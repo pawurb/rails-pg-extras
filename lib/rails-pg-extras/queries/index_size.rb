@@ -1,15 +1,11 @@
 # frozen_string_literal: true
 
 module RailsPGExtras
-  def self.index_size(in_format: :array)
-    result = connection.execute(index_size_query)
-
-    display_result(result, in_format: in_format)
+  def self.index_size_description
+    "The size of indexes, descending by size"
   end
 
-  private
-
-  def self.index_size_query
+  def self.index_size_sql
     <<-EOS
 SELECT c.relname AS name,
   pg_size_pretty(sum(c.relpages::bigint*8192)::bigint) AS size
@@ -22,6 +18,4 @@ GROUP BY c.relname
 ORDER BY sum(c.relpages) DESC;
 EOS
   end
-
-  private_class_method :index_size_query
 end
