@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 require 'terminal-table'
+require 'rails-pg-extras/railtie' if defined?(Rails)
 
 module RailsPGExtras
-
-  %i(
+  QUERIES =   %i(
     bloat blocking cache_hit
      calls extensions
      index_size index_usage locks
@@ -12,7 +12,9 @@ module RailsPGExtras
      records_rank seq_scans table_indexes_size
      table_size total_index_size total_table_size
      unused_indexes vacuum_stats
-  ).each do |query_name|
+  )
+
+  QUERIES.each do |query_name|
     require "rails-pg-extras/queries/#{query_name}"
 
     define_singleton_method query_name do |options = { in_format: :display_table }|

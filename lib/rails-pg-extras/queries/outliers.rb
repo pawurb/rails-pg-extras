@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 module RailsPGExtras
-  def self.outliners_description
+  def self.outliers_description
     "10 queries that have longest execution time in aggregate"
   end
 
-  def self.outliners_sql
+  def self.outliers_sql
     <<-EOS
 SELECT interval '1 millisecond' * total_time AS total_exec_time,
 to_char((total_time/sum(total_time) OVER()) * 100, 'FM90D0') || '%'  AS prop_exec_time,

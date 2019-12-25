@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module RailsPGExtras
-  def self.table_indexes_size_sql
+  def self.table_indexes_size_description
     "Total size of all the indexes on each table, descending by size"
   end
 
