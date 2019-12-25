@@ -1,6 +1,6 @@
 # Rails PG Extras
 
-Inspired by (a shameless ripoff of) [Heroku PG Extras](https://github.com/heroku/heroku-pg-extras). The goal of this project is to provide a powerful insights into PostgreSQL database for Ruby on Rails apps that are not using the default Heroku PostgreSQL plugin.
+Rails port of [Heroku PG Extras](https://github.com/heroku/heroku-pg-extras). The goal of this project is to provide a powerful insights into PostgreSQL database for Ruby on Rails apps that are not using the default Heroku PostgreSQL plugin.
 
 Included rake tasks and Ruby methods can be used to obtain information about a Postgres instance, that may be useful when analyzing performance issues. This includes information about locks, index usage, buffer cache hit ratios and vacuum statistics. Ruby API enables developers to easily integrate the tool into e.g. automatic monitoring tasks.
 
@@ -359,3 +359,7 @@ This command outputs the Mandelbrot set, calculated through SQL.
 * Does is not violate the Heroku PG Extras license?
 
 The original plugin is [MIT based](https://github.com/heroku/heroku-pg-extras/blob/master/LICENSE) so it means that copying and redistribution in any format is permitted.
+
+## Disclaimer
+
+This tool is in beta state.
