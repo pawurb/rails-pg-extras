@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'terminal-table'
-require 'rails-pg-extras/railtie' if defined?(Rails)
 
 module RailsPGExtras
   QUERIES =   %i(
@@ -63,3 +62,5 @@ module RailsPGExtras
   private_class_method :connection
   private_class_method :display_result
 end
+
+require 'rails-pg-extras/railtie' if defined?(Rails)
