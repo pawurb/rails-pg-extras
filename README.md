@@ -16,6 +16,43 @@ gem 'rails-pg-extras'
 
 Each command can be used as a rake task, or a directly from the Ruby code.
 
+```bash
+rake pg_extras:cache_hit
+```
+
+```ruby
+RailsPGExtras.cache_hit
+```
+```bash
++----------------+------------------------+
+|        Index and table hit rate         |
++----------------+------------------------+
+| name           | ratio                  |
++----------------+------------------------+
+| index hit rate | 0.97796610169491525424 |
+| table hit rate | 0.96724294813466787989 |
++----------------+------------------------+
+```
+
+
+By default the ASCII table is displayed, to change to format you need to specify the `in_format` parameter (`[:display_table, :hash, :array, :raw]` options are available):
+
+```ruby
+RailsPGExtras.cache_hit(in_format: :hash) =>
+
+ [{"name"=>"index hit rate", "ratio"=>"0.97796610169491525424"}, {"name"=>"table hit rate", "ratio"=>"0.96724294813466787989"}]
+
+RailsPGExtras.cache_hit(in_format: :array) =>
+
+ [["index hit rate", "0.97796610169491525424"], ["table hit rate", "0.96724294813466787989"]]
+
+RailsPGExtras.cache_hit(in_format: :raw) =>
+
+ #<PG::Result:0x00007f75777f7328 status=PGRES_TUPLES_OK ntuples=2 nfields=2 cmd_tuples=2>
+```
+
+### Available methods
+
 #### `cache_hit`
 
 ```bash
@@ -309,7 +346,7 @@ $ rake pg_extras:vacuum_stats
 
 This command displays statistics related to vacuum operations for each table, including an estiamtion of dead rows, last autovacuum and the current autovacuum threshold. This command can be useful when determining if current vacuum thresholds require adjustments, and to determine when the table was last vacuumed.
 
-### pg:mandelbrot
+### mandelbrot
 
 ```
 $ rake pg_extras:mandelbrot
