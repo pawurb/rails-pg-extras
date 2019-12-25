@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
 module RailsPGExtras
-  def self.index_size
-    connection.execute(index_size_query)
+  def self.index_size(in_format: :array)
+    result = connection.execute(index_size_query)
+
+    display_result(result, in_format: in_format)
   end
 
   private

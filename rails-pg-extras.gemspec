@@ -15,4 +15,5 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
   gem.license       = "MIT"
   gem.add_dependency "activerecord"
+  gem.add_dependency "terminal-table"
 end
