@@ -2,7 +2,7 @@
 
 module RailsPGExtras
   def self.locks_description
-    "Queries with active locks"
+    "Queries with active exclusive locks"
   end
 
   def self.locks_sql

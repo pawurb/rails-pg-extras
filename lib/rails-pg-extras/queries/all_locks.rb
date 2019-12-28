@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 module RailsPGExtras
-  def self.locks_description
+  def self.all_locks_description
     "Queries with active locks"
   end
 
-  def self.locks_sql
+  def self.all_locks_sql
     <<-EOS
 SELECT
   pg_stat_activity.pid,
