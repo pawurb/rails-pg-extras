@@ -1,12 +1,5 @@
-# frozen_string_literal: true
+/* Index hit rate (effective databases are at 99% and up) */
 
-module RailsPGExtras
-  def self.index_usage_description
-    "Index hit rate (effective databases are at 99% and up)"
-  end
-
-  def self.index_usage_sql
-    <<-EOS
 SELECT relname,
    CASE idx_scan
      WHEN 0 THEN 'Insufficient data'
@@ -17,6 +10,3 @@ SELECT relname,
    pg_stat_user_tables
  ORDER BY
    n_live_tup DESC;
-EOS
-  end
-end

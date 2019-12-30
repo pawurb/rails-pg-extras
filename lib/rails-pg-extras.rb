@@ -3,19 +3,17 @@
 require 'terminal-table'
 
 module RailsPGExtras
-  QUERIES =   %i(
+  QUERIES = %i(
     bloat blocking cache_hit
-     calls extensions
-     index_size index_usage locks all_locks
-     long_running_queries mandelbrot outliers
-     records_rank seq_scans table_indexes_size
-     table_size total_index_size total_table_size
-     unused_indexes vacuum_stats
+    calls extensions
+    index_size index_usage locks all_locks
+    long_running_queries mandelbrot outliers
+    records_rank seq_scans table_indexes_size
+    table_size total_index_size total_table_size
+    unused_indexes vacuum_stats
   )
 
   QUERIES.each do |query_name|
-    require "rails-pg-extras/queries/#{query_name}"
-
     define_singleton_method query_name do |options = { in_format: :display_table }|
       run_query(
         query_name: query_name,
@@ -25,9 +23,11 @@ module RailsPGExtras
   end
 
   def self.run_query(query_name:, in_format:)
-    result = connection.execute(self.public_send("#{query_name}_sql"))
-    title = self.public_send("#{query_name}_description")
-    display_result(result, title: title, in_format: in_format)
+    sql_path = File.join(File.dirname(__FILE__), "/rails-pg-extras/queries/#{query_name}.sql")
+    sql = File.read(sql_path)
+    description = sql.split("\n").first[/\/\*(.*?)\*\//m, 1].strip
+    result = connection.execute(sql)
+    display_result(result, title: description, in_format: in_format)
   end
 
   def self.display_result(result, title:, in_format:)

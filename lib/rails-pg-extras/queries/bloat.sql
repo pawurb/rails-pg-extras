@@ -1,12 +1,5 @@
-# frozen_string_literal: true
+/* Table and index bloat in your database ordered by most wasteful */
 
-module RailsPGExtras
-  def self.bloat_description
-    "Table and index bloat in your database ordered by most wasteful"
-  end
-
-  def self.bloat_sql
-    <<-EOS
 WITH constants AS (
   SELECT current_setting('block_size')::numeric AS bs, 23 AS hdr, 4 AS ma
 ), bloat_info AS (
@@ -66,8 +59,5 @@ SELECT
   CASE WHEN ipages < iotta THEN '0' ELSE (bs*(ipages-iotta))::bigint END AS raw_waste
 FROM
   index_bloat) bloat_summary
-ORDER BY raw_waste DESC, bloat DESC
-EOS
-  end
-end
+ORDER BY raw_waste DESC, bloat DESC;
 

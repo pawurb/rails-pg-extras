@@ -1,12 +1,5 @@
-# frozen_string_literal: true
+/* Queries holding locks other queries are waiting to be released */
 
-module RailsPGExtras
-  def self.blocking_description
-    "Queries holding locks other queries are waiting to be released"
-  end
-
-  def self.blocking_sql
-    <<-EOS
 SELECT bl.pid AS blocked_pid,
   ka.query AS blocking_statement,
   now() - ka.query_start AS blocking_duration,
@@ -20,7 +13,4 @@ JOIN pg_catalog.pg_locks kl
   JOIN pg_catalog.pg_stat_activity ka
     ON kl.pid = ka.pid
 ON bl.transactionid = kl.transactionid AND bl.pid != kl.pid
-WHERE NOT bl.granted
-EOS
-  end
-end
+WHERE NOT bl.granted;

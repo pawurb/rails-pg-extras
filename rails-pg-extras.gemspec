@@ -8,8 +8,8 @@ Gem::Specification.new do |gem|
   gem.version       = RailsPGExtras::VERSION
   gem.authors       = ["pawurb"]
   gem.email         = ["contact@pawelurbanek.com"]
-  gem.summary       = %q{ Rails PostgreSQL database insights }
-  gem.description   = %q{ A bunch of rake tasks for showing what's going on inside your Rails PostgreSQL database }
+  gem.summary       = %q{ Rails PostgreSQL performance database insights }
+  gem.description   = %q{ Rails port of Heroku PG Extras. The goal of this project is to provide a powerful insights into PostgreSQL database for Ruby on Rails apps that are not using the default Heroku PostgreSQL plugin. }
   gem.homepage      = "http://github.com/pawurb/rails-pg-extras"
   gem.files         = `git ls-files`.split("\n")
   gem.require_paths = ["lib"]

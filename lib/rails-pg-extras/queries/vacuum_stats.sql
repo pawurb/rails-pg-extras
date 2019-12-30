@@ -1,12 +1,5 @@
-# frozen_string_literal: true
+/* Dead rows and whether an automatic vacuum is expected to be triggered */
 
-module RailsPGExtras
-  def self.vacuum_stats_description
-    "Dead rows and whether an automatic vacuum is expected to be triggered"
-  end
-
-  def self.vacuum_stats_sql
-    <<-EOS
 WITH table_opts AS (
   SELECT
     pg_class.oid, relname, nspname, array_to_string(reloptions, '') AS relopts
@@ -44,8 +37,4 @@ SELECT
 FROM
   pg_stat_user_tables psut INNER JOIN pg_class ON psut.relid = pg_class.oid
     INNER JOIN vacuum_settings ON pg_class.oid = vacuum_settings.oid
-ORDER BY 1
-EOS
-  end
-end
-
+ORDER BY 1;

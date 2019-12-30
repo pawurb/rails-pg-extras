@@ -1,12 +1,5 @@
-# frozen_string_literal: true
+/* The mandelbrot set */
 
-module RailsPGExtras
-  def self.mandelbrot_description
-    "The mandelbrot set"
-  end
-
-  def self.mandelbrot_sql
-    <<-EOS
 WITH RECURSIVE Z(IX, IY, CX, CY, X, Y, I) AS (
           SELECT IX, IY, X::float, Y::float, X::float, Y::float, 0
           FROM (select -2.2 + 0.031 * i, i from generate_series(0,101) as i) as xgen(x,ix),
@@ -25,7 +18,4 @@ FROM (
       ORDER BY IY, IX
      ) AS ZT
 GROUP BY IY
-ORDER BY IY
-EOS
-  end
-end
+ORDER BY IY;
