@@ -23,11 +23,15 @@ module RailsPGExtras
   end
 
   def self.run_query(query_name:, in_format:)
-    sql_path = File.join(File.dirname(__FILE__), "/rails-pg-extras/queries/#{query_name}.sql")
-    sql = File.read(sql_path)
-    description = sql.split("\n").first[/\/\*(.*?)\*\//m, 1].strip
-    result = connection.execute(sql)
-    display_result(result, title: description, in_format: in_format)
+    result = connection.execute(
+      sql_for(query_name: query_name)
+    )
+
+    display_result(
+      result,
+      title: description_for(query_name: query_name),
+      in_format: in_format
+    )
   end
 
   def self.display_result(result, title:, in_format:)
@@ -55,12 +59,36 @@ module RailsPGExtras
     end
   end
 
+  def self.description_for(query_name:)
+    first_line = File.open(
+      sql_path_for(query_name: query_name)
+    ) { |f| f.readline }
+
+    first_line[/\/\*(.*?)\*\//m, 1].strip
+  end
+
+  def self.sql_for(query_name:)
+    File.read(
+      sql_path_for(query_name: query_name)
+    )
+  end
+
+  def self.sql_path_for(query_name:)
+    File.join(File.dirname(__FILE__), "/rails-pg-extras/queries/#{query_name}.sql")
+  end
+
   def self.connection
     ActiveRecord::Base.connection
   end
 
-  private_class_method :connection
-  private_class_method :display_result
+  %i(
+    connection
+    display_result
+    sql_for
+    sql_path_for
+  ).each do |method_name|
+    private_class_method method_name
+  end
 end
 
 require 'rails-pg-extras/railtie' if defined?(Rails)
