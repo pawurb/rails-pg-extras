@@ -12,8 +12,12 @@ Gem::Specification.new do |gem|
   gem.description   = %q{ Rails port of Heroku PG Extras. The goal of this project is to provide a powerful insights into PostgreSQL database for Ruby on Rails apps that are not using the default Heroku PostgreSQL plugin. }
   gem.homepage      = "http://github.com/pawurb/rails-pg-extras"
   gem.files         = `git ls-files`.split("\n")
+  gem.test_files    = gem.files.grep(%r{^(spec)/})
   gem.require_paths = ["lib"]
   gem.license       = "MIT"
   gem.add_dependency "activerecord"
   gem.add_dependency "terminal-table"
+  gem.add_development_dependency "rake"
+  gem.add_development_dependency "rspec"
+  gem.add_development_dependency "rspec_junit_formatter"
 end
