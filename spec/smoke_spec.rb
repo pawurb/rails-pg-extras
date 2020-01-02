@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe RailsPGExtras do
@@ -9,7 +11,6 @@ describe RailsPGExtras do
         )
       end.not_to raise_error
     end
-
   end
 
   PG_STATS_DEPENDENT_QUERIES = %i(calls outliers)
