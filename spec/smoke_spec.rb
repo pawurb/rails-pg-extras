@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe RailsPGExtras do
@@ -9,7 +11,6 @@ describe RailsPGExtras do
         )
       end.not_to raise_error
     end
-
   end
 
   PG_STATS_DEPENDENT_QUERIES = %i(calls outliers)
@@ -17,7 +18,7 @@ describe RailsPGExtras do
   (RailsPGExtras::QUERIES - PG_STATS_DEPENDENT_QUERIES).each do |query_name|
     it "#{query_name} query can be executed" do
       expect do
-        result = RailsPGExtras.run_query(
+        RailsPGExtras.run_query(
           query_name: query_name,
           in_format: :hash
         )

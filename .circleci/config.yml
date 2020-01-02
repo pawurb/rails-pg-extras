@@ -1,14 +1,5 @@
 version: 2
 jobs:
-  setup:
-    docker:
-      - image: circleci/ruby:2.6.5
-    steps:
-      - checkout
-      - run: gem update --system
-      - run: gem install bundler
-      - run: bundle install --path vendor/bundle
-
   test:
     docker:
       - image: circleci/ruby:2.6.5
@@ -30,26 +21,9 @@ jobs:
       - run:
           name: Run specs
           command: |
-            mkdir /tmp/test-results
-            TEST_FILES="$(circleci tests glob "spec/**/*_spec.rb" | \
-              circleci tests split --split-by=timings)"
-
-            bundle exec rspec \
-              --format progress \
-              --format RspecJunitFormatter \
-              --out /tmp/test-results/rspec.xml \
-              --format progress \
-              $TEST_FILES
-      - store_test_results:
-          path: /tmp/test-results
-      - store_artifacts:
-          path: /tmp/test-results
-          destination: test-results
+            bundle exec rspec spec/
 workflows:
   version: 2
-  setup_and_test:
+  test:
     jobs:
-      - setup
-      - test:
-          requires:
-            - setup
+      - test
