@@ -13,9 +13,8 @@ describe RailsPGExtras do
     end
   end
 
-  PG_STATS_DEPENDENT_QUERIES = %i(calls outliers)
 
-  (RailsPGExtras::QUERIES - PG_STATS_DEPENDENT_QUERIES).each do |query_name|
+  RailsPGExtras::QUERIES.each do |query_name|
     it "#{query_name} query can be executed" do
       expect do
         RailsPGExtras.run_query(

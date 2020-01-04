@@ -11,7 +11,9 @@ RSpec.configure do |config|
   config.before :suite do
     ActiveRecord::Base.establish_connection(
       ENV.fetch("DATABASE_URL")
-    )
+    ).tap do |pg|
+      pg.connection.execute("CREATE EXTENSION IF NOT EXISTS pg_stat_statements;")
+    end
   end
 
   config.after :suite do

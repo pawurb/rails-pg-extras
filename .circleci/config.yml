@@ -5,7 +5,7 @@ jobs:
       - image: circleci/ruby:2.6.5
         environment:
           DATABASE_URL: postgresql://postgres:secret@localhost:5432/rails-pg-extras-test
-      - image: circleci/postgres:11.5
+      - image: pawurb/postgres-stat-statements
         environment:
           POSTGRES_USER: postgres
           POSTGRES_DB: rails-pg-extras-test
