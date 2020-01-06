@@ -366,7 +366,7 @@ This command outputs the Mandelbrot set, calculated through SQL.
 
 * Does is not violate the Heroku PG Extras license?
 
-The original plugin is [MIT based](https://github.com/heroku/heroku-pg-extras/blob/master/LICENSE) so it means that copying and redistribution in any format is permitted.
+The original plugin is MIT based so it means that copying and redistribution in any format is permitted.
 
 ## Disclaimer
 
