@@ -3,4 +3,5 @@ Gemfile.lock
 pkg/
 *.gem
 docker-compose.yml
+.byebug_history
 
