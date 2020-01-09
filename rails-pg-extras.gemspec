@@ -15,10 +15,8 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(spec)/})
   gem.require_paths = ["lib"]
   gem.license       = "MIT"
-  gem.add_dependency "activerecord"
-  gem.add_dependency "pg"
-  gem.add_dependency "terminal-table"
   gem.add_dependency "ruby-pg-extras", RailsPGExtras::VERSION
+  gem.add_dependency "activerecord"
   gem.add_development_dependency "rake"
   gem.add_development_dependency "rspec"
 end
