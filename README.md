@@ -1,6 +1,6 @@
 # Rails PG Extras [![Gem Version](https://badge.fury.io/rb/rails-pg-extras.svg)](https://badge.fury.io/rb/rails-pg-extras) [![CircleCI](https://circleci.com/gh/pawurb/rails-pg-extras.svg?style=svg)](https://circleci.com/gh/pawurb/rails-pg-extras)
 
-Rails port of [Heroku PG Extras](https://github.com/heroku/heroku-pg-extras). The goal of this project is to provide powerful insights into the PostgreSQL database for Ruby on Rails apps that are not using the Heroku PostgreSQL plugin.
+Rails port of [Heroku PG Extras](https://github.com/heroku/heroku-pg-extras) with several additions and improvements. The goal of this project is to provide powerful insights into the PostgreSQL database for Ruby on Rails apps that are not using the Heroku PostgreSQL plugin.
 
 Included rake tasks and Ruby methods can be used to obtain information about a Postgres instance, that may be useful when analyzing performance issues. This includes information about locks, index usage, buffer cache hit ratios and vacuum statistics. Ruby API enables developers to easily integrate the tool into e.g. automatic monitoring tasks.
 
@@ -57,8 +57,9 @@ RailsPGExtras.cache_hit(in_format: :raw) =>
 
 #### `cache_hit`
 
-```bash
+```
 $ rake pg_extras:cache_hit
+
       name      |         ratio
 ----------------+------------------------
  index hit rate | 0.99957765013541945832
@@ -68,10 +69,43 @@ $ rake pg_extras:cache_hit
 
 This command provides information on the efficiency of the buffer cache, for both index reads (`index hit rate`) as well as table reads (`table hit rate`). A low buffer cache hit ratio can be a sign that the Postgres instance is too small for the workload.
 
+#### `index_cache_hit`
+
+```
+
+$ rake pg_extras:index_cache_hit
+
+| name                  | buffer_hits | block_reads | total_read | ratio             |
++-----------------------+-------------+-------------+------------+-------------------+
+| teams                 | 187665      | 109         | 187774     | 0.999419514948821 |
+| subscriptions         | 5160        | 6           | 5166       | 0.99883855981417  |
+| plans                 | 5718        | 9           | 5727       | 0.998428496595076 |
+(truncated results for brevity)
+```
+
+The same as `cache_hit` with each table's indexes cache hit info displayed seperately.
+
+#### `table_cache_hit`
+
+```
+
+$ rake pg_extras:table_cache_hit
+
+| name                  | buffer_hits | block_reads | total_read | ratio             |
++-----------------------+-------------+-------------+------------+-------------------+
+| plans                 | 32123       | 2           | 32125      | 0.999937743190662 |
+| subscriptions         | 95021       | 8           | 95029      | 0.999915815172211 |
+| teams                 | 171637      | 200         | 171837     | 0.99883610631005  |
+(truncated results for brevity)
+```
+
+The same as `cache_hit` with each table's cache hit info displayed seperately.
+
 #### `index_usage`
 
 ```
 $ rake pg_extras:index_usage
+
        relname       | percent_of_times_index_used | rows_in_table
 ---------------------+-----------------------------+---------------
  events              |                          65 |       1217347
@@ -114,6 +148,7 @@ This command displays all the current locks, regardless of their type.
 
 ```
 $ rake pg_extras:outliers
+
                    qry                   |    exec_time     | prop_exec_time |   ncalls    | sync_io_time
 -----------------------------------------+------------------+----------------+-------------+--------------
  SELECT * FROM archivable_usage_events.. | 154:39:26.431466 | 72.2%          | 34,211,877  | 00:00:00
@@ -122,11 +157,7 @@ $ rake pg_extras:outliers
  INSERT INTO usage_events (id, retaine.. | 01:42:59.436532  | 0.8%           | 12,328,187  | 00:00:00
  SELECT * FROM usage_events WHERE (alp.. | 01:18:10.754354  | 0.6%           | 102,114,301 | 00:00:00
  UPDATE usage_events SET reporter_id =.. | 00:52:35.683254  | 0.4%           | 23,786,348  | 00:00:00
- INSERT INTO usage_events (id, retaine.. | 00:49:24.952561  | 0.4%           | 21,988,201  | 00:00:00
- COPY public.app_ownership_events (id,.. | 00:37:14.31082   | 0.3%           | 13          | 00:12:32.584754
- INSERT INTO app_ownership_events (id,.. | 00:26:59.808212  | 0.2%           | 383,109     | 00:00:00
- SELECT * FROM app_ownership_events   .. | 00:19:06.021846  | 0.1%           | 744,879     | 00:00:00
-(10 rows)
+(truncated results for brevity)
 ```
 
 This command displays statements, obtained from `pg_stat_statements`, ordered by the amount of time to execute in aggregate. This includes the statement itself, the total execution time for that statement, the proportion of total execution time for all statements that statement has taken up, the number of times that statement has been called, and the amount of time that statement spent on synchronous I/O (reading/writing from the filesystem).
@@ -137,6 +168,7 @@ Typically, an efficient query will have an appropriate ratio of calls to total e
 
 ```
 $ rake pg_extras:calls
+
                    qry                   |    exec_time     | prop_exec_time |   ncalls    | sync_io_time
 -----------------------------------------+------------------+----------------+-------------+--------------
  SELECT * FROM usage_events WHERE (alp.. | 01:18:11.073333  | 0.6%           | 102,120,780 | 00:00:00
@@ -144,12 +176,7 @@ $ rake pg_extras:calls
  COMMIT                                  | 00:00:52.31724   | 0.0%           | 47,288,615  | 00:00:00
  SELECT * FROM  archivable_usage_event.. | 154:39:26.431466 | 72.2%          | 34,211,877  | 00:00:00
  UPDATE usage_events SET reporter_id =.. | 00:52:35.986167  | 0.4%           | 23,788,388  | 00:00:00
- INSERT INTO usage_events (id, retaine.. | 00:49:25.260245  | 0.4%           | 21,990,326  | 00:00:00
- INSERT INTO usage_events (id, retaine.. | 01:42:59.436532  | 0.8%           | 12,328,187  | 00:00:00
- SELECT * FROM app_ownership_events   .. | 00:19:06.289521  | 0.1%           | 744,976     | 00:00:00
- INSERT INTO app_ownership_events(id, .. | 00:26:59.885631  | 0.2%           | 383,153     | 00:00:00
- UPDATE app_ownership_events SET app_i.. | 00:01:22.282337  | 0.0%           | 359,741     | 00:00:00
-(10 rows)
+(truncated results for brevity)
 ```
 
 This command is much like `pg:outliers`, but ordered by the number of times a statement has been called.
@@ -158,6 +185,7 @@ This command is much like `pg:outliers`, but ordered by the number of times a st
 
 ```
 $ rake pg_extras:blocking
+
  blocked_pid |    blocking_statement    | blocking_duration | blocking_pid |                                        blocked_statement                           | blocked_duration
 -------------+--------------------------+-------------------+--------------+------------------------------------------------------------------------------------+------------------
          461 | select count(*) from app | 00:00:03.838314   |        15682 | UPDATE "app" SET "updated_at" = '2013-03-04 15:07:04.746688' WHERE "id" = 12823149 | 00:00:03.821826
@@ -170,6 +198,7 @@ This command displays statements that are currently holding locks that other sta
 
 ```
 $ rake pg_extras:total_index_size
+
   size
 -------
  28194 MB
@@ -194,11 +223,6 @@ $ rake pg_extras:index_size
  index_attempts_on_enrollment_id                               | 1957 MB
  index_enrollment_attemptables_by_enrollment_activity_id       | 1789 MB
  enrollment_activities_pkey                                    |  458 MB
- index_enrollment_activities_by_lesson_enrollment_and_activity |  402 MB
- index_placement_attempts_on_response_id                       |  109 MB
- index_placement_attempts_on_placement_test_id                 |  108 MB
- index_placement_attempts_on_grade_level_id                    |   97 MB
- index_lesson_enrollments_on_lesson_id                         |   93 MB
 (truncated results for brevity)
 ```
 
@@ -208,6 +232,7 @@ This command displays the size of each each index in the database, in MB. It is 
 
 ```
 $ rake pg_extras:table_size
+
                              name                              |  size
 ---------------------------------------------------------------+---------
  learning_coaches                                              |  196 MB
@@ -224,6 +249,7 @@ This command displays the size of each table in the database, in MB. It is calcu
 
 ```
 $ rake pg_extras:table-indexes-size
+
                              table                             | indexes_size
 ---------------------------------------------------------------+--------------
  learning_coaches                                              |    153 MB
@@ -240,6 +266,7 @@ This command displays the total size of indexes for each table, in MB. It is cal
 
 ```
 $ rake pg_extras:total_table_size
+
                              name                              |  size
 ---------------------------------------------------------------+---------
  learning_coaches                                              |  349 MB
@@ -256,6 +283,7 @@ This command displays the total size of each table in the database, in MB. It is
 
 ```
 $ rake pg_extras:unused_indexes
+
           table      |                       index                | index_size | index_scans
 ---------------------+--------------------------------------------+------------+-------------
  public.grade_levels | index_placement_attempts_on_grade_level_id | 97 MB      |           0
@@ -313,6 +341,7 @@ This command displays currently running queries, that have been running for long
 
 ```
 $ rake pg_extras:records_rank
+
                name                | estimated_count
 -----------------------------------+-----------------
  tastypie_apiaccess                |          568891
@@ -338,6 +367,7 @@ $ rake pg_extras:bloat
  index | public     | bloated_table::bloated_index  |   3.7 | 34 MB
  table | public     | clean_table                   |   0.2 | 3808 kB
  table | public     | other_clean_table             |   0.3 | 1576 kB
+ (truncated results for brevity)
 ```
 
 This command displays an estimation of table "bloat" – space allocated to a relation that is full of dead tuples, that has yet to be reclaimed. Tables that have a high bloat ratio, typically 10 or greater, should be investigated to see if vacuuming is aggressive enough, and can be a sign of high table churn.
@@ -346,13 +376,14 @@ This command displays an estimation of table "bloat" – space allocated to a re
 
 ```
 $ rake pg_extras:vacuum_stats
+
  schema |         table         | last_vacuum | last_autovacuum  |    rowcount    | dead_rowcount  | autovacuum_threshold | expect_autovacuum
 --------+-----------------------+-------------+------------------+----------------+----------------+----------------------+-------------------
  public | log_table             |             | 2013-04-26 17:37 |         18,030 |              0 |          3,656       |
  public | data_table            |             | 2013-04-26 13:09 |             79 |             28 |             66       |
  public | other_table           |             | 2013-04-26 11:41 |             41 |             47 |             58       |
  public | queue_table           |             | 2013-04-26 17:39 |             12 |          8,228 |             52       | yes
- public | picnic_table          |             |                  |             13 |              0 |             53       |
+ (truncated results for brevity)
 ```
 
 This command displays statistics related to vacuum operations for each table, including an estiamtion of dead rows, last autovacuum and the current autovacuum threshold. This command can be useful when determining if current vacuum thresholds require adjustments, and to determine when the table was last vacuumed.
