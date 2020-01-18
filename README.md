@@ -11,7 +11,7 @@ Not using Rails? Check out the core dependency [pure Ruby version](https://githu
 In your Gemfile
 
 ```ruby
-gem 'rails-pg-extras'
+gem "rails-pg-extras"
 ```
 
 ### Usage
