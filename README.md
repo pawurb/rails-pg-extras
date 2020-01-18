@@ -401,7 +401,3 @@ This command outputs the Mandelbrot set, calculated through SQL.
 * Does is not violate the Heroku PG Extras license?
 
 The original plugin is MIT based so it means that copying and redistribution in any format is permitted.
-
-## Disclaimer
-
-This tool is in beta state.
