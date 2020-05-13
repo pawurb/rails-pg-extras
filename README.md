@@ -248,7 +248,7 @@ This command displays the size of each table and materialized view in the databa
 ### `table_indexes_size`
 
 ```
-$ rake pg_extras:table-indexes-size
+$ rake pg_extras:table_indexes_size
 
                              table                             | indexes_size
 ---------------------------------------------------------------+--------------
@@ -260,7 +260,7 @@ $ rake pg_extras:table-indexes-size
 (truncated results for brevity)
 ```
 
-This command displays the total size of indexes for each table, in MB. It is calcualtes by using the system administration function `pg_indexes_size()`.
+This command displays the total size of indexes for each table and materialized view, in MB. It is calcualtes by using the system administration function `pg_indexes_size()`.
 
 ### `total_table_size`
 
@@ -277,7 +277,7 @@ $ rake pg_extras:total_table_size
 (truncated results for brevity)
 ```
 
-This command displays the total size of each table in the database, in MB. It is calculated by using the system administration function `pg_total_relation_size()`, which includes table size, total index size and TOAST data.
+This command displays the total size of each table and materialized view in the database, in MB. It is calculated by using the system administration function `pg_total_relation_size()`, which includes table size, total index size and TOAST data.
 
 ### `unused_indexes`
 
