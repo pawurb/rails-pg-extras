@@ -243,7 +243,7 @@ $ rake pg_extras:table_size
 (truncated results for brevity)
 ```
 
-This command displays the size of each table in the database, in MB. It is calculated by using the system administration function `pg_table_size()`, which includes the size of the main data fork, free space map, visibility map and TOAST data.
+This command displays the size of each table and materialized view in the database, in MB. It is calculated by using the system administration function `pg_table_size()`, which includes the size of the main data fork, free space map, visibility map and TOAST data.
 
 ### `table_indexes_size`
 
