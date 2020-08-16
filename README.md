@@ -6,6 +6,8 @@ Included rake tasks and Ruby methods can be used to obtain information about a P
 
 Not using Rails? Check out the core dependency [pure Ruby version](https://github.com/pawurb/ruby-pg-extras).
 
+Are you the fan of Elixir and Phoenix? Check out the [ecto_psql_extras](https://github.com/pawurb/ecto_psql_extras).
+
 ## Installation
 
 In your Gemfile
