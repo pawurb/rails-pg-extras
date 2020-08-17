@@ -16,6 +16,8 @@ In your Gemfile
 gem "rails-pg-extras"
 ```
 
+Some of the queries (e.g., `calls` and `outliers`) require [pg_stat_statements](https://www.postgresql.org/docs/current/pgstatstatements.html) extension enabled.
+
 ## Usage
 
 Each command can be used as a rake task, or a directly from the Ruby code.
