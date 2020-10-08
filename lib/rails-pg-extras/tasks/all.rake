@@ -11,7 +11,7 @@ namespace :pg_extras do
 
   RailsPGExtras::QUERIES.each do |query_name|
     desc RubyPGExtras.description_for(query_name: query_name)
-    task query_name.to_sym => :establish_connection do
+    task query_name.to_sym => :environment do
       RailsPGExtras.public_send(query_name)
     end
   end
