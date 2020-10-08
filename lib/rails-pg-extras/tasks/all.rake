@@ -3,10 +3,9 @@
 require 'rails-pg-extras'
 
 namespace :pg_extras do
-  desc "Establish connection"
   task :establish_connection do
-    db_config_file = File.open('config/database.yml')
-    db_config = YAML::load(db_config_file)
+    db_config_file = File.read('config/database.yml')
+    db_config = YAML::load(ERB.new(db_config_file).result)
     ActiveRecord::Base.establish_connection(db_config[Rails.env])
   end
 
