@@ -4,9 +4,7 @@ require 'rails-pg-extras'
 
 namespace :pg_extras do
   task :establish_connection do
-    db_config_file = File.read('config/database.yml')
-    db_config = YAML::load(ERB.new(db_config_file).result)
-    ActiveRecord::Base.establish_connection(db_config[Rails.env])
+    ActiveRecord::Base.establish_connection(ActiveRecord::Base.configurations[Rails.env])
   end
 
   RailsPGExtras::QUERIES.each do |query_name|
