@@ -106,7 +106,7 @@ $ rake pg_extras:index_cache_hit
 (truncated results for brevity)
 ```
 
-The same as `cache_hit` with each table's indexes cache hit info displayed seperately.
+The same as `cache_hit` with each table's indexes cache hit info displayed separately.
 
 ### `table_cache_hit`
 
@@ -157,7 +157,7 @@ $ rake pg_extras:locks
 (4 rows)
 ```
 
-This command displays queries that have taken out an exlusive lock on a relation. Exclusive locks typically prevent other operations on that relation from taking place, and can be a cause of "hung" queries that are waiting for a lock to be granted.
+This command displays queries that have taken out an exclusive lock on a relation. Exclusive locks typically prevent other operations on that relation from taking place, and can be a cause of "hung" queries that are waiting for a lock to be granted.
 
 ### `all_locks`
 
@@ -183,7 +183,7 @@ $ rake pg_extras:outliers
 (truncated results for brevity)
 ```
 
-This command displays statements, obtained from `pg_stat_statements`, ordered by the amount of time to execute in aggregate. This includes the statement itself, the total execution time for that statement, the proportion of total execution time for all statements that statement has taken up, the number of times that statement has been called, and the amount of time that statement spent on synchronous I/O (reading/writing from the filesystem).
+This command displays statements, obtained from `pg_stat_statements`, ordered by the amount of time to execute in aggregate. This includes the statement itself, the total execution time for that statement, the proportion of total execution time for all statements that statement has taken up, the number of times that statement has been called, and the amount of time that statement spent on synchronous I/O (reading/writing from the file system).
 
 Typically, an efficient query will have an appropriate ratio of calls to total execution time, with as little time spent on I/O as possible. Queries that have a high total execution time but low call count should be investigated to improve their performance. Queries that have a high proportion of execution time being spent on synchronous I/O should also be investigated.
 
@@ -283,7 +283,7 @@ $ rake pg_extras:table_indexes_size
 (truncated results for brevity)
 ```
 
-This command displays the total size of indexes for each table and materialized view, in MB. It is calcualtes by using the system administration function `pg_indexes_size()`.
+This command displays the total size of indexes for each table and materialized view, in MB. It is calculated by using the system administration function `pg_indexes_size()`.
 
 ### `total_table_size`
 
@@ -343,7 +343,7 @@ $ rake pg_extras:seq_scans
 (truncated results for brevity)
 ```
 
-This command displays the number of sequential scans recorded against all tables, descending by count of sequential scans. Tables that have very high numbers of sequential scans may be underindexed, and it may be worth investigating queries that read from these tables.
+This command displays the number of sequential scans recorded against all tables, descending by count of sequential scans. Tables that have very high numbers of sequential scans may be under-indexed, and it may be worth investigating queries that read from these tables.
 
 ### `long_running_queries`
 
@@ -409,7 +409,7 @@ $ rake pg_extras:vacuum_stats
  (truncated results for brevity)
 ```
 
-This command displays statistics related to vacuum operations for each table, including an estiamtion of dead rows, last autovacuum and the current autovacuum threshold. This command can be useful when determining if current vacuum thresholds require adjustments, and to determine when the table was last vacuumed.
+This command displays statistics related to vacuum operations for each table, including an estimation of dead rows, last autovacuum and the current autovacuum threshold. This command can be useful when determining if current vacuum thresholds require adjustments, and to determine when the table was last vacuumed.
 
 ### `kill_all`
 
