@@ -78,6 +78,13 @@ RailsPGExtras.cache_hit(in_format: :raw) =>
  #<PG::Result:0x00007f75777f7328 status=PGRES_TUPLES_OK ntuples=2 nfields=2 cmd_tuples=2>
 ```
 
+Some methods accept an optional `args` param allowing you to customize queries:
+
+```ruby
+RailsPGExtras.long_running_queries(args: { threshold: "200 milliseconds" })
+
+```
+
 ## Available methods
 
 ### `cache_hit`
