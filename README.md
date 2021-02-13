@@ -90,6 +90,8 @@ RailsPGExtras.long_running_queries(args: { threshold: "200 milliseconds" })
 ### `cache_hit`
 
 ```
+RailsPGExtras.cache_hit
+
 $ rake pg_extras:cache_hit
 
       name      |         ratio
@@ -104,6 +106,8 @@ This command provides information on the efficiency of the buffer cache, for bot
 ### `index_cache_hit`
 
 ```
+
+RailsPGExtras.index_cache_hit
 
 $ rake pg_extras:index_cache_hit
 
@@ -121,6 +125,8 @@ The same as `cache_hit` with each table's indexes cache hit info displayed separ
 
 ```
 
+RailsPGExtras.table_cache_hit
+
 $ rake pg_extras:table_cache_hit
 
 | name                  | buffer_hits | block_reads | total_read | ratio             |
@@ -136,6 +142,8 @@ The same as `cache_hit` with each table's cache hit info displayed seperately.
 ### `index_usage`
 
 ```
+RailsPGExtras.index_usage
+
 $ rake pg_extras:index_usage
 
        relname       | percent_of_times_index_used | rows_in_table
@@ -153,6 +161,8 @@ This command provides information on the efficiency of indexes, represented as w
 ### `locks`
 
 ```
+RailsPGExtras.locks
+
 $ rake pg_extras:locks
 
  procpid | relname | transactionid | granted |     query_snippet     | mode             |       age
@@ -171,6 +181,8 @@ This command displays queries that have taken out an exclusive lock on a relatio
 ### `all_locks`
 
 ```
+RailsPGExtras.all_locks
+
 $ rake pg_extras:all_locks
 ```
 
@@ -179,6 +191,8 @@ This command displays all the current locks, regardless of their type.
 ### `outliers`
 
 ```
+RubyPGExtras.outliers(args: { limit: 20 })
+
 $ rake pg_extras:outliers
 
                    qry                   |    exec_time     | prop_exec_time |   ncalls    | sync_io_time
@@ -199,6 +213,8 @@ Typically, an efficient query will have an appropriate ratio of calls to total e
 ### `calls`
 
 ```
+RubyPGExtras.calls(args: { limit: 10 })
+
 $ rake pg_extras:calls
 
                    qry                   |    exec_time     | prop_exec_time |   ncalls    | sync_io_time
@@ -216,6 +232,8 @@ This command is much like `pg:outliers`, but ordered by the number of times a st
 ### `blocking`
 
 ```
+RubyPGExtras.blocking
+
 $ rake pg_extras:blocking
 
  blocked_pid |    blocking_statement    | blocking_duration | blocking_pid |                                        blocked_statement                           | blocked_duration
@@ -229,6 +247,8 @@ This command displays statements that are currently holding locks that other sta
 #### `total_index_size`
 
 ```
+RubyPGExtras.total_index_size
+
 $ rake pg_extras:total_index_size
 
   size
@@ -242,6 +262,8 @@ This command displays the total size of all indexes on the database, in MB. It i
 ### `index_size`
 
 ```
+RubyPGExtras.index_size
+
 $ rake pg_extras:index_size
                              name                              |  size
 ---------------------------------------------------------------+---------
@@ -263,6 +285,8 @@ This command displays the size of each each index in the database, in MB. It is 
 ### `table_size`
 
 ```
+RubyPGExtras.table_size
+
 $ rake pg_extras:table_size
 
                              name                              |  size
@@ -280,6 +304,8 @@ This command displays the size of each table and materialized view in the databa
 ### `table_indexes_size`
 
 ```
+RubyPGExtras.table_indexes_size
+
 $ rake pg_extras:table_indexes_size
 
                              table                             | indexes_size
@@ -297,6 +323,8 @@ This command displays the total size of indexes for each table and materialized 
 ### `total_table_size`
 
 ```
+RubyPGExtras.total_table_size
+
 $ rake pg_extras:total_table_size
 
                              name                              |  size
@@ -314,6 +342,8 @@ This command displays the total size of each table and materialized view in the 
 ### `unused_indexes`
 
 ```
+RubyPGExtras.unused_indexes(args: { min_scans: 20 })
+
 $ rake pg_extras:unused_indexes
 
           table      |                       index                | index_size | index_scans
@@ -330,6 +360,8 @@ This command displays indexes that have < 50 scans recorded against them, and ar
 
 ```ruby
 
+RailsPGExtras.null_indexes(args: { min_relation_size_mb: 10 })
+
 $ rake pg_extras:null_indexes
 
    oid   |         index      | index_size | unique | indexed_column | null_frac | expected_saving
@@ -345,6 +377,8 @@ This commands displays indexes that contain `NULL` values. A high ratio of `NULL
 ### `seq_scans`
 
 ```
+RubyPGExtras.seq_scans
+
 $ rake pg_extras:seq_scans
 
                name                |  count
@@ -373,6 +407,8 @@ This command displays the number of sequential scans recorded against all tables
 ### `long_running_queries`
 
 ```
+RubyPGExtras.long_running_queries(args: { threshold: "200 milliseconds" })
+
 $ rake pg_extras:long_running_queries
 
   pid  |    duration     |                                      query
@@ -388,6 +424,8 @@ This command displays currently running queries, that have been running for long
 ### `records_rank`
 
 ```
+RubyPGExtras.records_rank
+
 $ rake pg_extras:records_rank
 
                name                | estimated_count
@@ -406,6 +444,8 @@ This command displays an estimated count of rows per table, descending by estima
 ### `bloat`
 
 ```
+RubyPGExtras.bloat
+
 $ rake pg_extras:bloat
 
  type  | schemaname |           object_name         | bloat |   waste
@@ -423,6 +463,8 @@ This command displays an estimation of table "bloat" – space allocated to a re
 ### `vacuum_stats`
 
 ```
+RubyPGExtras.vacuum_stats
+
 $ rake pg_extras:vacuum_stats
 
  schema |         table         | last_vacuum | last_autovacuum  |    rowcount    | dead_rowcount  | autovacuum_threshold | expect_autovacuum
@@ -448,9 +490,14 @@ This commands kills all the currently active connections to the database. It can
 
 ### `extensions`
 
-```ruby
+```
 
 RailsPGExtras.extensions
+
+$ rake pg_extras:extensions
+
+| pg_stat_statements | 1.7 | 1.7 | track execution statistics of all SQL statements executed
+ (truncated results for brevity)
 
 ```
 
@@ -459,6 +506,8 @@ This command lists all the currently installed and available PostgreSQL extensio
 ### mandelbrot
 
 ```
+RailsPGExtras.mandelbrot
+
 $ rake pg_extras:mandelbrot
 ```
 
