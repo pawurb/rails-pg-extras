@@ -258,7 +258,7 @@ This command displays statements that are currently holding locks that other sta
 
 [More info](https://pawelurbanek.com/postgresql-fix-performance#deadlocks)
 
-#### `total_index_size`
+### `total_index_size`
 
 ```ruby
 RubyPGExtras.total_index_size
