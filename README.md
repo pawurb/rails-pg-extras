@@ -221,7 +221,7 @@ This command displays all the current locks, regardless of their type.
 ### `outliers`
 
 ```ruby
-RubyPGExtras.outliers(args: { limit: 20 })
+RailsPGExtras.outliers(args: { limit: 20 })
 
 $ rake pg_extras:outliers
 
@@ -245,7 +245,7 @@ Typically, an efficient query will have an appropriate ratio of calls to total e
 ### `calls`
 
 ```ruby
-RubyPGExtras.calls(args: { limit: 10 })
+RailsPGExtras.calls(args: { limit: 10 })
 
 $ rake pg_extras:calls
 
@@ -266,7 +266,7 @@ This command is much like `pg:outliers`, but ordered by the number of times a st
 ### `blocking`
 
 ```ruby
-RubyPGExtras.blocking
+RailsPGExtras.blocking
 
 $ rake pg_extras:blocking
 
@@ -283,7 +283,7 @@ This command displays statements that are currently holding locks that other sta
 ### `total_index_size`
 
 ```ruby
-RubyPGExtras.total_index_size
+RailsPGExtras.total_index_size
 
 $ rake pg_extras:total_index_size
 
@@ -298,7 +298,7 @@ This command displays the total size of all indexes on the database, in MB. It i
 ### `index_size`
 
 ```ruby
-RubyPGExtras.index_size
+RailsPGExtras.index_size
 
 $ rake pg_extras:index_size
                              name                              |  size
@@ -321,7 +321,7 @@ This command displays the size of each each index in the database, in MB. It is 
 ### `table_size`
 
 ```ruby
-RubyPGExtras.table_size
+RailsPGExtras.table_size
 
 $ rake pg_extras:table_size
 
@@ -340,7 +340,7 @@ This command displays the size of each table and materialized view in the databa
 ### `table_indexes_size`
 
 ```ruby
-RubyPGExtras.table_indexes_size
+RailsPGExtras.table_indexes_size
 
 $ rake pg_extras:table_indexes_size
 
@@ -359,7 +359,7 @@ This command displays the total size of indexes for each table and materialized 
 ### `total_table_size`
 
 ```ruby
-RubyPGExtras.total_table_size
+RailsPGExtras.total_table_size
 
 $ rake pg_extras:total_table_size
 
@@ -378,7 +378,7 @@ This command displays the total size of each table and materialized view in the 
 ### `unused_indexes`
 
 ```ruby
-RubyPGExtras.unused_indexes(args: { min_scans: 20 })
+RailsPGExtras.unused_indexes(args: { min_scans: 20 })
 
 $ rake pg_extras:unused_indexes
 
@@ -417,7 +417,7 @@ This command displays indexes that contain `NULL` values. A high ratio of `NULL`
 ### `seq_scans`
 
 ```ruby
-RubyPGExtras.seq_scans
+RailsPGExtras.seq_scans
 
 $ rake pg_extras:seq_scans
 
@@ -441,7 +441,7 @@ This command displays the number of sequential scans recorded against all tables
 ### `long_running_queries`
 
 ```ruby
-RubyPGExtras.long_running_queries(args: { threshold: "200 milliseconds" })
+RailsPGExtras.long_running_queries(args: { threshold: "200 milliseconds" })
 
 $ rake pg_extras:long_running_queries
 
@@ -458,7 +458,7 @@ This command displays currently running queries, that have been running for long
 ### `records_rank`
 
 ```ruby
-RubyPGExtras.records_rank
+RailsPGExtras.records_rank
 
 $ rake pg_extras:records_rank
 
@@ -478,7 +478,7 @@ This command displays an estimated count of rows per table, descending by estima
 ### `bloat`
 
 ```ruby
-RubyPGExtras.bloat
+RailsPGExtras.bloat
 
 $ rake pg_extras:bloat
 
@@ -499,7 +499,7 @@ This command displays an estimation of table "bloat" – space allocated to a re
 ### `vacuum_stats`
 
 ```ruby
-RubyPGExtras.vacuum_stats
+RailsPGExtras.vacuum_stats
 
 $ rake pg_extras:vacuum_stats
 
