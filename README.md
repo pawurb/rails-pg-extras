@@ -526,19 +526,19 @@ This commands kills all the currently active connections to the database. It can
 
 ### `buffercache_stats`
 
-This command shows the relations buffered in database share buffer, ordered by percentage taken. It also shows that how much of the whole relation is buffered.
-
 ```ruby
 RailsPGExtras.buffercache_stats(args: { limit: 10 })
 ```
 
-### `buffercache_usage`
+This command shows the relations buffered in database share buffer, ordered by percentage taken. It also shows that how much of the whole relation is buffered.
 
-This command calculates how many blocks from which table are currently cached.
+### `buffercache_usage`
 
 ```ruby
 RailsPGExtras.buffercache_usage(args: { limit: 20 })
 ```
+
+This command calculates how many blocks from which table are currently cached.
 
 ### `extensions`
 
