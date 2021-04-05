@@ -524,6 +524,22 @@ RailsPGExtras.kill_all
 
 This commands kills all the currently active connections to the database. It can be useful as a last resort when your database is stuck in a deadlock.
 
+### `buffercache_stats`
+
+This command shows the relations buffered in database share buffer, ordered by percentage taken. It also shows that how much of the whole relation is buffered.
+
+```ruby
+RailsPGExtras.buffercache_stats(args: { limit: 10 })
+```
+
+### `buffercache_usage`
+
+This command calculates how many blocks from which table are currently cached.
+
+```ruby
+RailsPGExtras.buffercache_usage(args: { limit: 20 })
+```
+
 ### `extensions`
 
 ```ruby
@@ -548,3 +564,9 @@ $ rake pg_extras:mandelbrot
 ```
 
 This command outputs the Mandelbrot set, calculated through SQL.
+
+## Query sources
+
+- [https://github.com/heroku/heroku-pg-extras](https://github.com/heroku/heroku-pg-extras)
+- [https://hakibenita.com/postgresql-unused-index-size](https://hakibenita.com/postgresql-unused-index-size)
+- [https://sites.google.com/site/itmyshare/database-tips-and-examples/postgres/useful-sqls-to-check-contents-of-postgresql-shared_buffer](https://sites.google.com/site/itmyshare/database-tips-and-examples/postgres/useful-sqls-to-check-contents-of-postgresql-shared_buffer)
