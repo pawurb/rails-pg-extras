@@ -36,8 +36,6 @@ module RailsPGExtras
   def self.connection
     ActiveRecord::Base.connection
   end
-
-  private_class_method :connection
 end
 
 require 'rails-pg-extras/railtie' if defined?(Rails)
