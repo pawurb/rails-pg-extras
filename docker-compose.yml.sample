@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-  postgres:
+  postgres11:
     image: postgres:11.5-alpine
     command: postgres -c shared_preload_libraries=pg_stat_statements -c pg_stat_statements.track=all -c max_connections=200
     environment:
@@ -10,4 +10,21 @@ services:
       POSTGRES_PASSWORD: secret
     ports:
       - '5432:5432'
-
+  postgres12:
+    image: postgres:12.7-alpine
+    command: postgres -c shared_preload_libraries=pg_stat_statements -c pg_stat_statements.track=all -c max_connections=200
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: rails-pg-extras-test
+      POSTGRES_PASSWORD: secret
+    ports:
+      - '5433:5432'
+  postgres13:
+    image: postgres:13.3-alpine
+    command: postgres -c shared_preload_libraries=pg_stat_statements -c pg_stat_statements.track=all -c max_connections=200
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: rails-pg-extras-test
+      POSTGRES_PASSWORD: secret
+    ports:
+      - '5434:5432'

@@ -6,6 +6,7 @@ require 'ruby-pg-extras'
 module RailsPGExtras
   QUERIES = RubyPGExtras::QUERIES
   DEFAULT_ARGS = RubyPGExtras::DEFAULT_ARGS
+  NEW_PG_STAT_STATEMENTS = RubyPGExtras::NEW_PG_STAT_STATEMENTS
 
   QUERIES.each do |query_name|
     define_singleton_method query_name do |options = {}|
@@ -18,6 +19,16 @@ module RailsPGExtras
   end
 
   def self.run_query(query_name:, in_format:, args: {})
+    if %i(calls outliers).include?(query_name)
+      pg_stat_statements_ver = RailsPGExtras.connection.execute("select installed_version from pg_available_extensions where name='pg_stat_statements'")
+        .to_a[0].fetch("installed_version", nil)
+      if pg_stat_statements_ver != nil
+        if Gem::Version.new(pg_stat_statements_ver) < Gem::Version.new(NEW_PG_STAT_STATEMENTS)
+          query_name = "#{query_name}_legacy".to_sym
+        end
+      end
+    end
+
     sql = if (custom_args = DEFAULT_ARGS[query_name].merge(args)) != {}
       RubyPGExtras.sql_for(query_name: query_name) % custom_args
     else
