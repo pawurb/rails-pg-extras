@@ -3,6 +3,7 @@ version: '3'
 services:
   postgres:
     image: postgres:11.5-alpine
+    command: postgres -c shared_preload_libraries=pg_stat_statements -c pg_stat_statements.track=all -c max_connections=200
     environment:
       POSTGRES_USER: postgres
       POSTGRES_DB: rails-pg-extras-test
