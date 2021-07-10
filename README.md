@@ -565,6 +565,14 @@ $ rake pg_extras:mandelbrot
 
 This command outputs the Mandelbrot set, calculated through SQL.
 
+## Testing
+
+```bash
+cp docker-compose.yml.sample docker-compose.yml
+docker compose up -d
+rake test_all
+```
+
 ## Query sources
 
 - [https://github.com/heroku/heroku-pg-extras](https://github.com/heroku/heroku-pg-extras)
