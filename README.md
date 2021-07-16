@@ -6,6 +6,10 @@ Included rake tasks and Ruby methods can be used to obtain information about a P
 
 You can check out this blog post for detailed step by step tutorial on how to [optimize PostgreSQL using PG Extras library](https://pawelurbanek.com/postgresql-fix-performance).
 
+Check out [rails-pg-extras-web](https://github.com/defkode/rails-pg-extras-web) if you want to see SQL metrics in the UI instead of a command line interface.
+
+![Web interface](https://github.com/pawurb/rails-pg-extras/raw/master/rails-pg-extras-web.png)
+
 Alternative versions:
 
 - Core dependency - [Ruby](https://github.com/pawurb/ruby-pg-extras)
