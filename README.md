@@ -4,9 +4,11 @@ Rails port of [Heroku PG Extras](https://github.com/heroku/heroku-pg-extras) wit
 
 Included rake tasks and Ruby methods can be used to obtain information about a Postgres instance, that may be useful when analyzing performance issues. This includes information about locks, index usage, buffer cache hit ratios and vacuum statistics. Ruby API enables developers to easily integrate the tool into e.g. automatic monitoring tasks.
 
-You can check out this blog post for detailed step by step tutorial on how to [optimize PostgreSQL using PG Extras library](https://pawelurbanek.com/postgresql-fix-performance).
+You can read this blog post for detailed step by step tutorial on how to [optimize PostgreSQL using PG Extras library](https://pawelurbanek.com/postgresql-fix-performance).
 
-Check out [rails-pg-extras-web](https://github.com/defkode/rails-pg-extras-web) if you want to see SQL metrics in the UI instead of a command line interface.
+**Shameless plug:** rails-pg-extras is one of the tools that I use when conducting Rails performance audits. [Check out my offer](https://pawelurbanek.com/#rails-performance-tuning) if you need help with fine-tuning your app.
+
+Use [rails-pg-extras-web](https://github.com/defkode/rails-pg-extras-web) if you want to see SQL metrics in the UI instead of a command line interface.
 
 ![Web interface](https://github.com/pawurb/rails-pg-extras/raw/master/rails-pg-extras-web.png)
 
