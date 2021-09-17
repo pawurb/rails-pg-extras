@@ -6,7 +6,7 @@ jobs:
         environment:
           DATABASE_URL: postgresql://postgres:secret@localhost:5432/rails-pg-extras-test
       - image: circleci/postgres:11.5
-        command: postgres -c shared_preload_libraries=pg_stat_statements -c pg_stat_statements.track=all -c max_connections=200
+        command: postgres -c shared_preload_libraries=pg_stat_statements
         environment:
           POSTGRES_USER: postgres
           POSTGRES_DB: rails-pg-extras-test
