@@ -173,6 +173,20 @@ This method displays values for selected PostgreSQL settings. You can compare th
 
 [More info](https://pawelurbanek.com/postgresql-fix-performance#cache-hit)
 
+### `ssl_used`
+
+```ruby
+
+RailsPGExtras.ssl_used
+
+| ssl_is_used                     |
++---------------------------------+
+| t                               |
+
+```
+
+Returns boolean indicating if an encrypted SSL is currently used. Connecting to the database via an unencrypted connection is a critical security risk.
+
 ### `index_usage`
 
 ```ruby
