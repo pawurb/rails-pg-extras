@@ -557,6 +557,14 @@ RailsPGExtras.kill_all
 
 This commands kills all the currently active connections to the database. It can be useful as a last resort when your database is stuck in a deadlock.
 
+### `pg_stat_statements_reset`
+
+```ruby
+RailsPGExtras.pg_stat_statements_reset
+```
+
+This command discards all statistics gathered so far by pg_stat_statements.
+
 ### `buffercache_stats`
 
 ```ruby
