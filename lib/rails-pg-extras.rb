@@ -2,6 +2,8 @@
 
 require 'terminal-table'
 require 'ruby-pg-extras'
+require 'rails-pg-extras/diagnose_data'
+require 'rails-pg-extras/diagnose_print'
 
 module RailsPGExtras
   QUERIES = RubyPGExtras::QUERIES
@@ -42,6 +44,18 @@ module RailsPGExtras
       title: RubyPGExtras.description_for(query_name: query_name),
       in_format: in_format
     )
+  end
+
+  def self.diagnose(in_format: :display_table)
+    data = RailsPGExtras::DiagnoseData.call
+
+    if in_format == :display_table
+      RailsPGExtras::DiagnosePrint.call(data)
+    elsif in_format == :hash
+      data
+    else
+      raise "Invalid 'in_format' argument!"
+    end
   end
 
   def self.connection

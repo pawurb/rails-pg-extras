@@ -32,7 +32,7 @@ In your Gemfile
 gem "rails-pg-extras"
 ```
 
-Some of the queries (e.g., `calls` and `outliers`) require [pg_stat_statements](https://www.postgresql.org/docs/current/pgstatstatements.html) extension enabled.
+`calls` and `outliers` queries require [pg_stat_statements](https://www.postgresql.org/docs/current/pgstatstatements.html) extension.
 
 You can check if it is enabled in your database by running:
 
@@ -43,6 +43,12 @@ You should see the similar line in the output:
 
 ```bash
 | pg_stat_statements  | 1.7  | 1.7 | track execution statistics of all SQL statements executed |
+```
+
+`ssl_used` requires `sslinfo` extension, and `buffercache_usage`/`buffercache_usage` queries need `pg_buffercache`. You can enable them all by running:
+
+```ruby
+RailsPGExtras.add_extensions
 ```
 
 ## Usage
@@ -90,6 +96,18 @@ Some methods accept an optional `args` param allowing you to customize queries:
 RailsPGExtras.long_running_queries(args: { threshold: "200 milliseconds" })
 
 ```
+
+## Diagnose report
+
+The simplest way to start using pg-extras is to execute a `diagnose` method. It runs a set of checks and prints out a report highlighting areas that may require additional investigation:
+
+```ruby
+RailsPGExtras.diagnose
+```
+
+![Diagnose report](https://github.com/pawurb/rails-pg-extras/raw/master/rails-pg-extras-diagnose.png)
+
+Keep reading to learn about methods that `diagnose` uses under the hood.
 
 ## Available methods
 
@@ -398,7 +416,7 @@ This command displays the total size of each table and materialized view in the 
 ### `unused_indexes`
 
 ```ruby
-RailsPGExtras.unused_indexes(args: { min_scans: 20 })
+RailsPGExtras.unused_indexes(args: { max_scans: 20 })
 
 $ rake pg_extras:unused_indexes
 

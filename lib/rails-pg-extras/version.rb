@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
 module RailsPGExtras
-  VERSION = "2.3.0"
+  VERSION = "3.0.1"
 end
