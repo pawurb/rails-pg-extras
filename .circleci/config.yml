@@ -31,7 +31,8 @@ jobs:
       - checkout
       - run: gem update --system
       - run: gem install bundler
-      - run: bundle install --path vendor/bundle
+      - run: bundle config set --local path 'vendor/bundle'
+      - run: bundle install
       - run: sudo apt-get update --allow-releaseinfo-change
       - run: sudo apt install postgresql-client
       - run: dockerize -wait tcp://postgres11:5432 -timeout 1m
