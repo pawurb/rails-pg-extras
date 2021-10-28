@@ -13,7 +13,7 @@ namespace :pg_extras do
     end
   end
 
-  RailsPGExtras::QUERIES.concat(:diagnose).each do |query_name|
+  RailsPGExtras::QUERIES.concat([:diagnose]).each do |query_name|
     desc RubyPGExtras.description_for(query_name: query_name)
     task query_name.to_sym => :establish_connection do
       RailsPGExtras.public_send(query_name)
