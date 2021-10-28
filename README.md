@@ -103,6 +103,8 @@ The simplest way to start using pg-extras is to execute a `diagnose` method. It 
 
 ```ruby
 RailsPGExtras.diagnose
+
+$ rake pg_extras:diagnose
 ```
 
 ![Diagnose report](https://github.com/pawurb/rails-pg-extras/raw/master/rails-pg-extras-diagnose.png)
