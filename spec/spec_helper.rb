@@ -24,6 +24,9 @@ RSpec.configure do |config|
     ActiveRecord::Base.establish_connection(
       ENV.fetch("DATABASE_URL")
     )
+    RailsPGExtras.connection.execute("CREATE EXTENSION IF NOT EXISTS pg_stat_statements;")
+    RailsPGExtras.connection.execute("CREATE EXTENSION IF NOT EXISTS pg_buffercache;")
+    RailsPGExtras.connection.execute("CREATE EXTENSION IF NOT EXISTS sslinfo;")
   end
 
   config.after :suite do
