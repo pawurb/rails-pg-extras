@@ -4,6 +4,10 @@ require 'terminal-table'
 require 'ruby-pg-extras'
 require 'rails-pg-extras/diagnose_data'
 require 'rails-pg-extras/diagnose_print'
+require 'rails-pg-extras/index_info'
+require 'rails-pg-extras/index_info_print'
+require 'rails-pg-extras/table_info'
+require 'rails-pg-extras/table_info_print'
 
 module RailsPGExtras
   QUERIES = RubyPGExtras::QUERIES
@@ -53,6 +57,34 @@ module RailsPGExtras
       RailsPGExtras::DiagnosePrint.call(data)
     elsif in_format == :hash
       data
+    else
+      raise "Invalid 'in_format' argument!"
+    end
+  end
+
+  def self.index_info(args: {}, in_format: :display_table)
+    data = RailsPGExtras::IndexInfo.call(args[:table_name])
+
+    if in_format == :display_table
+      RailsPGExtras::IndexInfoPrint.call(data)
+    elsif in_format == :hash
+      data
+    elsif in_format == :array
+      data.map(&:values)
+    else
+      raise "Invalid 'in_format' argument!"
+    end
+  end
+
+  def self.table_info(args: {}, in_format: :display_table)
+    data = RailsPGExtras::TableInfo.call(args[:table_name])
+
+    if in_format == :display_table
+      RailsPGExtras::TableInfoPrint.call(data)
+    elsif in_format == :hash
+      data
+    elsif in_format == :array
+      data.map(&:values)
     else
       raise "Invalid 'in_format' argument!"
     end

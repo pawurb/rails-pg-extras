@@ -13,4 +13,18 @@ describe RailsPGExtras do
       end.not_to raise_error
     end
   end
+
+  it "runs the custom methods" do
+    expect do
+      RailsPGExtras.diagnose(in_format: :hash)
+    end.not_to raise_error
+
+    expect do
+      RailsPGExtras.index_info(in_format: :hash)
+    end.not_to raise_error
+
+    expect do
+      RailsPGExtras.table_info(in_format: :hash)
+    end.not_to raise_error
+  end
 end
