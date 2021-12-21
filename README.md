@@ -113,6 +113,38 @@ Keep reading to learn about methods that `diagnose` uses under the hood.
 
 ## Available methods
 
+### `table_info`
+
+This method displays metadata metrics for all or a selected table. You can use it to check the table's size, its cache hit metrics, and whether it is correctly indexed. Many sequential scans or no index scans are potential indicators of misconfigured indexes. This method aggregates data provided by other methods in an easy to analyze summary format.
+
+```ruby
+RailsPGExtras.table_info(args: { table_name: "users" })
+
+| Table name | Table size | Table cache hit   | Indexes cache hit  | Estimated rows | Sequential scans | Indexes scans |
++------------+------------+-------------------+--------------------+----------------+------------------+---------------+
+| users      | 2432 kB    | 0.999966685701511 | 0.9988780464661853 | 16650          | 2128             | 512496        |
+
+```
+
+### `index_info`
+
+This method returns summary info about database indexes. You can check index size, how often it is used and what percentage of its total size are NULL values. Like the previous method, it aggregates data from other helper methods in an easy-to-digest format.
+
+```ruby
+
+RailsPGExtras.index_info(args: { table_name: "users" })
+
+| Index name                    | Table name | Columns        | Index size | Index scans | Null frac |
++-------------------------------+------------+----------------+------------+-------------+-----------+
+| users_pkey                    | users      | id             | 1152 kB    | 163007      | 0.00%     |
+| index_users_on_slack_id       | users      | slack_id       | 1080 kB    | 258870      | 0.00%     |
+| index_users_on_team_id        | users      | team_id        | 816 kB     | 70962       | 0.00%     |
+| index_users_on_uuid           | users      | uuid           | 1032 kB    | 0           | 0.00%     |
+| index_users_on_block_uuid     | users      | block_uuid     | 776 kB     | 19502       | 100.00%  |
+| index_users_on_api_auth_token | users      | api_auth_token | 1744 kB    | 156         | 0.00%     |
+
+```
+
 ### `cache_hit`
 
 ```ruby
