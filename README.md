@@ -140,7 +140,7 @@ RailsPGExtras.index_info(args: { table_name: "users" })
 | index_users_on_slack_id       | users      | slack_id       | 1080 kB    | 258870      | 0.00%     |
 | index_users_on_team_id        | users      | team_id        | 816 kB     | 70962       | 0.00%     |
 | index_users_on_uuid           | users      | uuid           | 1032 kB    | 0           | 0.00%     |
-| index_users_on_block_uuid     | users      | block_uuid     | 776 kB     | 19502       | 100.00%  |
+| index_users_on_block_uuid     | users      | block_uuid     | 776 kB     | 19502       | 100.00%   |
 | index_users_on_api_auth_token | users      | api_auth_token | 1744 kB    | 156         | 0.00%     |
 
 ```
