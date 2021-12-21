@@ -24,4 +24,14 @@ namespace :pg_extras do
   task diagnose: :establish_connection do
     RailsPGExtras.diagnose
   end
+
+  desc "Display tables metadata metrics"
+  task table_info: :establish_connection do
+    RailsPGExtras.table_info
+  end
+
+  desc "Display indexes metadata metrics"
+  task index_info: :establish_connection do
+    RailsPGExtras.index_info
+  end
 end
