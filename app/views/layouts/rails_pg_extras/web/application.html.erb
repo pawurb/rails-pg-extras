@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for :title %> |  v<%= RailsPgExtras::VERSION %></title>
+    <%= javascript_include_tag "https://unpkg.com/@rails/ujs" %>
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <%= csrf_meta_tags %>
+  </head>
+  <body class="p-5 text-xs">
+    <% if flash[:notice] %>
+      <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4" role="alert">
+        <p class="font-bold">Notice</p>
+        <p><%= flash[:notice] %></p>
+      </div>
+    <% end %>
+
+    <% if flash[:alert] %>
+      <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4" role="alert">
+        <p class="font-bold">Alert</p>
+        <p><%= flash[:alert] %></p>
+      </div>
+    <% end %>
+
+    <%= yield %>
+  </body>
+</html>

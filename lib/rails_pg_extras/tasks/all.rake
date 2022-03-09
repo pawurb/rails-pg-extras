@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'rails-pg-extras'
+require 'rails_pg_extras'
 
 namespace :pg_extras do
   task :establish_connection do
@@ -13,25 +13,25 @@ namespace :pg_extras do
     end
   end
 
-  RailsPGExtras::QUERIES.each do |query_name|
-    desc RubyPGExtras.description_for(query_name: query_name)
+  RailsPgExtras::QUERIES.each do |query_name|
+    desc RubyPgExtras.description_for(query_name: query_name)
     task query_name.to_sym => :establish_connection do
-      RailsPGExtras.public_send(query_name)
+      RailsPgExtras.public_send(query_name)
     end
   end
 
   desc "Generate a PostgreSQL healthcheck report"
   task diagnose: :establish_connection do
-    RailsPGExtras.diagnose
+    RailsPgExtras.diagnose
   end
 
   desc "Display tables metadata metrics"
   task table_info: :establish_connection do
-    RailsPGExtras.table_info
+    RailsPgExtras.table_info
   end
 
   desc "Display indexes metadata metrics"
   task index_info: :establish_connection do
-    RailsPGExtras.index_info
+    RailsPgExtras.index_info
   end
 end

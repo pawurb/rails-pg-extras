@@ -8,7 +8,7 @@ You can read this blog post for detailed step by step tutorial on how to [optimi
 
 **Shameless plug:** rails-pg-extras is one of the tools that I use when conducting Rails performance audits. [Check out my offer](https://pawelurbanek.com/#rails-performance-tuning) if you need help with fine-tuning your app.
 
-Use [rails-pg-extras-web](https://github.com/defkode/rails-pg-extras-web) if you want to see SQL metrics in the UI instead of a command line interface.
+Optionally you can enable a visual interface:
 
 ![Web interface](https://github.com/pawurb/rails-pg-extras/raw/master/rails-pg-extras-web.png)
 
@@ -29,7 +29,7 @@ Alternative versions:
 In your Gemfile
 
 ```ruby
-gem "rails-pg-extras"
+gem "rails-pg-extras", require: "rails_pg_extras"
 ```
 
 `calls` and `outliers` queries require [pg_stat_statements](https://www.postgresql.org/docs/current/pgstatstatements.html) extension.
@@ -37,7 +37,7 @@ gem "rails-pg-extras"
 You can check if it is enabled in your database by running:
 
 ```ruby
-RailsPGExtras.extensions
+RailsPgExtras.extensions
 ```
 You should see the similar line in the output:
 
@@ -48,7 +48,7 @@ You should see the similar line in the output:
 `ssl_used` requires `sslinfo` extension, and `buffercache_usage`/`buffercache_usage` queries need `pg_buffercache`. You can enable them all by running:
 
 ```ruby
-RailsPGExtras.add_extensions
+RailsPgExtras.add_extensions
 ```
 
 ## Usage
@@ -60,7 +60,7 @@ rake pg_extras:cache_hit
 ```
 
 ```ruby
-RailsPGExtras.cache_hit
+RailsPgExtras.cache_hit
 ```
 ```bash
 +----------------+------------------------+
@@ -77,15 +77,15 @@ RailsPGExtras.cache_hit
 By default the ASCII table is displayed, to change to format you need to specify the `in_format` parameter (`[:display_table, :hash, :array, :raw]` options are available):
 
 ```ruby
-RailsPGExtras.cache_hit(in_format: :hash) =>
+RailsPgExtras.cache_hit(in_format: :hash) =>
 
  [{"name"=>"index hit rate", "ratio"=>"0.97796610169491525424"}, {"name"=>"table hit rate", "ratio"=>"0.96724294813466787989"}]
 
-RailsPGExtras.cache_hit(in_format: :array) =>
+RailsPgExtras.cache_hit(in_format: :array) =>
 
  [["index hit rate", "0.97796610169491525424"], ["table hit rate", "0.96724294813466787989"]]
 
-RailsPGExtras.cache_hit(in_format: :raw) =>
+RailsPgExtras.cache_hit(in_format: :raw) =>
 
  #<PG::Result:0x00007f75777f7328 status=PGRES_TUPLES_OK ntuples=2 nfields=2 cmd_tuples=2>
 ```
@@ -93,7 +93,7 @@ RailsPGExtras.cache_hit(in_format: :raw) =>
 Some methods accept an optional `args` param allowing you to customize queries:
 
 ```ruby
-RailsPGExtras.long_running_queries(args: { threshold: "200 milliseconds" })
+RailsPgExtras.long_running_queries(args: { threshold: "200 milliseconds" })
 
 ```
 
@@ -102,7 +102,7 @@ RailsPGExtras.long_running_queries(args: { threshold: "200 milliseconds" })
 The simplest way to start using pg-extras is to execute a `diagnose` method. It runs a set of checks and prints out a report highlighting areas that may require additional investigation:
 
 ```ruby
-RailsPGExtras.diagnose
+RailsPgExtras.diagnose
 
 $ rake pg_extras:diagnose
 ```
@@ -111,6 +111,16 @@ $ rake pg_extras:diagnose
 
 Keep reading to learn about methods that `diagnose` uses under the hood.
 
+## Visual interface
+
+You can enable UI using a Rails engine by adding the following code in `config/routes.rb`:
+
+```ruby
+  mount RailsPgExtras::Web::Engine, at: 'pg_extras'
+```
+
+On production environment you can enable HTTP basic auth by specifying `RAILS_PG_EXTRAS_USER` and `RAILS_PG_EXTRAS_PASSWORD` variables.
+
 ## Available methods
 
 ### `table_info`
@@ -118,7 +128,7 @@ Keep reading to learn about methods that `diagnose` uses under the hood.
 This method displays metadata metrics for all or a selected table. You can use it to check the table's size, its cache hit metrics, and whether it is correctly indexed. Many sequential scans or no index scans are potential indicators of misconfigured indexes. This method aggregates data provided by other methods in an easy to analyze summary format.
 
 ```ruby
-RailsPGExtras.table_info(args: { table_name: "users" })
+RailsPgExtras.table_info(args: { table_name: "users" })
 
 | Table name | Table size | Table cache hit   | Indexes cache hit  | Estimated rows | Sequential scans | Indexes scans |
 +------------+------------+-------------------+--------------------+----------------+------------------+---------------+
@@ -132,7 +142,7 @@ This method returns summary info about database indexes. You can check index siz
 
 ```ruby
 
-RailsPGExtras.index_info(args: { table_name: "users" })
+RailsPgExtras.index_info(args: { table_name: "users" })
 
 | Index name                    | Table name | Columns        | Index size | Index scans | Null frac |
 +-------------------------------+------------+----------------+------------+-------------+-----------+
@@ -148,7 +158,7 @@ RailsPGExtras.index_info(args: { table_name: "users" })
 ### `cache_hit`
 
 ```ruby
-RailsPGExtras.cache_hit
+RailsPgExtras.cache_hit
 
 $ rake pg_extras:cache_hit
 
@@ -167,7 +177,7 @@ This command provides information on the efficiency of the buffer cache, for bot
 
 ```ruby
 
-RailsPGExtras.index_cache_hit
+RailsPgExtras.index_cache_hit
 
 $ rake pg_extras:index_cache_hit
 
@@ -187,7 +197,7 @@ The same as `cache_hit` with each table's indexes cache hit info displayed separ
 
 ```ruby
 
-RailsPGExtras.table_cache_hit
+RailsPgExtras.table_cache_hit
 
 $ rake pg_extras:table_cache_hit
 
@@ -207,7 +217,7 @@ The same as `cache_hit` with each table's cache hit info displayed seperately.
 
 ```ruby
 
-RailsPGExtras.db_settings
+RailsPgExtras.db_settings
 
 $ rake pg_extras:db_settings
 
@@ -229,7 +239,7 @@ This method displays values for selected PostgreSQL settings. You can compare th
 
 ```ruby
 
-RailsPGExtras.ssl_used
+RailsPgExtras.ssl_used
 
 | ssl_is_used                     |
 +---------------------------------+
@@ -242,7 +252,7 @@ Returns boolean indicating if an encrypted SSL is currently used. Connecting to 
 ### `index_usage`
 
 ```ruby
-RailsPGExtras.index_usage
+RailsPgExtras.index_usage
 
 $ rake pg_extras:index_usage
 
@@ -261,7 +271,7 @@ This command provides information on the efficiency of indexes, represented as w
 ### `locks`
 
 ```ruby
-RailsPGExtras.locks
+RailsPgExtras.locks
 
 $ rake pg_extras:locks
 
@@ -283,7 +293,7 @@ This command displays queries that have taken out an exclusive lock on a relatio
 ### `all_locks`
 
 ```ruby
-RailsPGExtras.all_locks
+RailsPgExtras.all_locks
 
 $ rake pg_extras:all_locks
 ```
@@ -293,7 +303,7 @@ This command displays all the current locks, regardless of their type.
 ### `outliers`
 
 ```ruby
-RailsPGExtras.outliers(args: { limit: 20 })
+RailsPgExtras.outliers(args: { limit: 20 })
 
 $ rake pg_extras:outliers
 
@@ -317,7 +327,7 @@ Typically, an efficient query will have an appropriate ratio of calls to total e
 ### `calls`
 
 ```ruby
-RailsPGExtras.calls(args: { limit: 10 })
+RailsPgExtras.calls(args: { limit: 10 })
 
 $ rake pg_extras:calls
 
@@ -338,7 +348,7 @@ This command is much like `pg:outliers`, but ordered by the number of times a st
 ### `blocking`
 
 ```ruby
-RailsPGExtras.blocking
+RailsPgExtras.blocking
 
 $ rake pg_extras:blocking
 
@@ -355,7 +365,7 @@ This command displays statements that are currently holding locks that other sta
 ### `total_index_size`
 
 ```ruby
-RailsPGExtras.total_index_size
+RailsPgExtras.total_index_size
 
 $ rake pg_extras:total_index_size
 
@@ -370,7 +380,7 @@ This command displays the total size of all indexes on the database, in MB. It i
 ### `index_size`
 
 ```ruby
-RailsPGExtras.index_size
+RailsPgExtras.index_size
 
 $ rake pg_extras:index_size
                              name                              |  size
@@ -393,7 +403,7 @@ This command displays the size of each each index in the database, in MB. It is 
 ### `table_size`
 
 ```ruby
-RailsPGExtras.table_size
+RailsPgExtras.table_size
 
 $ rake pg_extras:table_size
 
@@ -412,7 +422,7 @@ This command displays the size of each table and materialized view in the databa
 ### `table_indexes_size`
 
 ```ruby
-RailsPGExtras.table_indexes_size
+RailsPgExtras.table_indexes_size
 
 $ rake pg_extras:table_indexes_size
 
@@ -431,7 +441,7 @@ This command displays the total size of indexes for each table and materialized 
 ### `total_table_size`
 
 ```ruby
-RailsPGExtras.total_table_size
+RailsPgExtras.total_table_size
 
 $ rake pg_extras:total_table_size
 
@@ -450,7 +460,7 @@ This command displays the total size of each table and materialized view in the 
 ### `unused_indexes`
 
 ```ruby
-RailsPGExtras.unused_indexes(args: { max_scans: 20 })
+RailsPgExtras.unused_indexes(args: { max_scans: 20 })
 
 $ rake pg_extras:unused_indexes
 
@@ -470,7 +480,7 @@ This command displays indexes that have < 50 scans recorded against them, and ar
 
 ```ruby
 
-RailsPGExtras.duplicate_indexes
+RailsPgExtras.duplicate_indexes
 
 | size       |  idx1        |  idx2          |  idx3    |  idx4     |
 +------------+--------------+----------------+----------+-----------+
@@ -483,7 +493,7 @@ This command displays multiple indexes that have the same set of columns, same o
 
 ```ruby
 
-RailsPGExtras.null_indexes(args: { min_relation_size_mb: 10 })
+RailsPgExtras.null_indexes(args: { min_relation_size_mb: 10 })
 
 $ rake pg_extras:null_indexes
 
@@ -502,7 +512,7 @@ This command displays indexes that contain `NULL` values. A high ratio of `NULL`
 ### `seq_scans`
 
 ```ruby
-RailsPGExtras.seq_scans
+RailsPgExtras.seq_scans
 
 $ rake pg_extras:seq_scans
 
@@ -526,7 +536,7 @@ This command displays the number of sequential scans recorded against all tables
 ### `long_running_queries`
 
 ```ruby
-RailsPGExtras.long_running_queries(args: { threshold: "200 milliseconds" })
+RailsPgExtras.long_running_queries(args: { threshold: "200 milliseconds" })
 
 $ rake pg_extras:long_running_queries
 
@@ -543,7 +553,7 @@ This command displays currently running queries, that have been running for long
 ### `records_rank`
 
 ```ruby
-RailsPGExtras.records_rank
+RailsPgExtras.records_rank
 
 $ rake pg_extras:records_rank
 
@@ -563,7 +573,7 @@ This command displays an estimated count of rows per table, descending by estima
 ### `bloat`
 
 ```ruby
-RailsPGExtras.bloat
+RailsPgExtras.bloat
 
 $ rake pg_extras:bloat
 
@@ -584,7 +594,7 @@ This command displays an estimation of table "bloat" – space allocated to a re
 ### `vacuum_stats`
 
 ```ruby
-RailsPGExtras.vacuum_stats
+RailsPgExtras.vacuum_stats
 
 $ rake pg_extras:vacuum_stats
 
@@ -603,7 +613,7 @@ This command displays statistics related to vacuum operations for each table, in
 
 ```ruby
 
-RailsPGExtras.kill_all
+RailsPgExtras.kill_all
 
 ```
 
@@ -612,7 +622,7 @@ This commands kills all the currently active connections to the database. It can
 ### `pg_stat_statements_reset`
 
 ```ruby
-RailsPGExtras.pg_stat_statements_reset
+RailsPgExtras.pg_stat_statements_reset
 ```
 
 This command discards all statistics gathered so far by pg_stat_statements.
@@ -620,7 +630,7 @@ This command discards all statistics gathered so far by pg_stat_statements.
 ### `buffercache_stats`
 
 ```ruby
-RailsPGExtras.buffercache_stats(args: { limit: 10 })
+RailsPgExtras.buffercache_stats(args: { limit: 10 })
 ```
 
 This command shows the relations buffered in database share buffer, ordered by percentage taken. It also shows that how much of the whole relation is buffered.
@@ -628,7 +638,7 @@ This command shows the relations buffered in database share buffer, ordered by p
 ### `buffercache_usage`
 
 ```ruby
-RailsPGExtras.buffercache_usage(args: { limit: 20 })
+RailsPgExtras.buffercache_usage(args: { limit: 20 })
 ```
 
 This command calculates how many blocks from which table are currently cached.
@@ -637,7 +647,7 @@ This command calculates how many blocks from which table are currently cached.
 
 ```ruby
 
-RailsPGExtras.extensions
+RailsPgExtras.extensions
 
 $ rake pg_extras:extensions
 
@@ -651,7 +661,7 @@ This command lists all the currently installed and available PostgreSQL extensio
 ### mandelbrot
 
 ```ruby
-RailsPGExtras.mandelbrot
+RailsPgExtras.mandelbrot
 
 $ rake pg_extras:mandelbrot
 ```

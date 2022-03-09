@@ -1,11 +1,11 @@
 # -*- encoding: utf-8 -*-
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'rails-pg-extras/version'
+require 'rails_pg_extras/version'
 
 Gem::Specification.new do |s|
   s.name          = "rails-pg-extras"
-  s.version       = RailsPGExtras::VERSION
+  s.version       = RailsPgExtras::VERSION
   s.authors       = ["pawurb"]
   s.email         = ["contact@pawelurbanek.com"]
   s.summary       = %q{ Rails PostgreSQL performance database insights }
@@ -15,8 +15,8 @@ Gem::Specification.new do |s|
   s.test_files    = s.files.grep(%r{^(spec)/})
   s.require_paths = ["lib"]
   s.license       = "MIT"
-  s.add_dependency "ruby-pg-extras", RailsPGExtras::VERSION
-  s.add_dependency "activerecord"
+  s.add_dependency "ruby-pg-extras", RailsPgExtras::VERSION
+  s.add_dependency "rails"
   s.add_development_dependency "rake"
   s.add_development_dependency "rspec"
 

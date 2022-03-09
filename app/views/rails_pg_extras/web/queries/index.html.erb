@@ -1,0 +1,21 @@
+<%= content_for :title, "pg_extras" %>
+<%= render "rails_pg_extras/web/shared/queries_selector" %>
+<%= render "unavailable_extensions_warning" if unavailable_extensions.any? %>
+<%= render "diagnose" %>
+
+<h1 class="font-bold text-xl my-5">Actions</h1>
+
+<%= link_to "kill_all",  kill_all_action_path,
+  method: "post",
+  data: {
+    confirm: "This commands kills all the currently active connections to the database. Do you want to proceed?"
+  }, 
+  class: 'border p-3 bg-red-500 text-white hover:bg-red-600 font-bold rounded'
+%>
+
+<%= link_to "pg_stat_statements_reset", pg_stat_statements_reset_action_path,
+  method: "post",
+  data: {
+    confirm: "This command discards all statistics gathered so far by pg_stat_statements. Do you want to proceed?"
+  }, class: 'border p-3 bg-blue-500 text-white hover:bg-blue-600 font-bold rounded'
+%>

@@ -1,0 +1,11 @@
+<%= form_with url: queries_path, id: "queries", method: :get do |f| %>
+  <%= f.select :query_name, options_for_select(@all_queries, params[:query_name]),
+    {prompt: "--- select query ---"},
+    {class: "border p-2 font-bold", autofocus: true}
+  %>
+<% end %>
+<script>
+  document.getElementById('queries').addEventListener('change', (e) => {
+    e.target.form.submit()
+  })
+</script>

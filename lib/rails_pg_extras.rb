@@ -1,18 +1,19 @@
 # frozen_string_literal: true
 
 require 'terminal-table'
-require 'ruby-pg-extras'
-require 'rails-pg-extras/diagnose_data'
-require 'rails-pg-extras/diagnose_print'
-require 'rails-pg-extras/index_info'
-require 'rails-pg-extras/index_info_print'
-require 'rails-pg-extras/table_info'
-require 'rails-pg-extras/table_info_print'
+require 'ruby_pg_extras'
+require 'rails_pg_extras/diagnose_data'
+require 'rails_pg_extras/diagnose_print'
+require 'rails_pg_extras/index_info'
+require 'rails_pg_extras/index_info_print'
+require 'rails_pg_extras/table_info'
+require 'rails_pg_extras/table_info_print'
+require 'rails_pg_extras/web'
 
-module RailsPGExtras
-  QUERIES = RubyPGExtras::QUERIES
-  DEFAULT_ARGS = RubyPGExtras::DEFAULT_ARGS
-  NEW_PG_STAT_STATEMENTS = RubyPGExtras::NEW_PG_STAT_STATEMENTS
+module RailsPgExtras
+  QUERIES = RubyPgExtras::QUERIES
+  DEFAULT_ARGS = RubyPgExtras::DEFAULT_ARGS
+  NEW_PG_STAT_STATEMENTS = RubyPgExtras::NEW_PG_STAT_STATEMENTS
 
   QUERIES.each do |query_name|
     define_singleton_method query_name do |options = {}|
@@ -26,7 +27,7 @@ module RailsPGExtras
 
   def self.run_query(query_name:, in_format:, args: {})
     if %i(calls outliers).include?(query_name)
-      pg_stat_statements_ver = RailsPGExtras.connection.execute("select installed_version from pg_available_extensions where name='pg_stat_statements'")
+      pg_stat_statements_ver = RailsPgExtras.connection.execute("select installed_version from pg_available_extensions where name='pg_stat_statements'")
         .to_a[0].fetch("installed_version", nil)
       if pg_stat_statements_ver != nil
         if Gem::Version.new(pg_stat_statements_ver) < Gem::Version.new(NEW_PG_STAT_STATEMENTS)
@@ -36,25 +37,25 @@ module RailsPGExtras
     end
 
     sql = if (custom_args = DEFAULT_ARGS[query_name].merge(args)) != {}
-      RubyPGExtras.sql_for(query_name: query_name) % custom_args
+      RubyPgExtras.sql_for(query_name: query_name) % custom_args
     else
-      RubyPGExtras.sql_for(query_name: query_name)
+      RubyPgExtras.sql_for(query_name: query_name)
     end
 
     result = connection.execute(sql)
 
-    RubyPGExtras.display_result(
+    RubyPgExtras.display_result(
       result,
-      title: RubyPGExtras.description_for(query_name: query_name),
+      title: RubyPgExtras.description_for(query_name: query_name),
       in_format: in_format
     )
   end
 
   def self.diagnose(in_format: :display_table)
-    data = RailsPGExtras::DiagnoseData.call
+    data = RailsPgExtras::DiagnoseData.call
 
     if in_format == :display_table
-      RailsPGExtras::DiagnosePrint.call(data)
+      RailsPgExtras::DiagnosePrint.call(data)
     elsif in_format == :hash
       data
     else
@@ -63,10 +64,10 @@ module RailsPGExtras
   end
 
   def self.index_info(args: {}, in_format: :display_table)
-    data = RailsPGExtras::IndexInfo.call(args[:table_name])
+    data = RailsPgExtras::IndexInfo.call(args[:table_name])
 
     if in_format == :display_table
-      RailsPGExtras::IndexInfoPrint.call(data)
+      RailsPgExtras::IndexInfoPrint.call(data)
     elsif in_format == :hash
       data
     elsif in_format == :array
@@ -77,10 +78,10 @@ module RailsPGExtras
   end
 
   def self.table_info(args: {}, in_format: :display_table)
-    data = RailsPGExtras::TableInfo.call(args[:table_name])
+    data = RailsPgExtras::TableInfo.call(args[:table_name])
 
     if in_format == :display_table
-      RailsPGExtras::TableInfoPrint.call(data)
+      RailsPgExtras::TableInfoPrint.call(data)
     elsif in_format == :hash
       data
     elsif in_format == :array
@@ -95,4 +96,4 @@ module RailsPGExtras
   end
 end
 
-require 'rails-pg-extras/railtie' if defined?(Rails)
+require 'rails_pg_extras/railtie' if defined?(Rails)

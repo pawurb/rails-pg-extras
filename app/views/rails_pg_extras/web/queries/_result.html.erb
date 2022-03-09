@@ -1,0 +1,21 @@
+<h1 class="font-bold text-xl my-5"><%= title %></h1>
+
+<table class="w-full font-mono border-collapse border my-5">
+  <thead>
+    <tr class="bg-gray-300">
+      <% headers.each do |header| %>
+      <th class="p-2 border text-left"><%= header %></th>
+      <% end %>
+    </tr>
+  </thead>
+  <tbody>
+  <% rows.each.with_index do |row, i| %>
+    <tr class="hover:bg-gray-400 hover:text-white <%= i.even? ? "bg-gray-100" : "bg-gray-200" %>">
+    <% row.each do |column| %>
+      <td class="p-1 border"><%= column %></td>
+    <% end %>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+<span class="italic">run_at: <%= Time.now.utc %></span>
