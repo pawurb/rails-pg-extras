@@ -1,5 +1,5 @@
 module RailsPgExtras::Web
-  class ActionsController < ApplicationController
+  class ActionsController < RailsPgExtras::Web::ApplicationController
     def kill_all
       run(:kill_all)
     end

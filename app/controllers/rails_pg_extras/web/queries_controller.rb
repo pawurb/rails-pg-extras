@@ -1,5 +1,5 @@
 module RailsPgExtras::Web
-  class QueriesController < ApplicationController
+  class QueriesController < RailsPgExtras::Web::ApplicationController
     before_action :load_queries
     helper_method :unavailable_extensions
 
