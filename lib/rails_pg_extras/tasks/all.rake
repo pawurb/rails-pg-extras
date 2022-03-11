@@ -8,7 +8,7 @@ namespace :pg_extras do
       ActiveRecord::Base.establish_connection(ENV['DATABASE_URL'])
     else
       db_config_file = File.read('config/database.yml')
-      db_config = YAML::load(ERB.new(db_config_file).result)
+      db_config = YAML::load(ERB.new(db_config_file).result, aliases: true)
       ActiveRecord::Base.establish_connection(db_config[Rails.env])
     end
   end
