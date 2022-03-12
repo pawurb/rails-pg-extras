@@ -5,9 +5,11 @@
   <% end %>
  </div>
 
-<%= link_to "Enable extensions", add_extensions_action_path,
-  method: "post",
-  data: {
-    confirm: "This command will enable following extensions: #{unavailable_extensions.keys.join(', ')}. Do you want to proceeed?"
-  }, class: 'border p-3 bg-green-500 text-white hover:bg-green-600 font-bold rounded' %>
+<% if RailsPgExtras::Web.action_enabled?(:enable_extensions) %>
+  <%= link_to "Enable extensions", add_extensions_action_path,
+    method: "post",
+    data: {
+      confirm: "This command will enable following extensions: #{unavailable_extensions.keys.join(', ')}. Do you want to proceeed?"
+    }, class: 'border p-3 bg-green-500 text-white hover:bg-green-600 font-bold rounded' %>
+<% end %>
 

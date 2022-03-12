@@ -2,6 +2,7 @@
 
 require 'terminal-table'
 require 'ruby_pg_extras'
+require 'rails_pg_extras/configuration'
 require 'rails_pg_extras/diagnose_data'
 require 'rails_pg_extras/diagnose_print'
 require 'rails_pg_extras/index_info'

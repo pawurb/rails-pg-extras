@@ -121,6 +121,18 @@ You can enable UI using a Rails engine by adding the following code in `config/r
 
 You can enable HTTP basic auth by specifying `RAILS_PG_EXTRAS_USER` and `RAILS_PG_EXTRAS_PASSWORD` variables.
 
+## Configuration
+
+You can configure the web actions in `config/initializers/rails_pg_extras.rb`:
+
+```ruby
+RailsPgExtras.configure do |config|
+  # Rails-pg-extras enable all web actions by default. You can check all available actions via `RailsPgExtras::Web::ACTIONS`.
+  # For example, you may want to remove the dangerous `kill_all` action in case someone perform this action accidentally.
+  config.enabled_web_actions = %i[kill_all pg_stat_statements_reset enable_extensions]
+end
+```
+
 ## Available methods
 
 ### `table_info`
