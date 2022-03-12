@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
-require 'rails_pg_extras'
+require 'rails-pg-extras'
 
 describe RailsPgExtras do
   RailsPgExtras::QUERIES.each do |query_name|
