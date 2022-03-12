@@ -13,7 +13,7 @@ module RailsPgExtras::Web
 
     ACTIONS = %i[kill_all pg_stat_statements_reset add_extensions]
 
-    if Rails.env.production? && ENV['RAILS_PG_EXTRAS_USER'].present? && ENV['RAILS_PG_EXTRAS_PASSWORD'].present?
+    if ENV['RAILS_PG_EXTRAS_USER'].present? && ENV['RAILS_PG_EXTRAS_PASSWORD'].present?
       http_basic_authenticate_with name: ENV['RAILS_PG_EXTRAS_USER'], password: ENV['RAILS_PG_EXTRAS_PASSWORD']
     end
   end

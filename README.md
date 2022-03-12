@@ -119,7 +119,7 @@ You can enable UI using a Rails engine by adding the following code in `config/r
   mount RailsPgExtras::Web::Engine, at: 'pg_extras'
 ```
 
-On production environment you can enable HTTP basic auth by specifying `RAILS_PG_EXTRAS_USER` and `RAILS_PG_EXTRAS_PASSWORD` variables.
+You can enable HTTP basic auth by specifying `RAILS_PG_EXTRAS_USER` and `RAILS_PG_EXTRAS_PASSWORD` variables.
 
 ## Available methods
 
