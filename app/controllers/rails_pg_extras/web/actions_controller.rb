@@ -1,5 +1,7 @@
 module RailsPgExtras::Web
   class ActionsController < RailsPgExtras::Web::ApplicationController
+    before_action :validate_action!
+
     def kill_all
       run(:kill_all)
     end
@@ -13,6 +15,12 @@ module RailsPgExtras::Web
     end
 
     private
+
+    def validate_action!
+      unless RailsPgExtras::Web.action_enabled?(action_name)
+        render plain: "Action '#{action_name}' is not enabled!", status: :forbidden
+      end
+    end
 
     def run(action)
       begin
