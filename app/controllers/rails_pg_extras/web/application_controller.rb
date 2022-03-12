@@ -1,4 +1,4 @@
-require "rails_pg_extras"
+require "rails-pg-extras"
 require "rails_pg_extras/version"
 
 module RailsPgExtras::Web

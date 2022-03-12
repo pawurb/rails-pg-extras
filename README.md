@@ -29,7 +29,7 @@ Alternative versions:
 In your Gemfile
 
 ```ruby
-gem "rails-pg-extras", require: "rails_pg_extras"
+gem "rails-pg-extras"
 ```
 
 `calls` and `outliers` queries require [pg_stat_statements](https://www.postgresql.org/docs/current/pgstatstatements.html) extension.

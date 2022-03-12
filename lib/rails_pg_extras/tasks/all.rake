@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'rails_pg_extras'
+require 'rails-pg-extras'
 
 namespace :pg_extras do
   task :establish_connection do

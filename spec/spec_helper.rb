@@ -3,7 +3,7 @@
 require 'rubygems'
 require 'bundler/setup'
 require 'active_record'
-require_relative '../lib/rails_pg_extras'
+require_relative '../lib/rails-pg-extras'
 
 pg_version = ENV["PG_VERSION"]
 
