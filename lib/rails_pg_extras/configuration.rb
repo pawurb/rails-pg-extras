@@ -4,7 +4,7 @@ require "rails_pg_extras/web"
 
 module RailsPgExtras
   class Configuration
-    DEFAULT_CONFIG = { enabled_web_actions: Web::ACTIONS }
+    DEFAULT_CONFIG = { enabled_web_actions: Web::ACTIONS - [:kill_all] }
 
     attr_reader :enabled_web_actions
 
