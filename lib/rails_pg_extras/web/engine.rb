@@ -1,4 +1,5 @@
 require 'rails'
+require 'rails-pg-extras'
 
 module RailsPgExtras::Web
   class Engine < ::Rails::Engine
