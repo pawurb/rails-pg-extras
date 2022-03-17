@@ -20,7 +20,7 @@ Alternative versions:
 
 - [Elixir](https://github.com/pawurb/ecto_psql_extras)
 
-- [Python](https://github.com/pawurb/ecto_psql_extras)
+- [Python](https://github.com/pawurb/python-pg-extras)
 
 - [Haskell](https://github.com/pawurb/haskell-pg-extras)
 
