@@ -1,7 +1,6 @@
-<%= form_with url: queries_path, id: "queries", method: :get do |f| %>
-  <%= f.select :query_name, options_for_select(@all_queries, params[:query_name]),
-    {prompt: "--- select query ---"},
-    {class: "border p-2 font-bold", autofocus: true}
+<%= form_tag queries_path, id: "queries", method: :get do |f| %>
+  <%= select_tag :query_name, options_for_select(@all_queries, params[:query_name]),
+    {prompt: "--- select query ---", class: "border p-2 font-bold", autofocus: true}
   %>
 <% end %>
 <script>
