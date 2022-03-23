@@ -5,7 +5,7 @@
   <% end %>
  </div>
 
-<% if RailsPgExtras::Web.action_enabled?(:enable_extensions) %>
+<% if RailsPgExtras::Web.action_enabled?(:add_extensions) %>
   <%= link_to "Enable extensions", add_extensions_action_path,
     method: "post",
     data: {
