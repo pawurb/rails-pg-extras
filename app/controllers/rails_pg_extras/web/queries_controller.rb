@@ -21,7 +21,7 @@ module RailsPgExtras::Web
     private
 
     def load_queries
-      @all_queries = (RailsPgExtras::QUERIES - ACTIONS).inject({}) do |memo, query_name|
+      @all_queries = (RailsPgExtras::QUERIES - RailsPgExtras::Web::ACTIONS).inject({}) do |memo, query_name|
         unless query_name.in? %i[mandelbrot]
           memo[query_name] = { disabled: query_disabled?(query_name) }
         end
