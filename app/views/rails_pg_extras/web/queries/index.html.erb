@@ -15,7 +15,7 @@
   %>
 <% end %>
 
-<% if RailsPgExtras::Web.action_enabled?(:pg_stat_statements_reset) %>
+<% if RailsPgExtras::Web.action_enabled?(:pg_stat_statements_reset) && unavailable_extensions.exclude?(:pg_stat_statements) %>
   <%= link_to "pg_stat_statements_reset", pg_stat_statements_reset_action_path,
     method: "post",
     data: {
