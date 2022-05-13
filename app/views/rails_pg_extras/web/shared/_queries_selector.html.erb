@@ -3,8 +3,9 @@
     {prompt: "--- select query ---", class: "border p-2 font-bold", autofocus: true}
   %>
 <% end %>
-<script>
+
+<%= javascript_tag nonce: true do -%>
   document.getElementById('queries').addEventListener('change', (e) => {
     e.target.form.submit()
   })
-</script>
+<% end -%>
