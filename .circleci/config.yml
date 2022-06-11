@@ -26,6 +26,13 @@ jobs:
           POSTGRES_USER: postgres
           POSTGRES_DB: rails-pg-extras-test
           POSTGRES_PASSWORD: secret
+      - image: cimg/postgres:14.2
+        command: postgres -c shared_preload_libraries=pg_stat_statements
+        name: postgres14
+        environment:
+          POSTGRES_USER: postgres
+          POSTGRES_DB: rails-pg-extras-test
+          POSTGRES_PASSWORD: secret
     parallelism: 1
     steps:
       - checkout
@@ -50,6 +57,11 @@ jobs:
           name: Run specs for PG 13
           environment:
             DATABASE_URL: postgresql://postgres:secret@postgres13:5432/rails-pg-extras-test
+          command: bundle exec rspec spec/
+      - run:
+          name: Run specs for PG 14
+          environment:
+            DATABASE_URL: postgresql://postgres:secret@postgres14:5432/rails-pg-extras-test
           command: bundle exec rspec spec/
 workflows:
   version: 2
