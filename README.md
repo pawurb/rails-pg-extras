@@ -286,14 +286,14 @@ RailsPgExtras.locks
 
 $ rake pg_extras:locks
 
- procpid | relname | transactionid | granted |     query_snippet     | mode             |       age
----------+---------+---------------+---------+-----------------------+-------------------------------------
-   31776 |         |               | t       | <IDLE> in transaction | ExclusiveLock    |  00:19:29.837898
-   31776 |         |          1294 | t       | <IDLE> in transaction | RowExclusiveLock |  00:19:29.837898
-   31912 |         |               | t       | select * from hello;  | ExclusiveLock    |  00:19:17.94259
-    3443 |         |               | t       |                      +| ExclusiveLock    |  00:00:00
-         |         |               |         |    select            +|                  |
-         |         |               |         |      pg_stat_activi   |                  |
+ procpid | relname | transactionid | granted |     query_snippet     | mode             |       age        |   application |
+---------+---------+---------------+---------+-----------------------+------------------------------------------------------
+   31776 |         |               | t       | <IDLE> in transaction | ExclusiveLock    |  00:19:29.837898 |  bin/rails
+   31776 |         |          1294 | t       | <IDLE> in transaction | RowExclusiveLock |  00:19:29.837898 |  bin/rails
+   31912 |         |               | t       | select * from hello;  | ExclusiveLock    |  00:19:17.94259  |  bin/rails
+    3443 |         |               | t       |                      +| ExclusiveLock    |  00:00:00        |  bin/sidekiq
+         |         |               |         |    select            +|                  |                  |
+         |         |               |         |      pg_stat_activi   |                  |                  |
 (4 rows)
 ```
 
