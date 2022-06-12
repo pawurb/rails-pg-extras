@@ -13,6 +13,8 @@ elsif pg_version == "12"
   "5433"
 elsif pg_version == "13"
   "5434"
+elsif pg_version == "14"
+  "5435"
 else
   "5432"
 end
