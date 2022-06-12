@@ -2,7 +2,7 @@ version: 2
 jobs:
   test:
     docker:
-      - image: cimg/ruby:2.6.5
+      - image: cimg/ruby:2.7.6
         environment:
           DATABASE_URL: postgresql://postgres:secret@localhost:5432/rails-pg-extras-test
       - image: cimg/postgres:11.15
@@ -38,10 +38,11 @@ jobs:
       - checkout
       - run: gem update --system
       - run: gem install bundler
-      - run: bundle config set --local path 'vendor/bundle'
-      - run: bundle install
       - run: sudo apt-get update --allow-releaseinfo-change
       - run: sudo apt install postgresql-client
+      - run: sudo apt install libpq-dev
+      - run: bundle config set --local path 'vendor/bundle'
+      - run: bundle install
       - run: dockerize -wait tcp://postgres11:5432 -timeout 1m
       - run:
           name: Run specs for PG 11
