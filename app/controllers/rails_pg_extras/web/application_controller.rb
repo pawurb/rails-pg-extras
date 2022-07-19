@@ -13,8 +13,12 @@ module RailsPgExtras::Web
 
     ACTIONS = %i[kill_all pg_stat_statements_reset add_extensions]
 
+    if Rails.env.production? && (ENV['RAILS_PG_EXTRAS_USER'].blank? || ENV['RAILS_PG_EXTRAS_PASSWORD'].blank?) && ENV["RAILS_PG_EXTRAS_PUBLIC_DASHBOARD"] != "true"
+      raise "Missing credentials for rails-pg-extras dashboard!"
+    end
+
     if ENV['RAILS_PG_EXTRAS_USER'].present? && ENV['RAILS_PG_EXTRAS_PASSWORD'].present?
-      http_basic_authenticate_with name: ENV['RAILS_PG_EXTRAS_USER'], password: ENV['RAILS_PG_EXTRAS_PASSWORD']
+      http_basic_authenticate_with name: ENV.fetch('RAILS_PG_EXTRAS_USER'), password: ENV.fetch('RAILS_PG_EXTRAS_PASSWORD')
     end
   end
 end
