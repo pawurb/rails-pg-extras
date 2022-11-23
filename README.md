@@ -669,6 +669,24 @@ $ rake pg_extras:extensions
 
 This command lists all the currently installed and available PostgreSQL extensions.
 
+### `connections`
+
+```ruby
+
+RailsPgExtras.connections
+
++-----------------------------------------------------+
+| Returns the list of all active database connections |
++-----------------+----------------+------------------+
+| username        | client_address | application_name |
++-----------------+----------------+------------------+
+| postgres        | 172.19.0.1/32  | psql             |
+| postgres        | 172.19.0.1/32  | irb              |
++-----------------+----------------+------------------+
+```
+
+This command returns the list of all active database connections.
+
 ### mandelbrot
 
 ```ruby
