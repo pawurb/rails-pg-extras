@@ -685,14 +685,15 @@ This command lists all the currently installed and available PostgreSQL extensio
 
 RailsPgExtras.connections
 
-+-----------------------------------------------------+
-| Returns the list of all active database connections |
-+-----------------+----------------+------------------+
-| username        | client_address | application_name |
-+-----------------+----------------+------------------+
-| postgres        | 172.19.0.1/32  | psql             |
-| postgres        | 172.19.0.1/32  | irb              |
-+-----------------+----------------+------------------+
++----------------------------------------------------------------+
+|      Returns the list of all active database connections       |
++------------------+--------------------------+------------------+
+| username | pid   | client_address           | application_name |
++------------------+--------------------------+------------------+
+| postgres | 15962 | 172.31.69.166/32         | sidekiq          |
+| postgres | 16810 | 172.31.69.166/32         | bin/rails        |
++------------------+--------------------------+------------------+
+
 ```
 
 This command returns the list of all active database connections.
