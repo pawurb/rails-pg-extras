@@ -630,6 +630,16 @@ RailsPgExtras.kill_all
 
 This commands kills all the currently active connections to the database. It can be useful as a last resort when your database is stuck in a deadlock.
 
+### `kill_pid`
+
+```ruby
+
+RailsPgExtras.kill_pid(args: { pid: 4657 })
+
+```
+
+This commands kills currently active database connection by its `pid` number. You can use `connections` method to find the correct `pid` values.
+
 ### `pg_stat_statements_reset`
 
 ```ruby
