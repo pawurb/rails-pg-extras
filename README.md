@@ -282,7 +282,7 @@ This command provides information on the efficiency of indexes, represented as w
 ### `locks`
 
 ```ruby
-RailsPgExtras.locks
+RailsPgExtras.locks(args: { limit: 20 })
 
 $ rake pg_extras:locks
 
