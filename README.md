@@ -97,6 +97,30 @@ RailsPgExtras.long_running_queries(args: { threshold: "200 milliseconds" })
 
 ```
 
+## Multiple Databases / Analyze secondary database
+
+To analyze multiple database or a database that it's not the main one,
+it's possible optionally to configure multiple connections that will be used by RailsPgExtras adding in `config/application.rb`:
+
+```ruby
+config.after_initialize do
+  RailsPgExtras.connections = [ ApplicationRecord.connection, SecondaryDb::ApplicationRecord.connection, ... ]
+end
+```
+
+By default all the commands would be executed on the first connection.
+To do otherwise it's pass the database name as an argument:
+
+```ruby
+RailsPgExtras.diagnose(db_name: 'secondary_db_name')
+
+$ rake pg_extras:diagnose\[secondary_db_name\]
+```
+
+ When there are more then one connection in the visual interface it will be possible to chose which database to analyze and to execute other actions
+
+![Web interface multiple databases](https://github.com/pawurb/rails-pg-extras/raw/master/pg-extras-ui-multiple-dbs.png)
+
 ## Diagnose report
 
 The simplest way to start using pg-extras is to execute a `diagnose` method. It runs a set of checks and prints out a report highlighting areas that may require additional investigation:

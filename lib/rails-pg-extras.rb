@@ -19,12 +19,13 @@ module RailsPgExtras
       run_query(
         query_name: query_name,
         in_format: options.fetch(:in_format, :display_table),
+        db_name: options[:db_name],
         args: options.fetch(:args, {})
       )
     end
   end
 
-  def self.run_query(query_name:, in_format:, args: {})
+  def self.run_query(query_name:, in_format:, db_name: nil, args: {})
     if %i(calls outliers).include?(query_name)
       pg_stat_statements_ver = RailsPgExtras.connection.execute("select installed_version from pg_available_extensions where name='pg_stat_statements'")
         .to_a[0].fetch("installed_version", nil)
@@ -41,7 +42,7 @@ module RailsPgExtras
       RubyPgExtras.sql_for(query_name: query_name)
     end
 
-    result = connection.execute(sql)
+    result = connection(db_name: db_name).execute(sql)
 
     RubyPgExtras.display_result(
       result,
@@ -50,8 +51,8 @@ module RailsPgExtras
     )
   end
 
-  def self.diagnose(in_format: :display_table)
-    data = RailsPgExtras::DiagnoseData.call
+  def self.diagnose(in_format: :display_table, db_name: nil)
+    data = RailsPgExtras::DiagnoseData.call(db_name: db_name)
 
     if in_format == :display_table
       RailsPgExtras::DiagnosePrint.call(data)
@@ -62,8 +63,8 @@ module RailsPgExtras
     end
   end
 
-  def self.index_info(args: {}, in_format: :display_table)
-    data = RailsPgExtras::IndexInfo.call(args[:table_name])
+  def self.index_info(args: {}, in_format: :display_table, db_name: nil)
+    data = RailsPgExtras::IndexInfo.call(args[:table_name], db_name: db_name)
 
     if in_format == :display_table
       RailsPgExtras::IndexInfoPrint.call(data)
@@ -76,8 +77,8 @@ module RailsPgExtras
     end
   end
 
-  def self.table_info(args: {}, in_format: :display_table)
-    data = RailsPgExtras::TableInfo.call(args[:table_name])
+  def self.table_info(args: {}, in_format: :display_table, db_name: nil)
+    data = RailsPgExtras::TableInfo.call(args[:table_name], db_name: db_name)
 
     if in_format == :display_table
       RailsPgExtras::TableInfoPrint.call(data)
@@ -90,8 +91,19 @@ module RailsPgExtras
     end
   end
 
-  def self.connection
-    ActiveRecord::Base.connection
+  def self.connection(db_name: nil)
+    return ActiveRecord::Base.connection if @connections.blank?
+    return @connections.first if db_name.nil?
+
+    @connections.find { |connection| connection.current_database == db_name } || raise("Invalid database name argument!")
+  end
+
+  def self.connections
+    @connections
+  end
+
+  def self.connections=(connections)
+    @connections = connections
   end
 end
 

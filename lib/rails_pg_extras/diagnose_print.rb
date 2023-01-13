@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module RailsPgExtras
-  class DiagnosePrint < ::RubyPgExtras::DiagnosePrint
+  class DiagnosePrint < RubyPgExtras::DiagnosePrint
 
     private
 

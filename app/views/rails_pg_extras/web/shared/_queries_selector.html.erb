@@ -2,6 +2,12 @@
   <%= select_tag :query_name, options_for_select(@all_queries, params[:query_name]),
     {prompt: "--- select query ---", class: "border p-2 font-bold", autofocus: true}
   %>
+
+  <% if @all_dbs.present? && @all_dbs.size > 1 %>
+    <%= select_tag :db_name, options_for_select(@all_dbs, params[:db_name]),
+      {prompt: "--- select database ---", class: "border p-2 font-bold", autofocus: true}
+    %>
+  <% end %>
 <% end %>
 
 <%= javascript_tag nonce: true do -%>
