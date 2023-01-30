@@ -91,7 +91,11 @@ module RailsPgExtras
   end
 
   def self.connection
-    ActiveRecord::Base.connection
+    if (db_url = ENV['RAILS_PG_EXTRAS_DATABASE_URL'])
+      ActiveRecord::Base.establish_connection(db_url).connection
+    else
+      ActiveRecord::Base.connection
+    end
   end
 end
 

@@ -28,4 +28,14 @@ describe RailsPgExtras do
       RailsPgExtras.table_info(in_format: :hash)
     end.not_to raise_error
   end
+
+  it "supports custom RAILS_PG_EXTRAS_DATABASE_URL" do
+    ENV['RAILS_PG_EXTRAS_DATABASE_URL'] = ENV['DATABASE_URL']
+
+    expect do
+      RailsPgExtras.calls
+    end.not_to raise_error
+
+    ENV['RAILS_PG_EXTRAS_DATABASE_URL'] = nil
+  end
 end
