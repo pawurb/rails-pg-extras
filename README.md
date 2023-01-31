@@ -51,7 +51,7 @@ You should see the similar line in the output:
 RailsPgExtras.add_extensions
 ```
 
-By deafult a primary ActiveRecord database connection is used for running metadata queries. To connect to a different database you can specify an `ENV['RAILS_PG_EXTRAS_DATABASE_URL']` value in the following format:
+By deafult a primary ActiveRecord database connection is used for running metadata queries, rake tasks and web UI. To connect to a different database you can specify an `ENV['RAILS_PG_EXTRAS_DATABASE_URL']` value in the following format:
 
 ```ruby
 ENV["RAILS_PG_EXTRAS_DATABASE_URL"] = "postgresql://postgres:secret@localhost:5432/database_name"
