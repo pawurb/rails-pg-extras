@@ -29,6 +29,11 @@ describe RailsPgExtras do
     end.not_to raise_error
   end
 
+  it "collecting queries data works" do
+    output = RailsPgExtras.queries_data { RailsPgExtras.diagnose(in_format: :hash) }
+    expect(output.fetch(:count)).to eq 10
+  end
+
   it "supports custom RAILS_PG_EXTRAS_DATABASE_URL" do
     ENV['RAILS_PG_EXTRAS_DATABASE_URL'] = ENV['DATABASE_URL']
 

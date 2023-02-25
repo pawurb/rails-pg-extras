@@ -140,6 +140,27 @@ end
 
 ## Available methods
 
+### `queries_data`
+
+This method allows checking query types executed when running a provided Ruby snippet. It can help debug N+1 issues and review the impact of adding eager loading:
+
+```ruby
+
+User.queries_data { User.limit(10).map(&:team) }
+
+# {:count=>11,
+#  :queries=>
+#   {"SELECT \"users\".* FROM \"users\" LIMIT $1"=>1,
+#    "SELECT \"teams\".* FROM \"teams\" WHERE \"teams\".\"id\" = $1 LIMIT $2"=>10}}
+
+User.queries_data { User.limit(10).includes(:team).map(&:team) }
+
+# {:count=>2,
+#  :queries=>
+#   {"SELECT \"users\".* FROM \"users\" LIMIT $1"=>1,
+#    "SELECT \"teams\".* FROM \"teams\" WHERE \"teams\".\"id\" IN ($1, $2, $3, $4, $5, $6, $7, $8)"=>1}}
+```
+
 ### `table_info`
 
 This method displays metadata metrics for all or a selected table. You can use it to check the table's size, its cache hit metrics, and whether it is correctly indexed. Many sequential scans or no index scans are potential indicators of misconfigured indexes. This method aggregates data provided by other methods in an easy to analyze summary format.

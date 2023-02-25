@@ -62,6 +62,23 @@ module RailsPgExtras
     end
   end
 
+  def self.queries_data(&block)
+    queries = Hash.new(0)
+    subscriber = ActiveSupport::Notifications.subscribe("sql.active_record") do |_name, _start, _finish, _id, payload|
+      unless payload[:name] =~ /SCHEMA/
+        queries[payload[:sql]] += 1
+      end
+    end
+
+    block.call
+
+    ActiveSupport::Notifications.unsubscribe(subscriber)
+    {
+      count: queries.values.sum,
+      queries: queries
+    }
+  end
+
   def self.index_info(args: {}, in_format: :display_table)
     data = RailsPgExtras::IndexInfo.call(args[:table_name])
 
