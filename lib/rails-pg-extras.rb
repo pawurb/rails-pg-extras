@@ -62,20 +62,58 @@ module RailsPgExtras
     end
   end
 
-  def self.queries_data(&block)
-    queries = Hash.new(0)
-    subscriber = ActiveSupport::Notifications.subscribe("sql.active_record") do |_name, _start, _finish, _id, payload|
+  def self.measure_duration(&block)
+    starting = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+    block.call
+    ending = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+    elapsed = ending - starting
+    elapsed
+  end
+
+  def self.measure_queries(&block)
+    queries = {}
+    sql_duration = 0
+
+    method_name = if ActiveSupport::Notifications.respond_to?(:monotonic_subscribe)
+      :monotonic_subscribe
+    else
+      :subscribe
+    end
+
+    subscriber = ActiveSupport::Notifications.public_send(method_name, "sql.active_record") do |_name, start, finish, _id, payload|
       unless payload[:name] =~ /SCHEMA/
-        queries[payload[:sql]] += 1
+        key = payload[:sql]
+        queries[key] ||= { count: 0, total_duration: 0, min_duration: nil, max_duration: nil }
+        queries[key][:count] += 1
+        duration = finish - start
+        queries[key][:total_duration] += duration
+        sql_duration += duration
+
+        if queries[key][:min_duration] == nil || queries[key][:min_duration] > duration
+          queries[key][:min_duration] = duration
+        end
+
+        if queries[key][:max_duration] == nil || queries[key][:max_duration] < duration
+          queries[key][:max_duration] = duration
+        end
       end
     end
 
-    block.call
+    total_duration = measure_duration do
+      block.call
+    end
+
+    queries = queries.reduce({}) do |agg, val|
+      val[1][:avg_duration] = val[1][:total_duration] / val[1][:count]
+      agg.merge(val[0] => val[1])
+    end
 
     ActiveSupport::Notifications.unsubscribe(subscriber)
     {
-      count: queries.values.sum,
-      queries: queries
+      count: queries.reduce(0) { |agg, val| agg + val[1].fetch(:count) },
+      queries: queries,
+      total_duration: total_duration,
+      sql_duration: sql_duration
     }
   end
 

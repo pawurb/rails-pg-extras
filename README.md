@@ -140,25 +140,50 @@ end
 
 ## Available methods
 
-### `queries_data`
+### `measure_queries`
 
-This method allows checking query types executed when running a provided Ruby snippet. It can help debug N+1 issues and review the impact of adding eager loading:
+This method displays query types executed when running a provided Ruby snippet, with their avg., min., max., and total duration. It also outputs info about the snippet execution duration and the portion spent running SQL queries (`total_duration`/`sql_duration`). It can help debug N+1 issues and review the impact of configuring eager loading:
 
 ```ruby
 
-User.queries_data { User.limit(10).map(&:team) }
+User.measure_queries { User.limit(10).map(&:team) }
 
 # {:count=>11,
 #  :queries=>
-#   {"SELECT \"users\".* FROM \"users\" LIMIT $1"=>1,
-#    "SELECT \"teams\".* FROM \"teams\" WHERE \"teams\".\"id\" = $1 LIMIT $2"=>10}}
+#   {"SELECT \"users\".* FROM \"users\" LIMIT $1"=>
+#     {:count=>1,
+#      :total_duration=>0.003183000022545457,
+#      :min_duration=>0.003183000022545457,
+#      :max_duration=>0.003183000022545457,
+#      :avg_duration=>0.003183000022545457},
+#    "SELECT \"teams\".* FROM \"teams\" WHERE \"teams\".\"id\" = $1 LIMIT $2"=>
+#     {:count=>10,
+#      :total_duration=>0.011682000011205673,
+#      :min_duration=>0.0007209999894257635,
+#      :max_duration=>0.0024030000204220414,
+#      :avg_duration=>0.0011682000011205673}},
+#  :total_duration=>0.15247199998702854,
+#  :sql_duration=>0.01486500003375113}
 
-User.queries_data { User.limit(10).includes(:team).map(&:team) }
+User.measure_queries { User.limit(10).includes(:team).map(&:team) }
 
 # {:count=>2,
 #  :queries=>
-#   {"SELECT \"users\".* FROM \"users\" LIMIT $1"=>1,
-#    "SELECT \"teams\".* FROM \"teams\" WHERE \"teams\".\"id\" IN ($1, $2, $3, $4, $5, $6, $7, $8)"=>1}}
+#   {"SELECT \"users\".* FROM \"users\" LIMIT $1"=>
+#     {:count=>1,
+#      :total_duration=>0.0036189999955240637,
+#      :min_duration=>0.0036189999955240637,
+#      :max_duration=>0.0036189999955240637,
+#      :avg_duration=>0.0036189999955240637},
+#    "SELECT \"teams\".* FROM \"teams\" WHERE \"teams\".\"id\" IN ($1, $2, $3, $4, $5, $6, $7, $8)"=>
+#     {:count=>1,
+#      :total_duration=>0.003714999998919666,
+#      :min_duration=>0.003714999998919666,
+#      :max_duration=>0.003714999998919666,
+#      :avg_duration=>0.003714999998919666}},
+#  :total_duration=>0.023814999993192032,
+#  :sql_duration=>0.0073339999944437295}
+
 ```
 
 ### `table_info`
