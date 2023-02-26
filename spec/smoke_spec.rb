@@ -30,7 +30,7 @@ describe RailsPgExtras do
   end
 
   it "collecting queries data works" do
-    output = RailsPgExtras.queries_data { RailsPgExtras.diagnose(in_format: :hash) }
+    output = RailsPgExtras.measure_queries { RailsPgExtras.diagnose(in_format: :hash) }
     expect(output.fetch(:count)).to eq 10
   end
 
