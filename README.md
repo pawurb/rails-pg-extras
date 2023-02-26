@@ -146,7 +146,7 @@ This method displays query types executed when running a provided Ruby snippet, 
 
 ```ruby
 
-User.measure_queries { User.limit(10).map(&:team) }
+RailsPgExtras.measure_queries { User.limit(10).map(&:team) }
 
 # {:count=>11,
 #  :queries=>
@@ -165,7 +165,7 @@ User.measure_queries { User.limit(10).map(&:team) }
 #  :total_duration=>0.15247199998702854,
 #  :sql_duration=>0.01486500003375113}
 
-User.measure_queries { User.limit(10).includes(:team).map(&:team) }
+RailsPgExtras.measure_queries { User.limit(10).includes(:team).map(&:team) }
 
 # {:count=>2,
 #  :queries=>
