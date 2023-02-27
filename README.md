@@ -142,7 +142,7 @@ end
 
 ### `measure_queries`
 
-This method displays query types executed when running a provided Ruby snippet, with their avg., min., max., and total duration. It also outputs info about the snippet execution duration and the portion spent running SQL queries (`total_duration`/`sql_duration`). It can help debug N+1 issues and review the impact of configuring eager loading:
+This method displays query types executed when running a provided Ruby snippet, with their avg., min., max., and total duration in miliseconds. It also outputs info about the snippet execution duration and the portion spent running SQL queries (`total_duration`/`sql_duration`). It can help debug N+1 issues and review the impact of configuring eager loading:
 
 ```ruby
 

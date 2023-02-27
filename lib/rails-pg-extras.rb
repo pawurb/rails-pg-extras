@@ -66,8 +66,7 @@ module RailsPgExtras
     starting = Process.clock_gettime(Process::CLOCK_MONOTONIC)
     block.call
     ending = Process.clock_gettime(Process::CLOCK_MONOTONIC)
-    elapsed = ending - starting
-    elapsed
+    (ending - starting) * 1000
   end
 
   def self.measure_queries(&block)
@@ -85,7 +84,7 @@ module RailsPgExtras
         key = payload[:sql]
         queries[key] ||= { count: 0, total_duration: 0, min_duration: nil, max_duration: nil }
         queries[key][:count] += 1
-        duration = finish - start
+        duration = (finish - start) * 1000
         queries[key][:total_duration] += duration
         sql_duration += duration
 
