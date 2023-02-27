@@ -148,41 +148,41 @@ This method displays query types executed when running a provided Ruby snippet, 
 
 RailsPgExtras.measure_queries { User.limit(10).map(&:team) }
 
-# {:count=>11,
-#  :queries=>
-#   {"SELECT \"users\".* FROM \"users\" LIMIT $1"=>
-#     {:count=>1,
-#      :total_duration=>0.003183000022545457,
-#      :min_duration=>0.003183000022545457,
-#      :max_duration=>0.003183000022545457,
-#      :avg_duration=>0.003183000022545457},
-#    "SELECT \"teams\".* FROM \"teams\" WHERE \"teams\".\"id\" = $1 LIMIT $2"=>
-#     {:count=>10,
-#      :total_duration=>0.011682000011205673,
-#      :min_duration=>0.0007209999894257635,
-#      :max_duration=>0.0024030000204220414,
-#      :avg_duration=>0.0011682000011205673}},
-#  :total_duration=>0.15247199998702854,
-#  :sql_duration=>0.01486500003375113}
+{:count=>11,
+ :queries=>
+  {"SELECT \"users\".* FROM \"users\" LIMIT $1"=>
+    {:count=>1,
+     :total_duration=>3.452000004472211,
+     :min_duration=>3.452000004472211,
+     :max_duration=>3.452000004472211,
+     :avg_duration=>3.452000004472211},
+   "SELECT \"teams\".* FROM \"teams\" WHERE \"teams\".\"id\" = $1 LIMIT $2"=>
+    {:count=>10,
+     :total_duration=>14.487000000372063,
+     :min_duration=>0.778000001446344,
+     :max_duration=>1.985000002605375,
+     :avg_duration=>1.4487000000372063}},
+ :total_duration=>24.812000003294088,
+ :sql_duration=>17.939000004844274}
 
 RailsPgExtras.measure_queries { User.limit(10).includes(:team).map(&:team) }
 
-# {:count=>2,
-#  :queries=>
-#   {"SELECT \"users\".* FROM \"users\" LIMIT $1"=>
-#     {:count=>1,
-#      :total_duration=>0.0036189999955240637,
-#      :min_duration=>0.0036189999955240637,
-#      :max_duration=>0.0036189999955240637,
-#      :avg_duration=>0.0036189999955240637},
-#    "SELECT \"teams\".* FROM \"teams\" WHERE \"teams\".\"id\" IN ($1, $2, $3, $4, $5, $6, $7, $8)"=>
-#     {:count=>1,
-#      :total_duration=>0.003714999998919666,
-#      :min_duration=>0.003714999998919666,
-#      :max_duration=>0.003714999998919666,
-#      :avg_duration=>0.003714999998919666}},
-#  :total_duration=>0.023814999993192032,
-#  :sql_duration=>0.0073339999944437295}
+{:count=>2,
+ :queries=>
+  {"SELECT \"users\".* FROM \"users\" LIMIT $1"=>
+    {:count=>1,
+     :total_duration=>3.7079999965499155,
+     :min_duration=>3.7079999965499155,
+     :max_duration=>3.7079999965499155,
+     :avg_duration=>3.7079999965499155},
+   "SELECT \"teams\".* FROM \"teams\" WHERE \"teams\".\"id\" IN ($1, $2, $3, $4, $5, $6, $7, $8)"=>
+    {:count=>1,
+     :total_duration=>2.422000005026348,
+     :min_duration=>2.422000005026348,
+     :max_duration=>2.422000005026348,
+     :avg_duration=>2.422000005026348}},
+ :total_duration=>9.905999999318738,
+ :sql_duration=>6.1300000015762635}
 
 ```
 
