@@ -152,18 +152,18 @@ RailsPgExtras.measure_queries { User.limit(10).map(&:team) }
  :queries=>
   {"SELECT \"users\".* FROM \"users\" LIMIT $1"=>
     {:count=>1,
-     :total_duration=>3.452000004472211,
-     :min_duration=>3.452000004472211,
-     :max_duration=>3.452000004472211,
-     :avg_duration=>3.452000004472211},
+     :total_duration=>1.9,
+     :min_duration=>1.9,
+     :max_duration=>1.9,
+     :avg_duration=>1.9},
    "SELECT \"teams\".* FROM \"teams\" WHERE \"teams\".\"id\" = $1 LIMIT $2"=>
     {:count=>10,
-     :total_duration=>14.487000000372063,
-     :min_duration=>0.778000001446344,
-     :max_duration=>1.985000002605375,
-     :avg_duration=>1.4487000000372063}},
- :total_duration=>24.812000003294088,
- :sql_duration=>17.939000004844274}
+     :total_duration=>0.94,
+     :min_duration=>0.62,
+     :max_duration=>1.37,
+     :avg_duration=>0.94}},
+ :total_duration=>13.35,
+ :sql_duration=>11.34}
 
 RailsPgExtras.measure_queries { User.limit(10).includes(:team).map(&:team) }
 
@@ -171,18 +171,18 @@ RailsPgExtras.measure_queries { User.limit(10).includes(:team).map(&:team) }
  :queries=>
   {"SELECT \"users\".* FROM \"users\" LIMIT $1"=>
     {:count=>1,
-     :total_duration=>3.7079999965499155,
-     :min_duration=>3.7079999965499155,
-     :max_duration=>3.7079999965499155,
-     :avg_duration=>3.7079999965499155},
+     :total_duration=>3.43,
+     :min_duration=>3.43,
+     :max_duration=>3.43,
+    :avg_duration=>3.43},
    "SELECT \"teams\".* FROM \"teams\" WHERE \"teams\".\"id\" IN ($1, $2, $3, $4, $5, $6, $7, $8)"=>
     {:count=>1,
-     :total_duration=>2.422000005026348,
-     :min_duration=>2.422000005026348,
-     :max_duration=>2.422000005026348,
-     :avg_duration=>2.422000005026348}},
- :total_duration=>9.905999999318738,
- :sql_duration=>6.1300000015762635}
+     :total_duration=>2.59,
+     :min_duration=>2.59,
+     :max_duration=>2.59,
+     :avg_duration=>2.59}},
+ :total_duration=>9.75,
+ :sql_duration=>6.02}
 
 ```
 
