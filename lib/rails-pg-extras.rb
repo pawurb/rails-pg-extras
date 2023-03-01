@@ -89,11 +89,11 @@ module RailsPgExtras
         sql_duration += duration
 
         if queries[key][:min_duration] == nil || queries[key][:min_duration] > duration
-          queries[key][:min_duration] = duration
+          queries[key][:min_duration] = duration.round(2)
         end
 
         if queries[key][:max_duration] == nil || queries[key][:max_duration] < duration
-          queries[key][:max_duration] = duration
+          queries[key][:max_duration] = duration.round(2)
         end
       end
     end
@@ -103,7 +103,8 @@ module RailsPgExtras
     end
 
     queries = queries.reduce({}) do |agg, val|
-      val[1][:avg_duration] = val[1][:total_duration] / val[1][:count]
+      val[1][:avg_duration] = (val[1][:total_duration] / val[1][:count]).round(2)
+      val[1][:total_duration] = val[1][:total_duration].round(2)
       agg.merge(val[0] => val[1])
     end
 
@@ -111,10 +112,11 @@ module RailsPgExtras
     {
       count: queries.reduce(0) { |agg, val| agg + val[1].fetch(:count) },
       queries: queries,
-      total_duration: total_duration,
-      sql_duration: sql_duration
+      total_duration: total_duration.round(2),
+      sql_duration: sql_duration.round(2)
     }
   end
+
 
   def self.index_info(args: {}, in_format: :display_table)
     data = RailsPgExtras::IndexInfo.call(args[:table_name])
