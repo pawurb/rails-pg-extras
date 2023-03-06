@@ -186,6 +186,21 @@ RailsPgExtras.measure_queries { User.limit(10).includes(:team).map(&:team) }
 
 ```
 
+Optionally, by including [Marginalia gem](https://github.com/basecamp/marginalia) and configuring it to display query backtraces:
+
+`config/development.rb`
+
+```ruby
+
+Marginalia::Comment.components = [:line]
+
+```
+
+you can add this info to the output:
+
+![Marginalia logs](https://github.com/pawurb/rails-pg-extras/raw/master/marginalia-logs.png)
+
+
 ### `table_info`
 
 This method displays metadata metrics for all or a selected table. You can use it to check the table's size, its cache hit metrics, and whether it is correctly indexed. Many sequential scans or no index scans are potential indicators of misconfigured indexes. This method aggregates data provided by other methods in an easy to analyze summary format.
