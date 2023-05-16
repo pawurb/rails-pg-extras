@@ -10,7 +10,7 @@ You can read this blog post for detailed step by step tutorial on how to [optimi
 
 Optionally you can enable a visual interface:
 
-![Web interface](https://github.com/pawurb/rails-pg-extras/raw/master/pg-extras-ui.png)
+![Web interface](https://github.com/pawurb/rails-pg-extras/raw/main/pg-extras-ui.png)
 
 Alternative versions:
 
@@ -113,7 +113,7 @@ RailsPgExtras.diagnose
 $ rake pg_extras:diagnose
 ```
 
-![Diagnose report](https://github.com/pawurb/rails-pg-extras/raw/master/rails-pg-extras-diagnose.png)
+![Diagnose report](https://github.com/pawurb/rails-pg-extras/raw/main/rails-pg-extras-diagnose.png)
 
 Keep reading to learn about methods that `diagnose` uses under the hood.
 
@@ -198,7 +198,7 @@ Marginalia::Comment.components = [:line]
 
 you can add this info to the output:
 
-![Marginalia logs](https://github.com/pawurb/rails-pg-extras/raw/master/marginalia-logs.png)
+![Marginalia logs](https://github.com/pawurb/rails-pg-extras/raw/main/marginalia-logs.png)
 
 
 ### `table_info`
