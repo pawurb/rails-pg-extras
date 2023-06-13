@@ -14,6 +14,11 @@ module RailsPgExtras::Web
       run(:add_extensions)
     end
 
+    def switch_database
+      set_current_database(params[:database])
+      redirect_to request.env["HTTP_REFERER"]
+    end
+
     private
 
     def validate_action!

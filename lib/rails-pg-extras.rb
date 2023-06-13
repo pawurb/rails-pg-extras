@@ -13,6 +13,7 @@ module RailsPgExtras
   QUERIES = RubyPgExtras::QUERIES
   DEFAULT_ARGS = RubyPgExtras::DEFAULT_ARGS
   NEW_PG_STAT_STATEMENTS = RubyPgExtras::NEW_PG_STAT_STATEMENTS
+  RAILS_PG_EXTRAS_DATABASE = 'RAILS_PG_EXTRAS_DATABASE'
 
   QUERIES.each do |query_name|
     define_singleton_method query_name do |options = {}|
@@ -149,6 +150,8 @@ module RailsPgExtras
   def self.connection
     if (db_url = ENV['RAILS_PG_EXTRAS_DATABASE_URL'])
       ActiveRecord::Base.establish_connection(db_url).connection
+    elsif (db = ENV[RAILS_PG_EXTRAS_DATABASE])
+      ActiveRecord::Base.connects_to(database: { db: db.to_sym }).first.connection
     else
       ActiveRecord::Base.connection
     end

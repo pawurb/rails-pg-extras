@@ -1,0 +1,4 @@
+<%= form_tag switch_database_path, method: :post, class: "mb-2" do %>
+  <label>Database: </label>
+  <%= select_tag("database", options_for_select(@databases, @current_database), class: "border p-2 font-bold", onchange: "this.form.submit()") %>
+<% end %>
