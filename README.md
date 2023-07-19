@@ -103,6 +103,12 @@ RailsPgExtras.long_running_queries(args: { threshold: "200 milliseconds" })
 
 ```
 
+By default, queries target the `public` schema of the database. You can specify a different schema by passing the `schema` argument:
+
+```ruby
+RailsPgExtras.table_cache_hit(args: { schema: "my_schema" })
+```
+
 ## Diagnose report
 
 The simplest way to start using pg-extras is to execute a `diagnose` method. It runs a set of checks and prints out a report highlighting areas that may require additional investigation:
