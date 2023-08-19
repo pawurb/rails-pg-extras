@@ -1,4 +1,4 @@
-# Rails PG Extras [![Gem Version](https://badge.fury.io/rb/rails-pg-extras.svg)](https://badge.fury.io/rb/rails-pg-extras) [![CircleCI](https://circleci.com/gh/pawurb/rails-pg-extras.svg?style=svg)](https://circleci.com/gh/pawurb/rails-pg-extras)
+# Rails PG Extras [![Gem Version](https://badge.fury.io/rb/rails-pg-extras.svg)](https://badge.fury.io/rb/rails-pg-extras) [![GH Actions](https://github.com/pawurb/rails-pg-extras/actions/workflows/ci.yml/badge.svg)](https://github.com/pawurb/rails-pg-extras/actions)
 
 Rails port of [Heroku PG Extras](https://github.com/heroku/heroku-pg-extras) with several additions and improvements. The goal of this project is to provide powerful insights into the PostgreSQL database for Ruby on Rails apps that are not using the Heroku PostgreSQL plugin.
 

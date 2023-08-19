@@ -1,0 +1,128 @@
+name: Ruby CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby-version: ['3.2', '3.1', '3.0', '2.7', '2.6']
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run PostgreSQL 11
+        run: |
+          docker run --env POSTGRES_USER=postgres \
+            --env POSTGRES_DB=rails-pg-extras-test \
+            --env POSTGRES_PASSWORD=secret \
+            -d -p 5432:5432 postgres:11.18-alpine \
+            postgres -c shared_preload_libraries=pg_stat_statements
+      - name: Run PostgreSQL 12
+        run: |
+          docker run --env POSTGRES_USER=postgres \
+            --env POSTGRES_DB=rails-pg-extras-test \
+            --env POSTGRES_PASSWORD=secret \
+            -d -p 5433:5432 postgres:12.13-alpine \
+            postgres -c shared_preload_libraries=pg_stat_statements
+      - name: Run PostgreSQL 13
+        run: |
+          docker run --env POSTGRES_USER=postgres \
+            --env POSTGRES_DB=rails-pg-extras-test \
+            --env POSTGRES_PASSWORD=secret \
+            -d -p 5434:5432 postgres:13.9-alpine \
+            postgres -c shared_preload_libraries=pg_stat_statements
+      - name: Run PostgreSQL 14
+        run: |
+          docker run --env POSTGRES_USER=postgres \
+            --env POSTGRES_DB=rails-pg-extras-test \
+            --env POSTGRES_PASSWORD=secret \
+            -d -p 5435:5432 postgres:14.6-alpine \
+            postgres -c shared_preload_libraries=pg_stat_statements
+      - name: Run PostgreSQL 15
+        run: |
+          docker run --env POSTGRES_USER=postgres \
+            --env POSTGRES_DB=rails-pg-extras-test \
+            --env POSTGRES_PASSWORD=secret \
+            -d -p 5436:5432 postgres:15.1-alpine \
+            postgres -c shared_preload_libraries=pg_stat_statements
+          sleep 15
+      - name: Set up Ruby ${{ matrix.ruby-version }}
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby-version }}
+      - name: Setup dependencies
+        run: |
+          gem update --system
+          gem install bundler
+          sudo apt-get update --allow-releaseinfo-change
+          sudo apt install postgresql-client
+          sudo apt install libpq-dev
+          bundle config set --local path 'vendor/bundle'
+          bundle install
+          sleep 10
+      - name: Run tests for PG 11
+        env:
+          PG_VERSION: 11
+          POSTGRES_HOST: localhost
+          POSTGRES_USER: postgres
+          POSTGRES_DB: rails-pg-extras-test
+          POSTGRES_PASSWORD: secret
+          DATABASE_URL: postgresql://postgres:secret@localhost:5432/rails-pg-extras-test
+        run: |
+          bundle exec rspec spec/
+      - name: Run tests for PG 11
+        env:
+          PG_VERSION: 11
+          POSTGRES_HOST: localhost
+          POSTGRES_USER: postgres
+          POSTGRES_DB: rails-pg-extras-test
+          POSTGRES_PASSWORD: secret
+          DATABASE_URL: postgresql://postgres:secret@localhost:5432/rails-pg-extras-test
+        run: |
+          bundle exec rspec spec/
+      - name: Run tests for PG 12
+        env:
+          PG_VERSION: 12
+          POSTGRES_HOST: localhost
+          POSTGRES_USER: postgres
+          POSTGRES_DB: rails-pg-extras-test
+          POSTGRES_PASSWORD: secret
+          DATABASE_URL: postgresql://postgres:secret@localhost:5433/rails-pg-extras-test
+        run: |
+          bundle exec rspec spec/
+      - name: Run tests for PG 13
+        env:
+          PG_VERSION: 13
+          POSTGRES_HOST: localhost
+          POSTGRES_USER: postgres
+          POSTGRES_DB: rails-pg-extras-test
+          POSTGRES_PASSWORD: secret
+          DATABASE_URL: postgresql://postgres:secret@localhost:5434/rails-pg-extras-test
+        run: |
+          bundle exec rspec spec/
+      - name: Run tests for PG 14
+        env:
+          PG_VERSION: 14
+          POSTGRES_HOST: localhost
+          POSTGRES_USER: postgres
+          POSTGRES_DB: rails-pg-extras-test
+          POSTGRES_PASSWORD: secret
+          DATABASE_URL: postgresql://postgres:secret@localhost:5435/rails-pg-extras-test
+        run: |
+          bundle exec rspec spec/
+      - name: Run tests for PG 15
+        env:
+          PG_VERSION: 15
+          POSTGRES_HOST: localhost
+          POSTGRES_USER: postgres
+          POSTGRES_DB: rails-pg-extras-test
+          POSTGRES_PASSWORD: secret
+          DATABASE_URL: postgresql://postgres:secret@localhost:5436/rails-pg-extras-test
+        run: |
+          bundle exec rspec spec/
+
