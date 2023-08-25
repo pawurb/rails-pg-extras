@@ -467,18 +467,18 @@ This command displays the total size of all indexes on the database, in MB. It i
 RailsPgExtras.index_size
 
 $ rake pg_extras:index_size
-                             name                              |  size
----------------------------------------------------------------+---------
- idx_activity_attemptable_and_type_lesson_enrollment           | 5196 MB
- index_enrollment_attemptables_by_attempt_and_last_in_group    | 4045 MB
- index_attempts_on_student_id                                  | 2611 MB
- enrollment_activity_attemptables_pkey                         | 2513 MB
- index_attempts_on_student_id_final_attemptable_type           | 2466 MB
- attempts_pkey                                                 | 2466 MB
- index_attempts_on_response_id                                 | 2404 MB
- index_attempts_on_enrollment_id                               | 1957 MB
- index_enrollment_attemptables_by_enrollment_activity_id       | 1789 MB
- enrollment_activities_pkey                                    |  458 MB
+                             name                              |  size   | schema |
+---------------------------------------------------------------+-------------------
+ idx_activity_attemptable_and_type_lesson_enrollment           | 5196 MB | public |
+ index_enrollment_attemptables_by_attempt_and_last_in_group    | 4045 MB | public |
+ index_attempts_on_student_id                                  | 2611 MB | public |
+ enrollment_activity_attemptables_pkey                         | 2513 MB | custom |
+ index_attempts_on_student_id_final_attemptable_type           | 2466 MB | custom |
+ attempts_pkey                                                 | 2466 MB | custom |
+ index_attempts_on_response_id                                 | 2404 MB | public |
+ index_attempts_on_enrollment_id                               | 1957 MB | public |
+ index_enrollment_attemptables_by_enrollment_activity_id       | 1789 MB | public |
+ enrollment_activities_pkey                                    |  458 MB | public |
 (truncated results for brevity)
 ```
 
@@ -491,13 +491,13 @@ RailsPgExtras.table_size
 
 $ rake pg_extras:table_size
 
-                             name                              |  size
----------------------------------------------------------------+---------
- learning_coaches                                              |  196 MB
- states                                                        |  145 MB
- grade_levels                                                  |  111 MB
- charities_customers                                           |   73 MB
- charities                                                     |   66 MB
+                             name                              |  size   | schema |
+---------------------------------------------------------------+-------------------
+ learning_coaches                                              |  196 MB | public |
+ states                                                        |  145 MB | public |
+ grade_levels                                                  |  111 MB | custom |
+ charities_customers                                           |   73 MB | custom |
+ charities                                                     |   66 MB | public |
 (truncated results for brevity)
 ```
 
