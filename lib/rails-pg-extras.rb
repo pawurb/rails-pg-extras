@@ -26,10 +26,12 @@ module RailsPgExtras
 
   def self.run_query(query_name:, in_format:, args: {})
     if %i(calls outliers).include?(query_name)
-      pg_stat_statements_ver = RailsPgExtras.connection.execute("select installed_version from pg_available_extensions where name='pg_stat_statements'")
-        .to_a[0].fetch("installed_version", nil)
-      if pg_stat_statements_ver != nil
-        if Gem::Version.new(pg_stat_statements_ver) < Gem::Version.new(NEW_PG_STAT_STATEMENTS)
+      pg_stat_statements_version_sql = "SELECT installed_version
+                                        FROM pg_available_extensions
+                                        WHERE name = 'pg_stat_statements'"
+      if (version = RailsPgExtras.connection.execute(pg_stat_statements_version_sql)
+            .to_a[0].fetch("installed_version", nil))
+        if Gem::Version.new(version) < Gem::Version.new(NEW_PG_STAT_STATEMENTS)
           query_name = "#{query_name}_legacy".to_sym
         end
       end
