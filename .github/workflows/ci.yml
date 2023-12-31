@@ -57,8 +57,7 @@ jobs:
           ruby-version: ${{ matrix.ruby-version }}
       - name: Setup dependencies
         run: |
-          gem update --system
-          gem install bundler
+          gem install bundler -v 2.4.22
           sudo apt-get update --allow-releaseinfo-change
           sudo apt install postgresql-client
           sudo apt install libpq-dev
