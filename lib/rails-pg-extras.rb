@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-require 'terminal-table'
-require 'ruby-pg-extras'
-require 'rails_pg_extras/diagnose_data'
-require 'rails_pg_extras/diagnose_print'
-require 'rails_pg_extras/index_info'
-require 'rails_pg_extras/index_info_print'
-require 'rails_pg_extras/table_info'
-require 'rails_pg_extras/table_info_print'
+require "terminal-table"
+require "ruby-pg-extras"
+require "rails_pg_extras/diagnose_data"
+require "rails_pg_extras/diagnose_print"
+require "rails_pg_extras/index_info"
+require "rails_pg_extras/index_info_print"
+require "rails_pg_extras/table_info"
+require "rails_pg_extras/table_info_print"
 
 module RailsPgExtras
   QUERIES = RubyPgExtras::QUERIES
@@ -19,7 +19,7 @@ module RailsPgExtras
       run_query(
         query_name: query_name,
         in_format: options.fetch(:in_format, :display_table),
-        args: options.fetch(:args, {})
+        args: options.fetch(:args, {}),
       )
     end
   end
@@ -30,7 +30,7 @@ module RailsPgExtras
                                         FROM pg_available_extensions
                                         WHERE name = 'pg_stat_statements'"
       if (version = RailsPgExtras.connection.execute(pg_stat_statements_version_sql)
-            .to_a[0].fetch("installed_version", nil))
+        .to_a[0].fetch("installed_version", nil))
         if Gem::Version.new(version) < Gem::Version.new(NEW_PG_STAT_STATEMENTS)
           query_name = "#{query_name}_legacy".to_sym
         end
@@ -38,17 +38,17 @@ module RailsPgExtras
     end
 
     sql = if (custom_args = DEFAULT_ARGS[query_name].merge(args)) != {}
-      RubyPgExtras.sql_for(query_name: query_name) % custom_args
-    else
-      RubyPgExtras.sql_for(query_name: query_name)
-    end
+        RubyPgExtras.sql_for(query_name: query_name) % custom_args
+      else
+        RubyPgExtras.sql_for(query_name: query_name)
+      end
 
     result = connection.execute(sql)
 
     RubyPgExtras.display_result(
       result,
       title: RubyPgExtras.description_for(query_name: query_name),
-      in_format: in_format
+      in_format: in_format,
     )
   end
 
@@ -76,10 +76,10 @@ module RailsPgExtras
     sql_duration = 0
 
     method_name = if ActiveSupport::Notifications.respond_to?(:monotonic_subscribe)
-      :monotonic_subscribe
-    else
-      :subscribe
-    end
+        :monotonic_subscribe
+      else
+        :subscribe
+      end
 
     subscriber = ActiveSupport::Notifications.public_send(method_name, "sql.active_record") do |_name, start, finish, _id, payload|
       unless payload[:name] =~ /SCHEMA/
@@ -115,10 +115,9 @@ module RailsPgExtras
       count: queries.reduce(0) { |agg, val| agg + val[1].fetch(:count) },
       queries: queries,
       total_duration: total_duration.round(2),
-      sql_duration: sql_duration.round(2)
+      sql_duration: sql_duration.round(2),
     }
   end
-
 
   def self.index_info(args: {}, in_format: :display_table)
     data = RailsPgExtras::IndexInfo.call(args[:table_name])
@@ -149,7 +148,7 @@ module RailsPgExtras
   end
 
   def self.connection
-    if (db_url = ENV['RAILS_PG_EXTRAS_DATABASE_URL'])
+    if (db_url = ENV["RAILS_PG_EXTRAS_DATABASE_URL"])
       ActiveRecord::Base.establish_connection(db_url).connection
     else
       ActiveRecord::Base.connection
@@ -157,6 +156,6 @@ module RailsPgExtras
   end
 end
 
-require 'rails_pg_extras/web'
-require 'rails_pg_extras/configuration'
-require 'rails_pg_extras/railtie' if defined?(Rails)
+require "rails_pg_extras/web"
+require "rails_pg_extras/configuration"
+require "rails_pg_extras/railtie" if defined?(Rails)

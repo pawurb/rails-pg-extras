@@ -2,7 +2,6 @@
 
 module RailsPgExtras
   class DiagnoseData < ::RubyPgExtras::DiagnoseData
-
     private
 
     def query_module

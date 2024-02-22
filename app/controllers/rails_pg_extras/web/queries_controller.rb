@@ -38,7 +38,7 @@ module RailsPgExtras::Web
       return @unavailable_extensions if defined?(@unavailable_extensions)
 
       enabled_extensions = ActiveRecord::Base.connection.extensions
-      @unavailable_extensions = REQUIRED_EXTENSIONS.delete_if { |ext| ext.to_s.in?(enabled_extensions)  }
+      @unavailable_extensions = REQUIRED_EXTENSIONS.delete_if { |ext| ext.to_s.in?(enabled_extensions) }
     end
   end
 end

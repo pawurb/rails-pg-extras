@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-require 'rails-pg-extras'
+require "spec_helper"
+require "rails-pg-extras"
 
 describe RailsPgExtras do
   RailsPgExtras::QUERIES.each do |query_name|
@@ -9,7 +9,7 @@ describe RailsPgExtras do
       expect do
         RailsPgExtras.run_query(
           query_name: query_name,
-          in_format: :hash
+          in_format: :hash,
         )
       end.not_to raise_error
     end
@@ -35,12 +35,12 @@ describe RailsPgExtras do
   end
 
   it "supports custom RAILS_PG_EXTRAS_DATABASE_URL" do
-    ENV['RAILS_PG_EXTRAS_DATABASE_URL'] = ENV['DATABASE_URL']
+    ENV["RAILS_PG_EXTRAS_DATABASE_URL"] = ENV["DATABASE_URL"]
 
     expect do
       RailsPgExtras.calls
     end.not_to raise_error
 
-    ENV['RAILS_PG_EXTRAS_DATABASE_URL'] = nil
+    ENV["RAILS_PG_EXTRAS_DATABASE_URL"] = nil
   end
 end

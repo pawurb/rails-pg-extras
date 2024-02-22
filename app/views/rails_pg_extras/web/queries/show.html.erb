@@ -6,10 +6,9 @@
 <% else %>
   <% if @result&.any? %>
     <%= render "result",
-      title: RubyPgExtras.description_for(query_name: @query_name),
-      headers: @result[0].keys,
-      rows: @result.values
-    %>
+               title: RubyPgExtras.description_for(query_name: @query_name),
+               headers: @result[0].keys,
+               rows: @result.values %>
   <% else %>
    <div class="font-mono p-3 bg-gray-100 mt-3">No results</div>
   <% end %>

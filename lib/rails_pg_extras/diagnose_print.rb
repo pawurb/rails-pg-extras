@@ -2,7 +2,6 @@
 
 module RailsPgExtras
   class DiagnosePrint < ::RubyPgExtras::DiagnosePrint
-
     private
 
     def title

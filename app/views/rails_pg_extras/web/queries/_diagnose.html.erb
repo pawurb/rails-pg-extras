@@ -1,7 +1,7 @@
   <h1 class="font-bold text-xl my-5">Diagnose</h1>
   <table class="w-full font-mono border-collapse border my-5">
     <% RailsPgExtras.diagnose(in_format: :hash).each do |diagnosis| %>
-      <tr class="<%= diagnosis[:ok] ? 'bg-green-300' : 'bg-red-300' %>">
+      <tr class="<%= diagnosis[:ok] ? "bg-green-300" : "bg-red-300" %>">
         <td class='p-1 border font-bold'><%= diagnosis[:check_name] %></td>
         <td class='p-1 border'><%= diagnosis[:message] %></td>
       </tr>

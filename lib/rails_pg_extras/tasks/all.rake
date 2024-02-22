@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'rails-pg-extras'
+require "rails-pg-extras"
 
 namespace :pg_extras do
   RailsPgExtras::QUERIES.each do |query_name|
