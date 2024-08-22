@@ -548,7 +548,7 @@ This command displays the total size of each table and materialized view in the 
 ### `unused_indexes`
 
 ```ruby
-RailsPgExtras.unused_indexes(args: { max_scans: 20 })
+RailsPgExtras.unused_indexes(args: { max_scans: 50 })
 
 $ rake pg_extras:unused_indexes
 
