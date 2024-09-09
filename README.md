@@ -6,7 +6,7 @@ Included rake tasks and Ruby methods can be used to obtain information about a P
 
 You can read this blog post for detailed step by step tutorial on how to [optimize PostgreSQL using PG Extras library](https://pawelurbanek.com/postgresql-fix-performance).
 
-**Shameless plug:** rails-pg-extras is one of the tools that I use when conducting [Rails performance audits](https://pawelurbanek.com/optimize-rails-performance).
+**Shameless plug:** rails-pg-extras is just one of the tools that I use when conducting [Rails performance audits](https://pawelurbanek.com/optimize-rails-performance). Check out my offer if you need help with optimizing your application.
 
 Optionally you can enable a visual interface:
 
