@@ -7,14 +7,18 @@ require_relative "../lib/rails-pg-extras"
 
 pg_version = ENV["PG_VERSION"]
 
-port = if pg_version == "11"
+port = if pg_version == "12"
     "5432"
-  elsif pg_version == "12"
-    "5433"
   elsif pg_version == "13"
-    "5434"
+    "5433"
   elsif pg_version == "14"
+    "5434"
+  elsif pg_version == "15"
     "5435"
+  elsif pg_version == "16"
+    "5436"
+  elsif pg_version == "17"
+    "5437"
   else
     "5432"
   end

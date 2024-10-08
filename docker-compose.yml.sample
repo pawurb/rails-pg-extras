@@ -1,8 +1,6 @@
-version: '3'
-
 services:
-  postgres11:
-    image: postgres:11.16-alpine
+  postgres12:
+    image: postgres:12.20-alpine
     command: postgres -c shared_preload_libraries=pg_stat_statements
     environment:
       POSTGRES_USER: postgres
@@ -10,8 +8,8 @@ services:
       POSTGRES_PASSWORD: secret
     ports:
       - '5432:5432'
-  postgres12:
-    image: postgres:12.11-alpine
+  postgres13:
+    image: postgres:13.16-alpine
     command: postgres -c shared_preload_libraries=pg_stat_statements
     environment:
       POSTGRES_USER: postgres
@@ -19,8 +17,8 @@ services:
       POSTGRES_PASSWORD: secret
     ports:
       - '5433:5432'
-  postgres13:
-    image: postgres:13.7-alpine
+  postgres14:
+    image: postgres:14.13-alpine
     command: postgres -c shared_preload_libraries=pg_stat_statements
     environment:
       POSTGRES_USER: postgres
@@ -28,8 +26,8 @@ services:
       POSTGRES_PASSWORD: secret
     ports:
       - '5434:5432'
-  postgres14:
-    image: postgres:14.3-alpine
+  postgres15:
+    image: postgres:15.8-alpine
     command: postgres -c shared_preload_libraries=pg_stat_statements
     environment:
       POSTGRES_USER: postgres
@@ -37,3 +35,22 @@ services:
       POSTGRES_PASSWORD: secret
     ports:
       - '5435:5432'
+  postgres16:
+    image: postgres:16.4-alpine
+    command: postgres -c shared_preload_libraries=pg_stat_statements
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: rails-pg-extras-test
+      POSTGRES_PASSWORD: secret
+    ports:
+      - '5436:5432'
+  postgres17:
+    image: postgres:17.0-alpine
+    command: postgres -c shared_preload_libraries=pg_stat_statements
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: rails-pg-extras-test
+      POSTGRES_PASSWORD: secret
+    ports:
+      - '5437:5432'
+

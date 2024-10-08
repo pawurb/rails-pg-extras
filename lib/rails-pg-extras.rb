@@ -13,6 +13,7 @@ module RailsPgExtras
   QUERIES = RubyPgExtras::QUERIES
   DEFAULT_ARGS = RubyPgExtras::DEFAULT_ARGS
   NEW_PG_STAT_STATEMENTS = RubyPgExtras::NEW_PG_STAT_STATEMENTS
+  PG_STAT_STATEMENTS_17 = RubyPgExtras::PG_STAT_STATEMENTS_17
 
   QUERIES.each do |query_name|
     define_singleton_method query_name do |options = {}|
@@ -33,6 +34,8 @@ module RailsPgExtras
         .to_a[0].fetch("installed_version", nil))
         if Gem::Version.new(version) < Gem::Version.new(NEW_PG_STAT_STATEMENTS)
           query_name = "#{query_name}_legacy".to_sym
+        elsif Gem::Version.new(version) >= Gem::Version.new(PG_STAT_STATEMENTS_17)
+          query_name = "#{query_name}_17".to_sym
         end
       end
     end
