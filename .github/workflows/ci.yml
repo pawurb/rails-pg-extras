@@ -76,55 +76,31 @@ jobs:
       - name: Run tests for PG 12
         env:
           PG_VERSION: 12
-          POSTGRES_HOST: localhost
-          POSTGRES_USER: postgres
-          POSTGRES_DB: rails-pg-extras-test
-          POSTGRES_PASSWORD: secret
         run: |
           bundle exec rspec spec/
       - name: Run tests for PG 13
         env:
           PG_VERSION: 13
-          POSTGRES_HOST: localhost
-          POSTGRES_USER: postgres
-          POSTGRES_DB: rails-pg-extras-test
-          POSTGRES_PASSWORD: secret
         run: |
           bundle exec rspec spec/
       - name: Run tests for PG 14
         env:
           PG_VERSION: 14
-          POSTGRES_HOST: localhost
-          POSTGRES_USER: postgres
-          POSTGRES_DB: rails-pg-extras-test
-          POSTGRES_PASSWORD: secret
         run: |
           bundle exec rspec spec/
       - name: Run tests for PG 15
         env:
           PG_VERSION: 15
-          POSTGRES_HOST: localhost
-          POSTGRES_USER: postgres
-          POSTGRES_DB: rails-pg-extras-test
-          POSTGRES_PASSWORD: secret
         run: |
           bundle exec rspec spec/
       - name: Run tests for PG 16
         env:
           PG_VERSION: 16
-          POSTGRES_HOST: localhost
-          POSTGRES_USER: postgres
-          POSTGRES_DB: rails-pg-extras-test
-          POSTGRES_PASSWORD: secret
         run: |
           bundle exec rspec spec/
       - name: Run tests for PG 17
         env:
           PG_VERSION: 17
-          POSTGRES_HOST: localhost
-          POSTGRES_USER: postgres
-          POSTGRES_DB: rails-pg-extras-test
-          POSTGRES_PASSWORD: secret
         run: |
           bundle exec rspec spec/
 
