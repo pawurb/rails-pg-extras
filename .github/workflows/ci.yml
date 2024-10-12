@@ -43,7 +43,6 @@ jobs:
             --env POSTGRES_PASSWORD=secret \
             -d -p 5435:5432 postgres:15.8-alpine \
             postgres -c shared_preload_libraries=pg_stat_statements
-          sleep 15
       - name: Run PostgreSQL 16
         run: |
           docker run --env POSTGRES_USER=postgres \
@@ -51,7 +50,6 @@ jobs:
             --env POSTGRES_PASSWORD=secret \
             -d -p 5436:5432 postgres:16.4-alpine \
             postgres -c shared_preload_libraries=pg_stat_statements
-          sleep 15
       - name: Run PostgreSQL 17
         run: |
           docker run --env POSTGRES_USER=postgres \
@@ -59,7 +57,7 @@ jobs:
             --env POSTGRES_PASSWORD=secret \
             -d -p 5437:5432 postgres:17.0-alpine \
             postgres -c shared_preload_libraries=pg_stat_statements
-          sleep 15
+          sleep 5
       - name: Set up Ruby ${{ matrix.ruby-version }}
         uses: ruby/setup-ruby@v1
         with:
