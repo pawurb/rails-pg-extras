@@ -152,7 +152,15 @@ module RailsPgExtras
 
   def self.connection
     if (db_url = ENV["RAILS_PG_EXTRAS_DATABASE_URL"])
-      ActiveRecord::Base.establish_connection(db_url).connection
+      connector = ActiveRecord::Base.establish_connection(db_url)
+
+      if connector.respond_to?(:connection)
+        connector.connection
+      elsif connector.respond_to?(:lease_connection)
+        connector.lease_connection
+      else
+        raise "Unsupported connector: #{connector.class}"
+      end
     else
       ActiveRecord::Base.connection
     end
