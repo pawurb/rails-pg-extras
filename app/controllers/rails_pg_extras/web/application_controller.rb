@@ -14,14 +14,27 @@ module RailsPgExtras::Web
 
     ACTIONS = %i[kill_all pg_stat_statements_reset add_extensions]
 
-    if ENV["RAILS_PG_EXTRAS_USER"].present? && ENV["RAILS_PG_EXTRAS_PASSWORD"].present?
-      http_basic_authenticate_with name: ENV.fetch("RAILS_PG_EXTRAS_USER"), password: ENV.fetch("RAILS_PG_EXTRAS_PASSWORD")
+    user = get_user
+    password = get_password
+
+    if user.present? && password.present?
+      http_basic_authenticate_with name: user, password: password
     end
 
     def validate_credentials!
-      if (ENV["RAILS_PG_EXTRAS_USER"].blank? || ENV["RAILS_PG_EXTRAS_PASSWORD"].blank?) && !RailsPgExtras.configuration.public_dashboard
+      if (get_user.blank? || get_password.blank?) && RailsPgExtras.configuration.public_dashboard != true
         raise "Missing credentials for rails-pg-extras dashboard! If you want to enable public dashboard please set RAILS_PG_EXTRAS_PUBLIC_DASHBOARD=true"
       end
+    end
+
+    private
+
+    def get_user
+      Rails.application.try(:credentials).try(:pg_extras).try(:user) || ENV["RAILS_PG_EXTRAS_USER"]
+    end
+
+    def get_password
+      Rails.application.try(:credentials).try(:pg_extras).try(:password) || ENV["RAILS_PG_EXTRAS_PASSWORD"]
     end
   end
 end
