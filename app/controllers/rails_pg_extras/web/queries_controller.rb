@@ -8,6 +8,10 @@ module RailsPgExtras::Web
         @query_name = params[:query_name].to_sym.presence_in(@all_queries.keys)
         return unless @query_name
 
+        if params[:database].present?
+          RailsPgExtras.configuration.selected_database = params[:database].downcase.to_sym
+        end
+
         begin
           @result = RailsPgExtras.run_query(query_name: @query_name.to_sym, in_format: :raw)
         rescue ActiveRecord::StatementInvalid => e

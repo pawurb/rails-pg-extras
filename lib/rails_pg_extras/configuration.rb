@@ -8,6 +8,8 @@ module RailsPgExtras
 
     attr_reader :enabled_web_actions
     attr_accessor :public_dashboard
+    attr_accessor :selected_database
+    attr_accessor :show_all_active_record_databases
 
     def initialize(attrs)
       self.enabled_web_actions = attrs[:enabled_web_actions]
