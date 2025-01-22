@@ -4,13 +4,13 @@ module RailsPgExtras::Web
     helper_method :unavailable_extensions
 
     def index
+      if params[:database].present?
+        RailsPgExtras.configuration.selected_database = params[:database].downcase.to_sym
+      end
+
       if params[:query_name].present?
         @query_name = params[:query_name].to_sym.presence_in(@all_queries.keys)
         return unless @query_name
-
-        if params[:database].present?
-          RailsPgExtras.configuration.selected_database = params[:database].downcase.to_sym
-        end
 
         begin
           @result = RailsPgExtras.run_query(query_name: @query_name.to_sym, in_format: :raw)
@@ -39,10 +39,12 @@ module RailsPgExtras::Web
     end
 
     def unavailable_extensions
-      return @unavailable_extensions if defined?(@unavailable_extensions)
+      RailsPgExtras.with_selected_database do
+        return @unavailable_extensions if defined?(@unavailable_extensions)
 
-      enabled_extensions = ActiveRecord::Base.connection.extensions
-      @unavailable_extensions = REQUIRED_EXTENSIONS.delete_if { |ext| ext.to_s.in?(enabled_extensions) }
+        enabled_extensions = ExtrasDatabaseAdapter.connection.extensions
+        @unavailable_extensions = REQUIRED_EXTENSIONS.delete_if { |ext| ext.to_s.in?(enabled_extensions) }
+      end
     end
   end
 end

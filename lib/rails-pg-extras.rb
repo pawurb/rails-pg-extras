@@ -8,6 +8,7 @@ require "rails_pg_extras/index_info"
 require "rails_pg_extras/index_info_print"
 require "rails_pg_extras/table_info"
 require "rails_pg_extras/table_info_print"
+require "extras_database_adapter"
 
 module RailsPgExtras
   QUERIES = RubyPgExtras::QUERIES
@@ -58,14 +59,16 @@ module RailsPgExtras
   end
 
   def self.diagnose(in_format: :display_table)
-    data = RailsPgExtras::DiagnoseData.call
+    with_selected_database do
+      data = RailsPgExtras::DiagnoseData.call
 
-    if in_format == :display_table
-      RailsPgExtras::DiagnosePrint.call(data)
-    elsif in_format == :hash
-      data
-    else
-      raise "Invalid 'in_format' argument!"
+      if in_format == :display_table
+        RailsPgExtras::DiagnosePrint.call(data)
+      elsif in_format == :hash
+        data
+      else
+        raise "Invalid 'in_format' argument!"
+      end
     end
   end
 
@@ -154,13 +157,18 @@ module RailsPgExtras
 
   def self.with_selected_database
     ExtrasDatabaseAdapter.connect_databases
-    if RailsPgExtras.configuration.selected_database
+
+    if (db_url = ENV["RAILS_PG_EXTRAS_DATABASE_URL"] || ENV["DATABASE_URL"])
+      ExtrasDatabaseAdapter.establish_connection(db_url)
+      yield
+    elsif RailsPgExtras.configuration.selected_database.present?
       ExtrasDatabaseAdapter.connected_to(role: RailsPgExtras.configuration.selected_database) do
         yield
       end
-    elsif (db_url = ENV["RAILS_PG_EXTRAS_DATABASE_URL"])
-      ExtrasDatabaseAdapter.establish_connection(db_url)
-      yield
+    else
+      ExtrasDatabaseAdapter.connected_to(role: ExtrasDatabaseAdapter.database_list.first.to_sym) do
+        yield
+      end
     end
   end
 
