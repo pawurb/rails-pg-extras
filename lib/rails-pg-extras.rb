@@ -8,6 +8,7 @@ require "rails_pg_extras/index_info"
 require "rails_pg_extras/index_info_print"
 require "rails_pg_extras/table_info"
 require "rails_pg_extras/table_info_print"
+require "extras_database_adapter"
 
 module RailsPgExtras
   QUERIES = RubyPgExtras::QUERIES
@@ -26,44 +27,48 @@ module RailsPgExtras
   end
 
   def self.run_query(query_name:, in_format:, args: {})
-    if %i(calls outliers).include?(query_name)
-      pg_stat_statements_version_sql = "SELECT installed_version
-                                        FROM pg_available_extensions
-                                        WHERE name = 'pg_stat_statements'"
-      if (version = RailsPgExtras.connection.execute(pg_stat_statements_version_sql)
-        .to_a[0].fetch("installed_version", nil))
-        if Gem::Version.new(version) < Gem::Version.new(NEW_PG_STAT_STATEMENTS)
-          query_name = "#{query_name}_legacy".to_sym
-        elsif Gem::Version.new(version) >= Gem::Version.new(PG_STAT_STATEMENTS_17)
-          query_name = "#{query_name}_17".to_sym
+    with_selected_database do
+      if %i(calls outliers).include?(query_name)
+        pg_stat_statements_version_sql = "SELECT installed_version
+                                          FROM pg_available_extensions
+                                          WHERE name = 'pg_stat_statements'"
+        if (version = RailsPgExtras.connection.execute(pg_stat_statements_version_sql)
+          .to_a[0].fetch("installed_version", nil))
+          if Gem::Version.new(version) < Gem::Version.new(NEW_PG_STAT_STATEMENTS)
+            query_name = "#{query_name}_legacy".to_sym
+          elsif Gem::Version.new(version) >= Gem::Version.new(PG_STAT_STATEMENTS_17)
+            query_name = "#{query_name}_17".to_sym
+          end
         end
       end
+
+      sql = if (custom_args = DEFAULT_ARGS[query_name].merge(args)) != {}
+          RubyPgExtras.sql_for(query_name: query_name) % custom_args
+        else
+          RubyPgExtras.sql_for(query_name: query_name)
+        end
+
+      result = connection.execute(sql)
+
+      RubyPgExtras.display_result(
+        result,
+        title: RubyPgExtras.description_for(query_name: query_name),
+        in_format: in_format,
+      )
     end
-
-    sql = if (custom_args = DEFAULT_ARGS[query_name].merge(args)) != {}
-        RubyPgExtras.sql_for(query_name: query_name) % custom_args
-      else
-        RubyPgExtras.sql_for(query_name: query_name)
-      end
-
-    result = connection.execute(sql)
-
-    RubyPgExtras.display_result(
-      result,
-      title: RubyPgExtras.description_for(query_name: query_name),
-      in_format: in_format,
-    )
   end
 
   def self.diagnose(in_format: :display_table)
-    data = RailsPgExtras::DiagnoseData.call
+    with_selected_database do
+      data = RailsPgExtras::DiagnoseData.call
 
-    if in_format == :display_table
-      RailsPgExtras::DiagnosePrint.call(data)
-    elsif in_format == :hash
-      data
-    else
-      raise "Invalid 'in_format' argument!"
+      if in_format == :display_table
+        RailsPgExtras::DiagnosePrint.call(data)
+      elsif in_format == :hash
+        data
+      else
+        raise "Invalid 'in_format' argument!"
+      end
     end
   end
 
@@ -150,19 +155,30 @@ module RailsPgExtras
     end
   end
 
-  def self.connection
-    if (db_url = ENV["RAILS_PG_EXTRAS_DATABASE_URL"])
-      connector = ActiveRecord::Base.establish_connection(db_url)
+  def self.with_selected_database
+    ExtrasDatabaseAdapter.connect_databases
 
-      if connector.respond_to?(:connection)
-        connector.connection
-      elsif connector.respond_to?(:lease_connection)
-        connector.lease_connection
-      else
-        raise "Unsupported connector: #{connector.class}"
+    if (db_url = ENV["RAILS_PG_EXTRAS_DATABASE_URL"] || ENV["DATABASE_URL"])
+      ExtrasDatabaseAdapter.establish_connection(db_url)
+      yield
+    elsif RailsPgExtras.configuration.selected_database.present?
+      ExtrasDatabaseAdapter.connected_to(role: RailsPgExtras.configuration.selected_database) do
+        yield
       end
     else
-      ActiveRecord::Base.connection
+      ExtrasDatabaseAdapter.connected_to(role: ExtrasDatabaseAdapter.database_list.first.to_sym) do
+        yield
+      end
+    end
+  end
+
+  def self.connection
+    if ExtrasDatabaseAdapter.respond_to?(:connection)
+      ExtrasDatabaseAdapter.connection
+    elsif ExtrasDatabaseAdapter.respond_to?(:lease_connection)
+      ExtrasDatabaseAdapter.lease_connection
+    else
+      raise "Unsupported connector: #{ExtrasDatabaseAdapter.class}"
     end
   end
 end

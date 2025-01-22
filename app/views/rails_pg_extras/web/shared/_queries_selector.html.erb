@@ -1,6 +1,11 @@
 <%= form_tag queries_path, id: "queries", method: :get do |f| %>
+  <% if ENV["RAILS_PG_EXTRAS_DATABASE_URL"].blank? && RailsPgExtras.configuration.show_all_active_record_databases %>
+    <%= select_tag :database, options_for_select(ExtrasDatabaseAdapter.database_list, params[:database] || ExtrasDatabaseAdapter.database_list[0]),
+                   { prompt: "--- select database ---", class: "border p-2 font-bold", autofocus: true } %>
+  <% end %>
   <%= select_tag :query_name, options_for_select(@all_queries, params[:query_name]),
                  { prompt: "--- select query ---", class: "border p-2 font-bold", autofocus: true } %>
+
 <% end %>
 
 <%= javascript_tag nonce: true do -%>
