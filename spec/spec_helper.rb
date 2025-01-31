@@ -7,21 +7,16 @@ require_relative "../lib/rails-pg-extras"
 
 pg_version = ENV["PG_VERSION"]
 
-port = if pg_version == "12"
-    "5432"
-  elsif pg_version == "13"
-    "5433"
-  elsif pg_version == "14"
-    "5434"
-  elsif pg_version == "15"
-    "5435"
-  elsif pg_version == "16"
-    "5436"
-  elsif pg_version == "17"
-    "5437"
-  else
-    "5432"
-  end
+PG_PORTS = {
+  "12" => "5432",
+  "13" => "5433",
+  "14" => "5434",
+  "15" => "5435",
+  "16" => "5436",
+  "17" => "5437",
+}
+
+port = PG_PORTS.fetch(pg_version, "5432")
 
 ENV["DATABASE_URL"] ||= "postgresql://postgres:secret@localhost:#{port}/rails-pg-extras-test"
 
