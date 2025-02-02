@@ -6,6 +6,8 @@ require "rails_pg_extras/diagnose_data"
 require "rails_pg_extras/diagnose_print"
 require "rails_pg_extras/index_info"
 require "rails_pg_extras/index_info_print"
+require "rails_pg_extras/missing_fk_indexes"
+require "rails_pg_extras/missing_fk_constraints"
 require "rails_pg_extras/table_info"
 require "rails_pg_extras/table_info_print"
 
@@ -26,32 +28,12 @@ module RailsPgExtras
   end
 
   def self.run_query(query_name:, in_format:, args: {})
-    if %i(calls outliers).include?(query_name)
-      pg_stat_statements_version_sql = "SELECT installed_version
-                                        FROM pg_available_extensions
-                                        WHERE name = 'pg_stat_statements'"
-      if (version = RailsPgExtras.connection.execute(pg_stat_statements_version_sql)
-        .to_a[0].fetch("installed_version", nil))
-        if Gem::Version.new(version) < Gem::Version.new(NEW_PG_STAT_STATEMENTS)
-          query_name = "#{query_name}_legacy".to_sym
-        elsif Gem::Version.new(version) >= Gem::Version.new(PG_STAT_STATEMENTS_17)
-          query_name = "#{query_name}_17".to_sym
-        end
-      end
-    end
-
-    sql = if (custom_args = DEFAULT_ARGS[query_name].merge(args)) != {}
-        RubyPgExtras.sql_for(query_name: query_name) % custom_args
-      else
-        RubyPgExtras.sql_for(query_name: query_name)
-      end
-
-    result = connection.execute(sql)
-
-    RubyPgExtras.display_result(
-      result,
-      title: RubyPgExtras.description_for(query_name: query_name),
+    RubyPgExtras.run_query_base(
+      query_name: query_name,
+      conn: connection,
+      exec_method: :execute,
       in_format: in_format,
+      args: args,
     )
   end
 
@@ -148,6 +130,16 @@ module RailsPgExtras
     else
       raise "Invalid 'in_format' argument!"
     end
+  end
+
+  def self.missing_fk_indexes(args: {}, in_format: :display_table)
+    result = RailsPgExtras::MissingFkIndexes.call(args[:table_name])
+    RubyPgExtras.display_result(result, title: "Missing foreign key indexes", in_format: in_format)
+  end
+
+  def self.missing_fk_constraints(args: {}, in_format: :display_table)
+    result = RailsPgExtras::MissingFkConstraints.call(args[:table_name])
+    RubyPgExtras.display_result(result, title: "Missing foreign key constraints", in_format: in_format)
   end
 
   def self.connection

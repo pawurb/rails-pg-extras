@@ -4,7 +4,7 @@ require "rails_pg_extras/web"
 
 module RailsPgExtras
   class Configuration
-    DEFAULT_CONFIG = { enabled_web_actions: Web::ACTIONS - [:kill_all], public_dashboard: ENV["RAILS_PG_EXTRAS_PUBLIC_DASHBOARD"] == "true" }
+    DEFAULT_CONFIG = { enabled_web_actions: Web::ACTIONS - [:kill_all, :kill_pid], public_dashboard: ENV["RAILS_PG_EXTRAS_PUBLIC_DASHBOARD"] == "true" }
 
     attr_reader :enabled_web_actions
     attr_accessor :public_dashboard

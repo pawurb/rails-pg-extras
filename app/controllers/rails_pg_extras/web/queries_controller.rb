@@ -20,8 +20,10 @@ module RailsPgExtras::Web
 
     private
 
+    SKIP_QUERIES = %i[table_schema table_foreign_keys].freeze
+
     def load_queries
-      @all_queries = (RailsPgExtras::QUERIES - RailsPgExtras::Web::ACTIONS).inject({}) do |memo, query_name|
+      @all_queries = (RailsPgExtras::QUERIES - RailsPgExtras::Web::ACTIONS - SKIP_QUERIES).inject({}) do |memo, query_name|
         unless query_name.in? %i[mandelbrot]
           memo[query_name] = { disabled: query_disabled?(query_name) }
         end
