@@ -212,7 +212,7 @@ you can add this info to the output:
 
 ### `missing_fk_indexes`
 
-This method lists columns likely to be foreign keys (i.e. column name ending in `_id` and related table exists) but don't have an index. It's recommended to always index foreign key columns because they are used for searching relation objects. 
+This method lists columns likely to be foreign keys (i.e. column name ending in `_id` and related table exists) which don't have an index. It's recommended to always index foreign key columns because they are used for searching relation objects. 
 
 You can add indexes on the columns returned by this query and later check if they are receiving scans using the [unused_indexes method](#unused_indexes). Please remember that each index decreases write performance and autovacuuming overhead, so be careful when adding multiple indexes to often updated tables.
 
