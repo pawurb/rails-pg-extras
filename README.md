@@ -10,7 +10,7 @@ You can read this blog post for detailed step by step tutorial on how to [optimi
 
 Optionally you can enable a visual interface:
 
-![Web interface](https://github.com/pawurb/rails-pg-extras/raw/main/pg-extras-ui.png)
+![Web interface](https://github.com/pawurb/rails-pg-extras/raw/main/pg-extras-ui-2.png)
 
 Alternative versions:
 
