@@ -1,9 +1,26 @@
-  <h1 class="font-bold text-xl my-5">Diagnose</h1>
-  <table class="w-full font-mono border-collapse border my-5">
-    <% RailsPgExtras.diagnose(in_format: :hash).each do |diagnosis| %>
-      <tr class="<%= diagnosis[:ok] ? "bg-green-300" : "bg-red-300" %>">
-        <td class='p-1 border font-bold'><%= diagnosis[:check_name] %></td>
-        <td class='p-1 border'><%= diagnosis[:message] %></td>
+<h1 class="font-bold text-2xl my-6 text-gray-900">Diagnose 
+  <span class='pg-extras-help'>
+    (<a href="https://pawelurbanek.com/postgresql-fix-performance" 
+       class="text-blue-600 hover:text-blue-800 hover:underline" target='_blank'>Tutorial</a>)
+  </span>
+</h1>
+<div class="overflow-x-auto">
+  <table class="w-full border border-gray-400 shadow-md rounded-lg overflow-hidden">
+    <thead>
+      <tr class="bg-gray-200 text-gray-900 text-left uppercase text-sm font-bold">
+        <th class="px-4 py-3 border">Ok</th>
+        <th class="px-4 py-3 border">Check Name</th>
+        <th class="px-4 py-3 border">Message</th>
       </tr>
-    <% end %>
+    </thead>
+    <tbody>
+      <% RailsPgExtras.diagnose(in_format: :hash).each do |diagnosis| %>
+        <tr class="<%= diagnosis[:ok] ? "bg-green-100 text-green-900" : "bg-red-100 text-red-900" %> hover:bg-gray-300 transition">
+          <td class="px-4 py-3 border font-bold"><%= diagnosis[:ok] ? "YES" : "NO" %></td>
+          <td class="px-4 py-3 border font-semibold"><%= diagnosis[:check_name] %></td>
+          <td class="px-4 py-3 border"><%= diagnosis[:message] %></td>
+        </tr>
+      <% end %>
+    </tbody>
   </table>
+</div>

@@ -1,6 +1,12 @@
 <%= content_for :title, params[:query_name].presence || "pg_extras" %>
 <%= render "rails_pg_extras/web/shared/queries_selector" %>
 
+<br>
+
+<a href="/pg_extras/queries" 
+   class="inline-block bg-blue-500 text-white font-medium px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 transition">
+   ← Back to Diagnose
+</a>
 <% if @error %>
   <div class="text-red-500 p-3 font-mono my-5"><%= @error %></div>
 <% else %>

@@ -3,6 +3,8 @@
 <%= render "unavailable_extensions_warning" if unavailable_extensions.any? %>
 <%= render "diagnose" %>
 
+<br>
+<br>
 <h1 class="font-bold text-xl my-5">Actions</h1>
 
 <% if RailsPgExtras::Web.action_enabled?(:kill_all) %>
