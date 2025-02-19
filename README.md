@@ -252,6 +252,23 @@ RailsPgExtras.missing_fk_constraints(args: { table_name: "users" })
 
 `table_name` argument is optional, if omitted, method will display missing fk constraints for all the tables.
 
+### `table_schema`
+
+This method displays structure of a selected table, listing its column names, together with types, null constraints, and default values.
+
+```ruby
+RailsPgExtras.table_schema(args: { table_name: "users" })
+
++-----------------------------+-----------------------------+-------------+-----------------------------------+
+| column_name                 | data_type                   | is_nullable | column_default                    |
++-----------------------------+-----------------------------+-------------+-----------------------------------+
+| id                          | bigint                      | NO          | nextval('users_id_seq'::regclass) |
+| team_id                     | integer                     | NO          |                                   |
+| slack_id                    | character varying           | NO          |                                   |
+| pseudonym                   | character varying           | YES         |                                   |
+
+```
+
 ### `table_info`
 
 This method displays metadata metrics for all or a selected table. You can use it to check the table's size, its cache hit metrics, and whether it is correctly indexed. Many sequential scans or no index scans are potential indicators of misconfigured indexes. This method aggregates data provided by other methods in an easy to analyze summary format.
