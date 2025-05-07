@@ -3,10 +3,11 @@
 
 <br>
 
-<a href="/pg_extras/queries" 
-   class="inline-block bg-blue-500 text-white font-medium px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 transition">
-   ← Back to Diagnose
-</a>
+<%=
+  link_to "← Back to Diagnose", queries_path,
+          class: "inline-block bg-blue-500 text-white font-medium px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 transition"
+%>
+
 <% if @error %>
   <div class="text-red-500 p-3 font-mono my-5"><%= @error %></div>
 <% else %>
