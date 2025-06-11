@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
 module RailsPgExtras
-  VERSION = "5.6.10"
+  VERSION = "6.0.0"
 end
