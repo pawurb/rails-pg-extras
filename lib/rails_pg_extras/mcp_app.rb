@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-# MCP Server Rake Tasks
-
 require "fast_mcp"
 require "rack"
 require "rails_pg_extras/version"
@@ -14,7 +12,6 @@ SKIP_QUERIES = %i[
   mandelbrot
 ]
 
-# Dynamically create tool classes for each query
 QUERY_TOOL_CLASSES = RubyPgExtras::QUERIES.reject { |q| SKIP_QUERIES.include?(q) }.map do |query_name|
   Class.new(FastMcp::Tool) do
     description RubyPgExtras.description_for(query_name: query_name)
@@ -29,7 +26,6 @@ QUERY_TOOL_CLASSES = RubyPgExtras::QUERIES.reject { |q| SKIP_QUERIES.include?(q)
   end
 end
 
-# Additional specialized tool classes
 class MissingFkConstraintsTool < FastMcp::Tool
   description "Shows missing foreign key constraints"
 
@@ -97,7 +93,6 @@ module RailsPgExtras
         server.register_tools(MissingFkIndexesTool)
         server.register_tools(*QUERY_TOOL_CLASSES)
 
-        # Register a sample resource
         server.register_resource(ReadmeResource)
 
         Rack::Builder.new { run mcp_app }

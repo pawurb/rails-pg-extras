@@ -183,7 +183,7 @@ and in your LLM of choice:
 
 You can now ask LLM questions about the metadata and performance metrics of your database.
 
-![Web interface](https://github.com/pawurb/rails-pg-extras/raw/main/pg-extras-mcp.png)
+![LLM interface](https://github.com/pawurb/rails-pg-extras/raw/main/pg-extras-mcp.png)
 
 ## Available methods
 
