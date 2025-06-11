@@ -4,6 +4,7 @@
 
 require "fast_mcp"
 require "rack"
+require "rails_pg_extras/version"
 
 SKIP_QUERIES = %i[
   add_extensions
