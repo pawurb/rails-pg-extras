@@ -12,6 +12,10 @@ Optionally you can enable a visual interface:
 
 ![Web interface](https://github.com/pawurb/rails-pg-extras/raw/main/pg-extras-ui-3.png)
 
+[rails-pg-extras-mcp gem](https://github.com/pawurb/rails-pg-extras-mcp) provides an MCP (Model Context Protocol) interface enabling PostgreSQL metadata and performance analysis with an LLM support.  
+
+![LLM interface](https://github.com/pawurb/rails-pg-extras/raw/main/pg-extras-mcp.png)
+
 Alternative versions:
 
 - Core dependency - [Ruby](https://github.com/pawurb/ruby-pg-extras)
