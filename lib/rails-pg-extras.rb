@@ -10,7 +10,6 @@ require "rails_pg_extras/missing_fk_indexes"
 require "rails_pg_extras/missing_fk_constraints"
 require "rails_pg_extras/table_info"
 require "rails_pg_extras/table_info_print"
-require "rails_pg_extras/mcp_app"
 
 module RailsPgExtras
   QUERIES = RubyPgExtras::QUERIES
@@ -157,10 +156,6 @@ module RailsPgExtras
     else
       ActiveRecord::Base.connection
     end
-  end
-
-  def self.mcp_app
-    RailsPgExtras::MCPApp.build
   end
 end
 

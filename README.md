@@ -148,43 +148,6 @@ RailsPgExtras.configure do |config|
 end
 ```
 
-## MCP LLM integration
-
-Library supports MCP protocol via HTTP SSE interface. 
-
-`config/routes.rb`
-
-```ruby
-# Authentication is not yet supported
-mount RailsPgExtras.mcp_app, at: "pg-extras-mcp"
-```
-
-Install [mcp-remote](https://github.com/geelen/mcp-remote):
-
-```bash
-npm install -g mcp-remote
-```
-
-and in your LLM of choice:
-
-```json
-{
-  "mcpServers": {
-    "pg-extras": {
-      "command": "npx",
-      "args": [
-        "mcp-remote",
-        "http://localhost:3000/pg-extras-mcp/sse"
-      ]
-    }
-  }
-}
-```
-
-You can now ask LLM questions about the metadata and performance metrics of your database.
-
-![LLM interface](https://github.com/pawurb/rails-pg-extras/raw/main/pg-extras-mcp.png)
-
 ## Available methods
 
 ### `measure_queries`

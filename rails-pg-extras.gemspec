@@ -17,7 +17,6 @@ Gem::Specification.new do |s|
   s.license = "MIT"
   s.add_dependency "ruby-pg-extras", RailsPgExtras::VERSION
   s.add_dependency "rails"
-  s.add_dependency "fast-mcp"
   s.add_development_dependency "rake"
   s.add_development_dependency "rspec"
   s.add_development_dependency "rufo"
