@@ -63,6 +63,12 @@ By default a primary ActiveRecord database connection is used for running metada
 ENV["RAILS_PG_EXTRAS_DATABASE_URL"] = "postgresql://postgres:secret@localhost:5432/database_name"
 ```
 
+Alternatively, you can specify database URL with a method call:
+
+```ruby
+RailsPgExtras.database_url = "postgresql://postgres:secret@localhost:5432/database_name"
+```
+
 ## Usage
 
 Each command can be used as a rake task, or a directly from the Ruby code.
@@ -457,18 +463,18 @@ RailsPgExtras.outliers(args: { limit: 20 })
 
 $ rake pg_extras:outliers
 
-                   qry                   |    exec_time     | prop_exec_time |   ncalls    | sync_io_time
------------------------------------------+------------------+----------------+-------------+--------------
- SELECT * FROM archivable_usage_events.. | 154:39:26.431466 | 72.2%          | 34,211,877  | 00:00:00
- COPY public.archivable_usage_events (.. | 50:38:33.198418  | 23.6%          | 13          | 13:34:21.00108
- COPY public.usage_events (id, reporte.. | 02:32:16.335233  | 1.2%           | 13          | 00:34:19.784318
- INSERT INTO usage_events (id, retaine.. | 01:42:59.436532  | 0.8%           | 12,328,187  | 00:00:00
- SELECT * FROM usage_events WHERE (alp.. | 01:18:10.754354  | 0.6%           | 102,114,301 | 00:00:00
- UPDATE usage_events SET reporter_id =.. | 00:52:35.683254  | 0.4%           | 23,786,348  | 00:00:00
+                   qry                   |    exec_time     | prop_exec_time |   ncalls    | sync_io_time | avg_exec_ms
+-----------------------------------------+------------------+----------------+-------------+--------------+-------------
+ SELECT * FROM archivable_usage_events.. | 154:39:26.431466 | 72.2%          | 34,211,877  | 00:00:00     | 16.24
+ COPY public.archivable_usage_events (.. | 50:38:33.198418  | 23.6%          | 13          | 13:34:21.008 | 233845.63
+ COPY public.usage_events (id, reporte.. | 02:32:16.335233  | 1.2%           | 13          | 00:34:19.718 | 11689.72
+ INSERT INTO usage_events (id, retaine.. | 01:42:59.436532  | 0.8%           | 12,328,187  | 00:00:00     | 0.84
+ SELECT * FROM usage_events WHERE (alp.. | 01:18:10.754354  | 0.6%           | 102,114,301 | 00:00:00     | 0.77
+ UPDATE usage_events SET reporter_id =.. | 00:52:35.683254  | 0.4%           | 23,786,348  | 00:00:00     | 0.13
 (truncated results for brevity)
 ```
 
-This command displays statements, obtained from `pg_stat_statements`, ordered by the amount of time to execute in aggregate. This includes the statement itself, the total execution time for that statement, the proportion of total execution time for all statements that statement has taken up, the number of times that statement has been called, and the amount of time that statement spent on synchronous I/O (reading/writing from the file system).
+This command displays statements, obtained from `pg_stat_statements`, ordered by the amount of time to execute in aggregate. This includes the statement itself, the total execution time for that statement, the proportion of total execution time for all statements that statement has taken up, the number of times that statement has been called, the amount of time that statement spent on synchronous I/O (reading/writing from the file system), and the average execution time per call in milliseconds.
 
 Typically, an efficient query will have an appropriate ratio of calls to total execution time, with as little time spent on I/O as possible. Queries that have a high total execution time but low call count should be investigated to improve their performance. Queries that have a high proportion of execution time being spent on synchronous I/O should also be investigated.
 
@@ -481,17 +487,17 @@ RailsPgExtras.calls(args: { limit: 10 })
 
 $ rake pg_extras:calls
 
-                   qry                   |    exec_time     | prop_exec_time |   ncalls    | sync_io_time
------------------------------------------+------------------+----------------+-------------+--------------
- SELECT * FROM usage_events WHERE (alp.. | 01:18:11.073333  | 0.6%           | 102,120,780 | 00:00:00
- BEGIN                                   | 00:00:51.285988  | 0.0%           | 47,288,662  | 00:00:00
- COMMIT                                  | 00:00:52.31724   | 0.0%           | 47,288,615  | 00:00:00
- SELECT * FROM  archivable_usage_event.. | 154:39:26.431466 | 72.2%          | 34,211,877  | 00:00:00
- UPDATE usage_events SET reporter_id =.. | 00:52:35.986167  | 0.4%           | 23,788,388  | 00:00:00
+                   qry                   |    exec_time     | prop_exec_time |   ncalls    | sync_io_time | avg_exec_ms
+-----------------------------------------+------------------+----------------+-------------+--------------+-------------
+ SELECT * FROM usage_events WHERE (alp.. | 01:18:11.073333  | 0.6%           | 102,120,780 | 00:00:00     | 1
+ BEGIN                                   | 00:00:51.285988  | 0.0%           | 47,288,662  | 00:00:00     | 0
+ COMMIT                                  | 00:00:52.31724   | 0.0%           | 47,288,615  | 00:00:00     | 0
+ SELECT * FROM  archivable_usage_event.. | 154:39:26.431466 | 72.2%          | 34,211,877  | 00:00:00     | 16
+ UPDATE usage_events SET reporter_id =.. | 00:52:35.986167  | 0.4%           | 23,788,388  | 00:00:00     | 0
 (truncated results for brevity)
 ```
 
-This command is much like `pg:outliers`, but ordered by the number of times a statement has been called.
+This command is much like `pg:outliers`, but ordered by the number of times a statement has been called. 
 
 [More info](https://pawelurbanek.com/postgresql-fix-performance#missing-indexes)
 

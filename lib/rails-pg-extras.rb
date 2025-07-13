@@ -142,8 +142,14 @@ module RailsPgExtras
     RubyPgExtras.display_result(result, title: "Missing foreign key constraints", in_format: in_format)
   end
 
+  def self.database_url=(value)
+    @@database_url = value
+  end
+
   def self.connection
-    if (db_url = ENV["RAILS_PG_EXTRAS_DATABASE_URL"])
+    db_url = @@database_url || ENV["RAILS_PG_EXTRAS_DATABASE_URL"]
+
+    if db_url.present?
       connector = ActiveRecord::Base.establish_connection(db_url)
 
       if connector.respond_to?(:connection)
