@@ -148,9 +148,37 @@ module RailsPgExtras
   end
 
   def self.connection
+    # Priority:
+    # 1) Per-request selected db (thread-local), if present -> use named configuration or URL without altering global Base
+    # 2) Explicit URL via setter or ENV override
+    # 3) Default ActiveRecord::Base connection
+    selected_db_key = Thread.current[:rails_pg_extras_db_key]
     db_url = @@database_url || ENV["RAILS_PG_EXTRAS_DATABASE_URL"]
 
-    if db_url.present?
+    if selected_db_key.present?
+      const_name = selected_db_key.classify
+      # Use an isolated abstract class to avoid changing the global connection
+      thread_classes = (Thread.current[:rails_pg_extras_ar_classes] ||= {})
+      ar_class = (thread_classes[selected_db_key] ||= begin
+        if const_defined?(const_name, false)
+          const_get(const_name, false)
+        else
+          klass = Class.new(ActiveRecord::Base)
+          klass.abstract_class = true
+          const_set(const_name, klass)
+        end
+      end)
+
+      connector = ar_class.establish_connection(selected_db_key.to_sym)
+
+      if connector.respond_to?(:connection)
+        connector.connection
+      elsif connector.respond_to?(:lease_connection)
+        connector.lease_connection
+      else
+        raise "Unsupported connector: #{connector.class}"
+      end
+    elsif db_url.present?
       connector = ActiveRecord::Base.establish_connection(db_url)
 
       if connector.respond_to?(:connection)
