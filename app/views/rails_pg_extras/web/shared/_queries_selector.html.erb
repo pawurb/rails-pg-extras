@@ -1,6 +1,8 @@
 <%= form_tag queries_path, id: "queries", method: :get do |f| %>
   <%= select_tag :query_name, options_for_select(@all_queries, params[:query_name]),
                  { prompt: "diagnose", class: "border p-2 font-bold", autofocus: true } %>
+  <%# Preserve selected database across query changes %>
+  <%= hidden_field_tag :db_key, params[:db_key] if params[:db_key].present? %>
 <% end %>
 
 <%= javascript_tag nonce: true do -%>

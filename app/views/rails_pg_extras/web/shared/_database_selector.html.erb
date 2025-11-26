@@ -1,0 +1,16 @@
+<% if @available_databases.present? && @available_databases.size > 1 %>
+  <%= form_tag queries_path, id: "db_selector", method: :get, class: "mb-4 flex items-center gap-2" do %>
+    <label for="db_key" class="font-semibold">Database:</label>
+    <%= select_tag :db_key,
+                   options_for_select(@available_databases, @current_db_key),
+                   class: "border p-2 font-bold" %>
+    <%# Preserve current query selection if present %>
+    <%= hidden_field_tag :query_name, params[:query_name] if params[:query_name].present? %>
+  <% end %>
+
+  <%= javascript_tag nonce: true do -%>
+    document.getElementById('db_selector').addEventListener('change', (e) => {
+      e.target.form.submit()
+    })
+  <% end -%>
+<% end %>

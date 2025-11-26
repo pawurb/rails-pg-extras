@@ -3,6 +3,8 @@ require "rails_pg_extras/version"
 
 module RailsPgExtras::Web
   class ApplicationController < ActionController::Base
+    around_action :with_selected_database
+    before_action :load_available_databases
     def self.get_user
       Rails.application.try(:credentials).try(:pg_extras).try(:user) || ENV["RAILS_PG_EXTRAS_USER"]
     end
@@ -30,6 +32,37 @@ module RailsPgExtras::Web
       if (self.class.get_user.blank? || self.class.get_password.blank?) && RailsPgExtras.configuration.public_dashboard != true
         raise "Missing credentials for rails-pg-extras dashboard! If you want to enable public dashboard please set RAILS_PG_EXTRAS_PUBLIC_DASHBOARD=true"
       end
+    end
+
+    private
+
+    def with_selected_database
+      Thread.current[:rails_pg_extras_db_key] = params[:db_key].presence
+      yield
+    ensure
+      Thread.current[:rails_pg_extras_db_key] = nil
+    end
+
+    def load_available_databases
+      @available_databases = fetch_available_database_names
+      @current_db_key = params[:db_key].presence || default_db_key
+    end
+
+    def fetch_available_database_names
+
+      ActiveRecord::Base.configurations
+            .configs_for(env_name: Rails.env)
+            .filter_map { |conf| (conf.respond_to?(:name) && conf.name) || (conf.respond_to?(:spec_name) && conf.spec_name) }
+            .uniq
+            .sort
+
+    rescue
+      []
+    end
+
+    def default_db_key
+      # Prefer primary if available, else first available
+      @available_databases.include?("primary") ? "primary" : @available_databases.first
     end
   end
 end

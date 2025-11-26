@@ -2,24 +2,32 @@
 <div class='pg-extras-help pb-4'>
     (<a href="https://pawelurbanek.com/postgresql-fix-performance" 
        class="text-blue-600 hover:text-blue-800 hover:underline" target='_blank'>Tutorial</a>)
-</div>
-<div class="overflow-x-auto">
-  <table class="w-full border border-gray-400 shadow-md rounded-lg overflow-hidden">
-    <thead>
-      <tr class="bg-gray-200 text-gray-900 text-left uppercase text-sm font-bold">
-        <th class="px-4 py-3 border">Ok</th>
-        <th class="px-4 py-3 border">Check Name</th>
-        <th class="px-4 py-3 border">Message</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% RailsPgExtras.diagnose(in_format: :hash).each do |diagnosis| %>
-        <tr class="<%= diagnosis[:ok] ? "bg-green-100 text-green-900" : "bg-red-100 text-red-900" %> hover:bg-gray-300 transition">
-          <td class="px-4 py-3 border font-bold"><%= diagnosis[:ok] ? "YES" : "NO" %></td>
-          <td class="px-4 py-3 border font-semibold"><%= diagnosis[:check_name] %></td>
-          <td class="px-4 py-3 border"><%= diagnosis[:message] %></td>
+  </div>
+<% begin %>
+  <% diagnoses = RailsPgExtras.diagnose(in_format: :hash) %>
+  <div class="overflow-x-auto">
+    <table class="w-full border border-gray-400 shadow-md rounded-lg overflow-hidden">
+      <thead>
+        <tr class="bg-gray-200 text-gray-900 text-left uppercase text-sm font-bold">
+          <th class="px-4 py-3 border">Ok</th>
+          <th class="px-4 py-3 border">Check Name</th>
+          <th class="px-4 py-3 border">Message</th>
         </tr>
-      <% end %>
-    </tbody>
-  </table>
-</div>
+      </thead>
+      <tbody>
+        <% diagnoses.each do |diagnosis| %>
+          <tr class="<%= diagnosis[:ok] ? "bg-green-100 text-green-900" : "bg-red-100 text-red-900" %> hover:bg-gray-300 transition">
+            <td class="px-4 py-3 border font-bold"><%= diagnosis[:ok] ? "YES" : "NO" %></td>
+            <td class="px-4 py-3 border font-semibold"><%= diagnosis[:check_name] %></td>
+            <td class="px-4 py-3 border"><%= diagnosis[:message] %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% rescue => e %>
+  <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4" role="alert">
+    <p class="font-bold">Diagnose failed</p>
+    <p><%= e.message %></p>
+  </div>
+<% end %>
