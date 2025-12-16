@@ -181,7 +181,19 @@ module RailsPgExtras
         raise "Unsupported connector: #{connector.class}"
       end
     elsif db_url.present?
-      connector = ActiveRecord::Base.establish_connection(db_url)
+      # Use an isolated abstract class to avoid changing the global connection
+      thread_classes = (Thread.current[:rails_pg_extras_ar_classes] ||= {})
+      ar_class = (thread_classes[:database_url] ||= begin
+        if const_defined?(:PgExtrasURLConn, false)
+          const_get(:PgExtrasURLConn, false)
+        else
+          klass = Class.new(ActiveRecord::Base)
+          klass.abstract_class = true
+          const_set(:PgExtrasURLConn, klass)
+        end
+      end)
+
+      connector = ar_class.establish_connection(db_url)
 
       if connector.respond_to?(:connection)
         connector.connection

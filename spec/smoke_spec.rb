@@ -66,4 +66,15 @@ describe RailsPgExtras do
       }.not_to raise_error
     end
   end
+
+  it "database_url does not affect global connection" do
+    original_connection = ActiveRecord::Base.connection
+
+    RailsPgExtras.database_url = ENV["DATABASE_URL"]
+    RailsPgExtras.calls
+    RailsPgExtras.database_url = nil
+
+    # Verify global connection unchanged
+    expect(ActiveRecord::Base.connection).to eq(original_connection)
+  end
 end
