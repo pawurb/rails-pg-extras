@@ -57,7 +57,17 @@ You should see the similar line in the output:
 RailsPgExtras.add_extensions
 ```
 
-By default a primary ActiveRecord database connection is used for running metadata queries, rake tasks and web UI. To connect to a different database you can specify an `ENV['RAILS_PG_EXTRAS_DATABASE_URL']` value in the following format:
+By default rails-pg-extras uses your app’s default `ActiveRecord::Base.connection` (typically `primary`) for running metadata queries, rake tasks and the web UI.
+
+If your app uses Rails multiple databases, the web UI can switch connections dynamically. It reads the available database names from `ActiveRecord::Base.configurations` for the current environment and selects one via the `db_key` query param (thread-local per request, so it’s safe under concurrency):
+
+```ruby
+# examples
+/pg_extras?db_key=primary
+/pg_extras?db_key=animals
+```
+
+To connect to a database that isn’t defined in `database.yml` (or when using rake tasks / Ruby API outside the web UI), you can also provide an explicit URL via `ENV['RAILS_PG_EXTRAS_DATABASE_URL']`:
 
 ```ruby
 ENV["RAILS_PG_EXTRAS_DATABASE_URL"] = "postgresql://postgres:secret@localhost:5432/database_name"
