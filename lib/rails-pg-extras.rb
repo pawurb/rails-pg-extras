@@ -139,7 +139,9 @@ module RailsPgExtras
   end
 
   def self.missing_fk_constraints(args: {}, in_format: :display_table)
-    result = RailsPgExtras::MissingFkConstraints.call(args[:table_name])
+    ignore_list = args[:ignore_list]
+    ignore_list ||= RailsPgExtras.configuration.missing_fk_constraints_ignore_list
+    result = RailsPgExtras::MissingFkConstraints.call(args[:table_name], ignore_list: ignore_list)
     RubyPgExtras.display_result(result, title: "Missing foreign key constraints", in_format: in_format)
   end
 

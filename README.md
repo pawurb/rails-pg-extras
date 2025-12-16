@@ -158,6 +158,22 @@ RailsPgExtras.configure do |config|
 end
 ```
 
+You can also configure a default ignore list for the heuristic missing foreign key constraints checker. This helps skip columns that you know should not be considered foreign keys.
+
+```ruby
+RailsPgExtras.configure do |config|
+  # Accepts an Array or a comma-separated String of entries like:
+  # - "posts.category_id" (ignore a specific table+column)
+  # - "category_id"       (ignore this column name for all tables)
+  # - "posts.*"           (ignore all columns on a table)
+  # - "*"                 (ignore everything)
+  config.missing_fk_constraints_ignore_list = ["posts.category_id", "category_id"]
+
+  # Or as a comma-separated string:
+  # config.missing_fk_constraints_ignore_list = "posts.category_id, category_id"
+end
+```
+
 ## Available methods
 
 ### `measure_queries`
@@ -261,6 +277,26 @@ RailsPgExtras.missing_fk_constraints(args: { table_name: "users" })
 ```
 
 `table_name` argument is optional, if omitted, method will display missing fk constraints for all the tables.
+
+You can optionally pass an `ignore_list` to skip known false positives detected by the heuristic checker. It accepts an Array or a comma-separated String. Entries can be:
+- "posts.category_id" to ignore a specific table+column
+- "category_id" to ignore a column name for all tables
+- "posts.*" to ignore all columns on a specific table
+- "*" to ignore everything
+
+Examples:
+
+```ruby
+# Per-call ignore list
+RailsPgExtras.missing_fk_constraints(args: {
+  ignore_list: ["posts.category_id", "legacy_id", "temp_tables.*"]
+})
+
+# As a comma-separated string
+RailsPgExtras.missing_fk_constraints(args: {
+  ignore_list: "posts.category_id, legacy_id, temp_tables.*"
+})
+```
 
 ### `table_schema`
 
