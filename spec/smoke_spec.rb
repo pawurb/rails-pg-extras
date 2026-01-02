@@ -40,6 +40,18 @@ describe RailsPgExtras do
     expect(output.fetch(:count) > 0).to eq(true)
   end
 
+  it "supports custom RAILS_PG_EXTRAS_DATABASE_CONFIG that specifies an URL" do
+    ENV["RAILS_PG_EXTRAS_DATABASE_CONFIG"] = ENV["DATABASE_URL"]
+    puts ENV["RAILS_PG_EXTRAS_DATABASE_CONFIG"]
+
+    expect do
+      RailsPgExtras.calls
+    end.not_to raise_error
+
+    ENV["RAILS_PG_EXTRAS_DATABASE_CONFIG"] = nil
+  end
+
+  # Deprecated
   it "supports custom RAILS_PG_EXTRAS_DATABASE_URL" do
     ENV["RAILS_PG_EXTRAS_DATABASE_URL"] = ENV["DATABASE_URL"]
     puts ENV["RAILS_PG_EXTRAS_DATABASE_URL"]
@@ -67,6 +79,18 @@ describe RailsPgExtras do
     end
   end
 
+  it "database_config does not affect global connection" do
+    original_connection = ActiveRecord::Base.connection
+
+    RailsPgExtras.database_config = ENV["DATABASE_URL"]
+    RailsPgExtras.calls
+    RailsPgExtras.database_config = nil
+
+    # Verify global connection unchanged
+    expect(ActiveRecord::Base.connection).to eq(original_connection)
+  end
+
+  # Deprecated
   it "database_url does not affect global connection" do
     original_connection = ActiveRecord::Base.connection
 
