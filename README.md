@@ -12,7 +12,7 @@ Optionally you can enable a visual interface:
 
 ![Web interface](https://github.com/pawurb/rails-pg-extras/raw/main/pg-extras-ui-3.png)
 
-[rails-pg-extras-mcp gem](https://github.com/pawurb/rails-pg-extras-mcp) provides an MCP (Model Context Protocol) interface enabling PostgreSQL metadata and performance analysis with an LLM support.  
+[rails-pg-extras-mcp gem](https://github.com/pawurb/rails-pg-extras-mcp) provides an MCP (Model Context Protocol) interface enabling PostgreSQL metadata and performance analysis with an LLM support.
 
 ![LLM interface](https://github.com/pawurb/rails-pg-extras/raw/main/pg-extras-mcp.png)
 
@@ -67,16 +67,17 @@ If your app uses Rails multiple databases, the web UI can switch connections dyn
 /pg_extras?db_key=animals
 ```
 
-To connect to a database that isn’t defined in `database.yml` (or when using rake tasks / Ruby API outside the web UI), you can also provide an explicit URL via `ENV['RAILS_PG_EXTRAS_DATABASE_URL']`:
+To connect to a database that isn’t defined in `database.yml` (or when using rake tasks / Ruby API outside the web UI), you can also provide an explicit URL via `ENV['RAILS_PG_EXTRAS_DATABASE_CONFIG']`:
 
 ```ruby
-ENV["RAILS_PG_EXTRAS_DATABASE_URL"] = "postgresql://postgres:secret@localhost:5432/database_name"
+ENV["RAILS_PG_EXTRAS_DATABASE_CONFIG"] = "postgresql://postgres:secret@localhost:5432/database_name"
 ```
 
-Alternatively, you can specify database URL with a method call:
+Alternatively, you can specify database configuration with a method call:
 
 ```ruby
-RailsPgExtras.database_url = "postgresql://postgres:secret@localhost:5432/database_name"
+RailsPgExtras.database_config = "postgresql://postgres:secret@localhost:5432/database_name"
+RailsPgExtras.database_config = :rails_pg_extras
 ```
 
 ## Usage
@@ -559,7 +560,7 @@ $ rake pg_extras:calls
 (truncated results for brevity)
 ```
 
-This command is much like `pg:outliers`, but ordered by the number of times a statement has been called. 
+This command is much like `pg:outliers`, but ordered by the number of times a statement has been called.
 
 [More info](https://pawelurbanek.com/postgresql-fix-performance#missing-indexes)
 
