@@ -40,15 +40,29 @@ describe RailsPgExtras do
     expect(output.fetch(:count) > 0).to eq(true)
   end
 
+  it "supports custom RAILS_PG_EXTRAS_DATABASE_CONFIG that specifies an URL" do
+    old_value = ENV["RAILS_PG_EXTRAS_DATABASE_CONFIG"]
+    ENV["RAILS_PG_EXTRAS_DATABASE_CONFIG"] = ENV["DATABASE_URL"]
+    puts ENV["RAILS_PG_EXTRAS_DATABASE_CONFIG"]
+
+    expect do
+      RailsPgExtras.calls
+    end.not_to raise_error
+  ensure
+    ENV["RAILS_PG_EXTRAS_DATABASE_CONFIG"] = old_value
+  end
+
+  # Deprecated
   it "supports custom RAILS_PG_EXTRAS_DATABASE_URL" do
+    old_value = ENV["RAILS_PG_EXTRAS_DATABASE_URL"]
     ENV["RAILS_PG_EXTRAS_DATABASE_URL"] = ENV["DATABASE_URL"]
     puts ENV["RAILS_PG_EXTRAS_DATABASE_URL"]
 
     expect do
       RailsPgExtras.calls
     end.not_to raise_error
-
-    ENV["RAILS_PG_EXTRAS_DATABASE_URL"] = nil
+  ensure
+    ENV["RAILS_PG_EXTRAS_DATABASE_URL"] = old_value
   end
 
   describe "missing_fk_indexes" do
@@ -67,14 +81,30 @@ describe RailsPgExtras do
     end
   end
 
-  it "database_url does not affect global connection" do
+  it "database_config does not affect global connection" do
     original_connection = ActiveRecord::Base.connection
 
-    RailsPgExtras.database_url = ENV["DATABASE_URL"]
+    old_value = RailsPgExtras.database_config
+    RailsPgExtras.database_config = ENV["DATABASE_URL"]
     RailsPgExtras.calls
-    RailsPgExtras.database_url = nil
 
     # Verify global connection unchanged
     expect(ActiveRecord::Base.connection).to eq(original_connection)
+  ensure
+    RailsPgExtras.database_config = old_value
+  end
+
+  # Deprecated
+  it "database_url does not affect global connection" do
+    original_connection = ActiveRecord::Base.connection
+
+    old_value = RailsPgExtras.database_url
+    RailsPgExtras.database_url = ENV["DATABASE_URL"]
+    RailsPgExtras.calls
+
+    # Verify global connection unchanged
+    expect(ActiveRecord::Base.connection).to eq(original_connection)
+  ensure
+    RailsPgExtras.database_url = old_value
   end
 end

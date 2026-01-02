@@ -12,7 +12,10 @@ require "rails_pg_extras/table_info"
 require "rails_pg_extras/table_info_print"
 
 module RailsPgExtras
-  @@database_url = nil
+  extend self
+
+  @@database_config = nil
+
   QUERIES = RubyPgExtras::QUERIES
   DEFAULT_ARGS = RubyPgExtras::DEFAULT_ARGS
   NEW_PG_STAT_STATEMENTS = RubyPgExtras::NEW_PG_STAT_STATEMENTS
@@ -28,7 +31,7 @@ module RailsPgExtras
     end
   end
 
-  def self.run_query(query_name:, in_format:, args: {})
+  def run_query(query_name:, in_format:, args: {})
     RubyPgExtras.run_query_base(
       query_name: query_name,
       conn: connection,
@@ -38,7 +41,7 @@ module RailsPgExtras
     )
   end
 
-  def self.diagnose(in_format: :display_table)
+  def diagnose(in_format: :display_table)
     data = RailsPgExtras::DiagnoseData.call
 
     if in_format == :display_table
@@ -50,14 +53,14 @@ module RailsPgExtras
     end
   end
 
-  def self.measure_duration(&block)
+  def measure_duration(&block)
     starting = Process.clock_gettime(Process::CLOCK_MONOTONIC)
     block.call
     ending = Process.clock_gettime(Process::CLOCK_MONOTONIC)
     (ending - starting) * 1000
   end
 
-  def self.measure_queries(&block)
+  def measure_queries(&block)
     queries = {}
     sql_duration = 0
 
@@ -105,7 +108,7 @@ module RailsPgExtras
     }
   end
 
-  def self.index_info(args: {}, in_format: :display_table)
+  def index_info(args: {}, in_format: :display_table)
     data = RailsPgExtras::IndexInfo.call(args[:table_name])
 
     if in_format == :display_table
@@ -119,7 +122,7 @@ module RailsPgExtras
     end
   end
 
-  def self.table_info(args: {}, in_format: :display_table)
+  def table_info(args: {}, in_format: :display_table)
     data = RailsPgExtras::TableInfo.call(args[:table_name])
 
     if in_format == :display_table
@@ -133,77 +136,80 @@ module RailsPgExtras
     end
   end
 
-  def self.missing_fk_indexes(args: {}, in_format: :display_table)
+  def missing_fk_indexes(args: {}, in_format: :display_table)
     result = RailsPgExtras::MissingFkIndexes.call(args[:table_name])
     RubyPgExtras.display_result(result, title: "Missing foreign key indexes", in_format: in_format)
   end
 
-  def self.missing_fk_constraints(args: {}, in_format: :display_table)
+  def missing_fk_constraints(args: {}, in_format: :display_table)
     ignore_list = args[:ignore_list]
     ignore_list ||= RailsPgExtras.configuration.missing_fk_constraints_ignore_list
     result = RailsPgExtras::MissingFkConstraints.call(args[:table_name], ignore_list: ignore_list)
     RubyPgExtras.display_result(result, title: "Missing foreign key constraints", in_format: in_format)
   end
 
-  def self.database_url=(value)
-    @@database_url = value
+  def database_config
+    @@database_config
   end
 
-  def self.connection
+  # Deprecated
+  alias_method :database_url, :database_config
+
+  def database_config=(value)
+    @@database_config = value
+  end
+
+  # Deprecated
+  alias_method :database_url=, :database_config=
+
+  def connection
     # Priority:
     # 1) Per-request selected db (thread-local), if present -> use named configuration or URL without altering global Base
-    # 2) Explicit URL via setter or ENV override
+    # 2) Explicit config via setter or ENV override
     # 3) Default ActiveRecord::Base connection
     selected_db_key = Thread.current[:rails_pg_extras_db_key]
-    db_url = @@database_url || ENV["RAILS_PG_EXTRAS_DATABASE_URL"]
+    config = @@database_config || ENV["RAILS_PG_EXTRAS_DATABASE_CONFIG"] || ENV["RAILS_PG_EXTRAS_DATABASE_URL"] # Latter is deprecated
 
     if selected_db_key.present?
-      const_name = selected_db_key.classify
-      # Use an isolated abstract class to avoid changing the global connection
-      thread_classes = (Thread.current[:rails_pg_extras_ar_classes] ||= {})
-      ar_class = (thread_classes[selected_db_key] ||= begin
-        if const_defined?(const_name, false)
-          const_get(const_name, false)
-        else
-          klass = Class.new(ActiveRecord::Base)
-          klass.abstract_class = true
-          const_set(const_name, klass)
-        end
-      end)
+      # Prefix thread class key to avoid collisions
+      ar_class = fetch_or_define_ar_class(thread_class_key: "database_#{selected_db_key}", const_name: selected_db_key.classify)
 
-      connector = ar_class.establish_connection(selected_db_key.to_sym)
+      establish_connection(ar_class: ar_class, config: selected_db_key.to_sym)
+    elsif config.present?
+      ar_class = fetch_or_define_ar_class(thread_class_key: :database_config, const_name: :PgExtrasDatabaseConfig)
 
-      if connector.respond_to?(:connection)
-        connector.connection
-      elsif connector.respond_to?(:lease_connection)
-        connector.lease_connection
-      else
-        raise "Unsupported connector: #{connector.class}"
-      end
-    elsif db_url.present?
-      # Use an isolated abstract class to avoid changing the global connection
-      thread_classes = (Thread.current[:rails_pg_extras_ar_classes] ||= {})
-      ar_class = (thread_classes[:database_url] ||= begin
-        if const_defined?(:PgExtrasURLConn, false)
-          const_get(:PgExtrasURLConn, false)
-        else
-          klass = Class.new(ActiveRecord::Base)
-          klass.abstract_class = true
-          const_set(:PgExtrasURLConn, klass)
-        end
-      end)
-
-      connector = ar_class.establish_connection(db_url)
-
-      if connector.respond_to?(:connection)
-        connector.connection
-      elsif connector.respond_to?(:lease_connection)
-        connector.lease_connection
-      else
-        raise "Unsupported connector: #{connector.class}"
-      end
+      establish_connection(ar_class: ar_class, config: config)
     else
       ActiveRecord::Base.connection
+    end
+  end
+
+  private
+
+  # Use an isolated abstract class to avoid changing the global connection
+  def fetch_or_define_ar_class(thread_class_key:, const_name:)
+    thread_classes = Thread.current[:rails_pg_extras_ar_classes] ||= {}
+
+    thread_classes[thread_class_key] ||=
+      if const_defined?(const_name, false)
+        const_get(const_name, false)
+      else
+        klass = Class.new(ActiveRecord::Base)
+        klass.abstract_class = true
+
+        const_set(const_name, klass)
+      end
+  end
+
+  def establish_connection(ar_class:, config:)
+    connector = ar_class.establish_connection(config)
+
+    if connector.respond_to?(:connection)
+      connector.connection
+    elsif connector.respond_to?(:lease_connection)
+      connector.lease_connection
+    else
+      raise "Unsupported connector: #{connector.class}"
     end
   end
 end
