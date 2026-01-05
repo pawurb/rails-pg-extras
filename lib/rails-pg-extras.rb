@@ -134,7 +134,9 @@ module RailsPgExtras
   end
 
   def self.missing_fk_indexes(args: {}, in_format: :display_table)
-    result = RailsPgExtras::MissingFkIndexes.call(args[:table_name])
+    ignore_list = args[:ignore_list]
+    ignore_list ||= RailsPgExtras.configuration.missing_fk_indexes_ignore_list
+    result = RailsPgExtras::MissingFkIndexes.call(args[:table_name], ignore_list: ignore_list)
     RubyPgExtras.display_result(result, title: "Missing foreign key indexes", in_format: in_format)
   end
 
