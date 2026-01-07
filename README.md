@@ -168,7 +168,7 @@ RailsPgExtras.configure do |config|
 end
 ```
 
-You can also configure a default ignore list for the heuristic missing foreign key constraints checker. This helps skip columns that you know should not be considered foreign keys.
+You can also configure default ignore lists for the missing foreign key checkers. This helps skip columns that you know should not be considered foreign keys (constraints) or you intentionally do not want to index (indexes).
 
 ```ruby
 RailsPgExtras.configure do |config|
@@ -178,9 +178,11 @@ RailsPgExtras.configure do |config|
   # - "posts.*"           (ignore all columns on a table)
   # - "*"                 (ignore everything)
   config.missing_fk_constraints_ignore_list = ["posts.category_id", "category_id"]
+  config.missing_fk_indexes_ignore_list = ["feedbacks.team_id", "legacy_id"]
 
   # Or as a comma-separated string:
   # config.missing_fk_constraints_ignore_list = "posts.category_id, category_id"
+  # config.missing_fk_indexes_ignore_list = "feedbacks.team_id, legacy_id"
 end
 ```
 
@@ -267,6 +269,16 @@ RailsPgExtras.missing_fk_indexes(args: { table_name: "users" })
 ```
 
 `table_name` argument is optional, if omitted, the method will display missing fk indexes for all the tables.
+
+You can also exclude known/intentional cases using `ignore_list` (array or comma-separated string), with entries like:
+- "posts.category_id" (ignore a specific table+column)
+- "category_id" (ignore this column name for all tables)
+- "posts.*" (ignore all columns on a table)
+- "*" (ignore everything)
+
+```ruby
+RailsPgExtras.missing_fk_indexes(args: { table_name: "users", ignore_list: ["feedbacks.team_id", "posts.*"] })
+```
 
 ## `missing_fk_constraints`
 
