@@ -1,0 +1,39 @@
+<%
+  ok = diagnosis[:ok]
+  expanded = !ok
+  styles = diagnose_status_styles(ok)
+  finding = diagnose_finding_count(diagnosis[:message], check_name: diagnosis[:check_name])
+%>
+
+<article
+  class="rounded-xl border shadow-sm overflow-hidden <%= styles[:card] %>"
+  data-pg-extras-card
+>
+  <button
+    type="button"
+    class="w-full flex flex-wrap items-center gap-3 px-4 py-3 text-left <%= "border-b" if expanded %> <%= styles[:header] %>"
+    aria-expanded="<%= expanded %>"
+    data-pg-extras-card-toggle
+  >
+    <span class="inline-flex items-center rounded px-2 py-0.5 text-xs font-bold uppercase tracking-wide <%= styles[:badge] %>">
+      <%= ok ? "OK" : "Fail" %>
+    </span>
+    <h2 class="font-semibold text-base text-gray-900 flex-1">
+      <%= humanize_check_name(diagnosis[:check_name]) %>
+      <% if finding %>
+        <span class="ml-2 inline-flex items-center rounded-full px-2 py-0.5 text-xs font-bold <%= styles[:count] %>">
+          <%= finding[:count] %> <%= finding[:label] %>
+        </span>
+      <% end %>
+    </h2>
+    <span class="text-gray-500 text-lg leading-none select-none" data-pg-extras-card-chevron aria-hidden="true">
+      <%= expanded ? "▾" : "▸" %>
+    </span>
+  </button>
+  <div
+    class="px-4 py-3 <%= styles[:body] %> <%= "hidden" unless expanded %>"
+    data-pg-extras-card-body
+  >
+    <%= format_diagnose_message(diagnosis[:message], check_name: diagnosis[:check_name]) %>
+  </div>
+</article>

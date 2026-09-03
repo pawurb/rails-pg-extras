@@ -1,9 +1,9 @@
 <% if @available_databases.present? && @available_databases.size > 1 %>
-  <%= form_tag queries_path, id: "db_selector", method: :get, class: "mb-4 flex items-center gap-2" do %>
-    <label for="db_key" class="font-semibold">Database:</label>
+  <%= form_tag queries_path, id: "db_selector", method: :get, class: "flex items-center gap-2" do %>
+    <label for="db_key" class="font-semibold text-sm text-gray-700">Database</label>
     <%= select_tag :db_key,
                    options_for_select(@available_databases, @current_db_key),
-                   class: "border p-2 font-bold" %>
+                   class: "border border-gray-400 rounded-lg p-2 font-bold bg-white" %>
     <%# Preserve current query selection if present %>
     <%= hidden_field_tag :query_name, params[:query_name] if params[:query_name].present? %>
   <% end %>

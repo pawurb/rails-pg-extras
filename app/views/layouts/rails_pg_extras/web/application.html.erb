@@ -2,11 +2,13 @@
 <html>
   <head>
     <title><%= content_for :title %> |  v<%= RailsPgExtras::VERSION %></title>
-    <script src="/pg-extras-rails-ujs.js"></script>
-    <link href="/pg-extras-tailwind.min.css" rel="stylesheet">
+    <%# Version query busts the browser cache when the gem is upgraded. %>
+    <script src="/pg-extras-rails-ujs.js?v=<%= RailsPgExtras::VERSION %>"></script>
+    <script src="/pg-extras-ui.js?v=<%= RailsPgExtras::VERSION %>"></script>
+    <link href="/pg-extras-tailwind.min.css?v=<%= RailsPgExtras::VERSION %>" rel="stylesheet">
     <%= csrf_meta_tags %>
   </head>
-  <body class="p-5 text-sm">
+  <body class="p-5 text-sm bg-gray-50 text-gray-900">
     <% if flash[:notice] %>
       <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4" role="alert">
         <p class="font-bold">Notice</p>
@@ -21,9 +23,15 @@
       </div>
     <% end %>
 
-    <div class="mb-4">
-      <%= render "rails_pg_extras/web/shared/database_selector" %>
-    </div>
+    <header class="mb-5 pb-4 border-b border-gray-200">
+      <div class="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <p class="text-xs uppercase tracking-wide text-gray-500 font-semibold">rails-pg-extras</p>
+          <p class="text-lg font-bold text-gray-900">PostgreSQL insights</p>
+        </div>
+        <%= render "rails_pg_extras/web/shared/database_selector" %>
+      </div>
+    </header>
 
     <%= yield %>
   </body>

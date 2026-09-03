@@ -1,33 +1,51 @@
-<h1 class="font-bold text-2xl pt-2 text-gray-900">Diagnose</h1>
-<div class='pg-extras-help pb-4'>
-    (<a href="https://pawelurbanek.com/postgresql-fix-performance" 
-       class="text-blue-600 hover:text-blue-800 hover:underline" target='_blank'>Tutorial</a>)
+<section class="mt-4">
+  <div class="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-2 mb-4">
+    <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+      <h1 class="font-bold text-2xl text-gray-900">Diagnose</h1>
+      <div class="pg-extras-help text-gray-600">
+        (<a href="https://pawelurbanek.com/postgresql-fix-performance"
+           class="text-blue-600 hover:text-blue-800 hover:underline" target="_blank" rel="noopener">Tutorial</a>)
+      </div>
+    </div>
+    <div class="inline-flex rounded-lg border border-blue-600 overflow-hidden text-sm shadow-sm" role="group" aria-label="Diagnose card controls">
+      <button
+        type="button"
+        class="px-3 py-2 font-semibold bg-blue-500 text-white hover:bg-blue-600 border-r border-blue-600"
+        data-pg-extras-cards-expand-all
+      >
+        Expand all
+      </button>
+      <button
+        type="button"
+        class="px-3 py-2 font-semibold bg-blue-500 text-white hover:bg-blue-600"
+        data-pg-extras-cards-collapse-all
+      >
+        Collapse all
+      </button>
+    </div>
   </div>
-<% begin %>
-  <% diagnoses = RailsPgExtras.diagnose(in_format: :hash) %>
-  <div class="overflow-x-auto">
-    <table class="w-full border border-gray-400 shadow-md rounded-lg overflow-hidden">
-      <thead>
-        <tr class="bg-gray-200 text-gray-900 text-left uppercase text-sm font-bold">
-          <th class="px-4 py-3 border">Ok</th>
-          <th class="px-4 py-3 border">Check Name</th>
-          <th class="px-4 py-3 border">Message</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% diagnoses.each do |diagnosis| %>
-          <tr class="<%= diagnosis[:ok] ? "bg-green-100 text-green-900" : "bg-red-100 text-red-900" %> hover:bg-gray-300 transition">
-            <td class="px-4 py-3 border font-bold"><%= diagnosis[:ok] ? "YES" : "NO" %></td>
-            <td class="px-4 py-3 border font-semibold"><%= diagnosis[:check_name] %></td>
-            <td class="px-4 py-3 border"><%= diagnosis[:message] %></td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-  </div>
-<% rescue => e %>
-  <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4" role="alert">
-    <p class="font-bold">Diagnose failed</p>
-    <p><%= e.message %></p>
-  </div>
-<% end %>
+
+  <% if @diagnose_error.present? %>
+    <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4" role="alert">
+      <p class="font-bold">Diagnose failed</p>
+      <p><%= @diagnose_error %></p>
+    </div>
+  <% else %>
+    <div class="flex flex-wrap gap-3 mb-5">
+      <div class="rounded-lg border border-red-200 bg-red-50 px-4 py-2 text-red-900">
+        <span class="font-bold text-lg"><%= @diagnose_fail_count %></span>
+        <span class="text-sm font-medium ml-1"><%= @diagnose_fail_count == 1 ? "check needs attention" : "checks need attention" %></span>
+      </div>
+      <div class="rounded-lg border border-green-200 bg-green-50 px-4 py-2 text-green-900">
+        <span class="font-bold text-lg"><%= @diagnose_pass_count %></span>
+        <span class="text-sm font-medium ml-1"><%= @diagnose_pass_count == 1 ? "check passed" : "checks passed" %></span>
+      </div>
+    </div>
+
+    <div class="space-y-3" data-pg-extras-diagnose-cards>
+      <% @diagnoses.each do |diagnosis| %>
+        <%= render "diagnose_card", diagnosis: diagnosis %>
+      <% end %>
+    </div>
+  <% end %>
+</section>

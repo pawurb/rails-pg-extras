@@ -1,15 +1,20 @@
-<div class="text-red-500 p-3 font-mono my-5">
+<div class="my-4 rounded-lg border border-yellow-300 bg-yellow-50 p-4 text-yellow-900" role="status">
   <% unavailable_extensions.each do |extension, queries| %>
-    WARNING: Queries <%= queries.map { |q| "<b><u>#{q}</u></b>" }.join(", ").html_safe %> require extension: <b><%= extension %></b>
-    <br>
+    <p class="mb-1">
+      <span class="font-bold uppercase tracking-wide text-yellow-800">Warning:</span>
+      Queries <%= queries.map { |q| "<b><u>#{q}</u></b>" }.join(", ").html_safe %>
+      require extension: <b><%= extension %></b>
+    </p>
   <% end %>
- </div>
 
-<% if RailsPgExtras::Web.action_enabled?(:add_extensions) %>
-  <% action_params = params[:db_key].present? ? { db_key: params[:db_key] } : {} %>
-  <%= link_to "Enable extensions", add_extensions_action_path(action_params),
-              method: "post",
-              data: {
-                confirm: "This command will enable following extensions: #{unavailable_extensions.keys.join(", ")}. Do you want to proceeed?",
-              }, class: "border p-3 bg-green-500 text-white hover:bg-green-600 font-bold rounded" %>
-<% end %>
+  <% if RailsPgExtras::Web.action_enabled?(:add_extensions) %>
+    <% action_params = params[:db_key].present? ? { db_key: params[:db_key] } : {} %>
+    <div class="mt-3">
+      <%= link_to "Enable extensions", add_extensions_action_path(action_params),
+                  method: "post",
+                  data: {
+                    confirm: "This command will enable following extensions: #{unavailable_extensions.keys.join(", ")}. Do you want to proceeed?",
+                  }, class: "inline-block border p-3 bg-green-500 text-white hover:bg-green-600 font-bold rounded-lg shadow-sm" %>
+    </div>
+  <% end %>
+</div>
